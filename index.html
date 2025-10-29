@@ -1,536 +1,503 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KaiGPT & SAFI - Egypt's First AI Assistant | Knowing.AI</title>
-    <meta name="description" content="KaiGPT powered by SAFI - Egypt's first AI assistant for the Grand Egyptian Museum opening. Know more. Do more.">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23000'/><circle cx='32' cy='32' r='20' fill='none' stroke='%23fff' stroke-width='3'/></svg>">
-    
-    <!-- React and Babel -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+import React, { useState, useEffect, useRef } from ‘react’;
+import { Send, Languages, Info, X, Menu, ArrowLeft, Sun, Moon } from ‘lucide-react’;
+
+const KaiGPTSAFI = () => {
+const [messages, setMessages] = useState([]);
+const [input, setInput] = useState(’’);
+const [language, setLanguage] = useState(‘en’);
+const [isDark, setIsDark] = useState(true);
+const [showAbout, setShowAbout] = useState(false);
+const [isTyping, setIsTyping] = useState(false);
+const [showMenu, setShowMenu] = useState(false);
+const messagesEndRef = useRef(null);
+
+// KaiGPT Logo SVG Component
+const KaiGPTLogo = ({ className, color }) => (
+<svg viewBox="0 0 300 200" className={className} fill={color}>
+<path d="M150,30 C195,30 235,50 260,85 L245,100 C225,70 190,55 150,55 C110,55 75,70 55,100 L40,85 C65,50 105,30 150,30 Z" />
+<path d="M150,170 C105,170 65,150 40,115 L55,100 C75,130 110,145 150,145 C190,145 225,130 245,100 L260,115 C235,150 195,170 150,170 Z" />
+<circle cx="150" cy="100" r="45" />
+<circle cx=“150” cy=“100” r=“20” fill={isDark ? “#000” : “#fff”} />
+<circle cx="210" cy="100" r="12" />
+<circle cx="240" cy="120" r="12" />
+<line x1=“150” y1=“100” x2=“210” y2=“100” stroke={isDark ? “#000” : “#fff”} strokeWidth=“8”/>
+<line x1=“210” y1=“100” x2=“240” y2=“120” stroke={isDark ? “#000” : “#fff”} strokeWidth=“8”/>
+</svg>
+);
+
+// Complete GEM Q&A Database
+const gemDatabase = [
+{
+id: 1,
+category: “General Information”,
+keywords: [“when”, “open”, “opening”, “date”, “متى”, “افتتاح”],
+en: {
+q: “When will the Grand Egyptian Museum officially open?”,
+a: “The official opening date is November 1st, 2025.”
+},
+ar: {
+q: “متى سيفتتح المتحف المصري الكبير رسمياً؟”,
+a: “التاريخ الرسمي للافتتاح هو 1 نوفمبر 2025.”
+}
+},
+{
+id: 2,
+category: “General Information”,
+keywords: [“where”, “location”, “located”, “أين”, “موقع”],
+en: {
+q: “Where is the GEM located?”,
+a: “It is located one mile from the Giza Pyramids, Cairo, Egypt.”
+},
+ar: {
+q: “أين يقع المتحف المصري الكبير؟”,
+a: “يقع على بعد ميل واحد من أهرامات الجيزة في القاهرة، مصر.”
+}
+},
+{
+id: 3,
+category: “General Information”,
+keywords: [“size”, “large”, “area”, “square”, “مساحة”, “حجم”],
+en: {
+q: “How large is the Grand Egyptian Museum?”,
+a: “It covers approximately 480,000 square meters and is the largest museum dedicated to a single civilization.”
+},
+ar: {
+q: “كم تبلغ مساحة المتحف المصري الكبير؟”,
+a: “يغطي حوالي 480,000 متر مربع وهو أكبر متحف مخصص لحضارة واحدة.”
+}
+},
+{
+id: 4,
+category: “Exhibits”,
+keywords: [“highlight”, “main”, “treasures”, “tutankhamun”, “artifacts”, “كنوز”, “توت”],
+en: {
+q: “What is the main highlight of the GEM?”,
+a: “It houses over 100,000 ancient artifacts, including the complete collection of King Tutankhamun’s treasures displayed together for the first time.”
+},
+ar: {
+q: “ما أبرز ما يوجد في المتحف المصري الكبير؟”,
+a: “يضم أكثر من 100,000 قطعة أثرية قديمة، بما في ذلك مجموعة كنوز توت عنخ آمون كاملة معروضة معاً لأول مرة.”
+}
+},
+{
+id: 5,
+category: “Visitor Info”,
+keywords: [“soft”, “opening”, “trial”, “june”, “تجريبي”, “يونيو”],
+en: {
+q: “Will there be a soft opening before the official inauguration?”,
+a: “Yes, a soft launch is planned for late June 2025, allowing limited visitors to experience the museum.”
+},
+ar: {
+q: “هل سيكون هناك افتتاح تجريبي قبل الافتتاح الرسمي؟”,
+a: “نعم، من المقرر افتتاح تجريبي في أواخر يونيو 2025 يسمح لعدد محدود من الزوار بالدخول.”
+}
+},
+{
+id: 6,
+category: “Visitor Info”,
+keywords: [“visitors”, “expect”, “annually”, “زوار”, “سنوياً”],
+en: {
+q: “How many visitors does the GEM expect annually?”,
+a: “The museum expects about 6 million visitors per year.”
+},
+ar: {
+q: “كم عدد الزوار المتوقعين سنوياً في المتحف؟”,
+a: “من المتوقع أن يستقبل المتحف حوالي 6 ملايين زائر سنوياً.”
+}
+},
+{
+id: 7,
+category: “Facilities”,
+keywords: [“food”, “shopping”, “restaurants”, “مطاعم”, “تسوق”],
+en: {
+q: “Are there food and shopping facilities inside the museum?”,
+a: “Yes, the GEM includes restaurants like Zooba, various eateries, and high-end designer shops.”
+},
+ar: {
+q: “هل توجد مرافق للطعام والتسوق داخل المتحف؟”,
+a: “نعم، يحتوي المتحف على مطاعم مثل زوبا، وأماكن لتناول الطعام، ومتاجر للماركات الفاخرة.”
+}
+},
+{
+id: 8,
+category: “Exhibits”,
+keywords: [“grand hall”, “ramses”, “statue”, “رمسيس”, “قاعة”],
+en: {
+q: “What is notable about the Grand Hall at GEM?”,
+a: “It features a colossal 11-meter tall, 83-ton granite statue of Ramses II and other large statues of gods, kings, and queens.”
+},
+ar: {
+q: “ما الذي يميز القاعة الكبرى في المتحف المصري الكبير؟”,
+a: “تضم تمثالاً ضخماً من الجرانيت لرمسيس الثاني بارتفاع 11 متراً ووزن 83 طناً، وتماثيل أخرى كبيرة للآلهة والملوك والملكات.”
+}
+},
+{
+id: 9,
+category: “Tickets”,
+keywords: [“tickets”, “book”, “reservation”, “تذاكر”, “حجز”],
+en: {
+q: “How to book tickets for GEM?”,
+a: “Tickets will be available online through the official GEM website and at museum counters. Booking details will be announced closer to the opening date.”
+},
+ar: {
+q: “كيف يمكن حجز تذاكر المتحف المصري الكبير؟”,
+a: “ستتاح التذاكر عبر الإنترنت من الموقع الرسمي وعند شباك التذاكر داخل المتحف. سيتم الإعلان عن تفاصيل الحجز قريباً.”
+}
+},
+{
+id: 10,
+category: “Technology”,
+keywords: [“technology”, “vr”, “digital”, “interactive”, “تقنيات”, “رقمي”],
+en: {
+q: “What technologies will be used at GEM?”,
+a: “The museum incorporates advanced display and security technologies, including digital displays, VR experiences, and augmented reality for an immersive visitor experience.”
+},
+ar: {
+q: “ما هي التقنيات المستخدمة في المتحف؟”,
+a: “يستخدم المتحف تقنيات عرض وأمن متقدمة، بما في ذلك الشاشات الرقمية وتجارب الواقع الافتراضي والواقع المعزز لتجربة زوار شاملة.”
+}
+}
+];
+
+const scrollToBottom = () => {
+messagesEndRef.current?.scrollIntoView({ behavior: “smooth” });
+};
+
+useEffect(() => {
+scrollToBottom();
+}, [messages]);
+
+useEffect(() => {
+const welcomeMsg = language === ‘en’
+? “Hello! I’m SAFI, Egypt’s first AI assistant. Ask me anything about the Grand Egyptian Museum! 🏛️✨”
+: “أهلاً! أنا صافي، أول مساعد ذكاء اصطناعي مصري. اسألني عن المتحف المصري الكبير! 🏛️✨”;
+
+```
+setMessages([{
+  role: 'assistant',
+  content: welcomeMsg,
+  timestamp: new Date()
+}]);
+```
+
+}, [language]);
+
+const findBestMatch = (query) => {
+const lowerQuery = query.toLowerCase();
+
+```
+for (const item of gemDatabase) {
+  const hasMatch = item.keywords.some(keyword => 
+    lowerQuery.includes(keyword.toLowerCase())
+  );
+  if (hasMatch) {
+    return language === 'en' ? item.en.a : item.ar.a;
+  }
+}
+
+return language === 'en'
+  ? "I'd be happy to help! Could you please rephrase your question about the Grand Egyptian Museum? You can ask about opening dates, location, exhibits, tickets, or facilities."
+  : "يسعدني المساعدة! هل يمكنك إعادة صياغة سؤالك عن المتحف المصري الكبير؟ يمكنك السؤال عن مواعيد الافتتاح أو الموقع أو المعروضات أو التذاكر أو المرافق.";
+```
+
+};
+
+const handleSend = async () => {
+if (!input.trim()) return;
+
+```
+const userMessage = {
+  role: 'user',
+  content: input,
+  timestamp: new Date()
+};
+
+setMessages(prev => [...prev, userMessage]);
+setInput('');
+setIsTyping(true);
+
+setTimeout(() => {
+  const response = findBestMatch(input);
+  const assistantMessage = {
+    role: 'assistant',
+    content: response,
+    timestamp: new Date()
+  };
+  setMessages(prev => [...prev, assistantMessage]);
+  setIsTyping(false);
+}, 1200);
+```
+
+};
+
+const handleKeyPress = (e) => {
+if (e.key === ‘Enter’ && !e.shiftKey) {
+e.preventDefault();
+handleSend();
+}
+};
+
+const handleBackToHome = () => {
+window.location.href = ‘https://knowing-ai.netlify.app’;
+};
+
+const toggleTheme = () => {
+setIsDark(!isDark);
+};
+
+return (
+<div className={`flex flex-col h-screen ${isDark ? 'bg-black' : 'bg-white'} transition-all duration-500`}>
+{/* Premium Header */}
+<header className={`${isDark ? 'bg-black border-white/10' : 'bg-white border-black/10'} border-b backdrop-blur-xl transition-all duration-300`}>
+<div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+<div className="flex items-center space-x-4">
+{/* Back Button */}
+<button
+onClick={handleBackToHome}
+className={`p-3 rounded-2xl ${isDark ? 'bg-white/5 hover:bg-white/10 text-white' : 'bg-black/5 hover:bg-black/10 text-black'} transition-all duration-300 transform hover:scale-105 active:scale-95`}
+title={language === ‘en’ ? ‘Back to Home’ : ‘العودة للصفحة الرئيسية’}
+>
+<ArrowLeft className="w-5 h-5" />
+</button>
+
+```
+        {/* Logo */}
+        <div className={`relative p-3 rounded-2xl ${isDark ? 'bg-white' : 'bg-black'} shadow-2xl transform hover:scale-105 transition-transform duration-300`}>
+          <KaiGPTLogo className="w-8 h-8" color={isDark ? '#000' : '#fff'} />
+          <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+        </div>
         
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
+        <div>
+          <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-black'} tracking-tight`}>
+            KaiGPT & SAFI
+          </h1>
+          <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} font-medium`}>
+            Know More. Do More.
+          </p>
+        </div>
+      </div>
+      
+      <div className="flex items-center space-x-2">
+        {/* Theme Toggle */}
+        <button
+          onClick={toggleTheme}
+          className={`p-3 rounded-xl ${isDark ? 'bg-white/5 hover:bg-white/10 text-white' : 'bg-black/5 hover:bg-black/10 text-black'} transition-all duration-300 hover:scale-105`}
+          title={isDark ? (language === 'en' ? 'Light Mode' : 'الوضع النهاري') : (language === 'en' ? 'Dark Mode' : 'الوضع الليلي')}
+        >
+          {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+        </button>
         
-        #root {
-            width: 100%;
-            height: 100vh;
+        <button
+          onClick={() => setShowAbout(true)}
+          className={`p-3 rounded-xl ${isDark ? 'bg-white/5 hover:bg-white/10 text-white' : 'bg-black/5 hover:bg-black/10 text-black'} transition-all duration-300 hover:scale-105`}
+          title={language === 'en' ? 'About SAFI' : 'عن صافي'}
+        >
+          <Info className="w-5 h-5" />
+        </button>
+        
+        <button
+          onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
+          className={`p-3 rounded-xl ${isDark ? 'bg-white/5 hover:bg-white/10 text-white' : 'bg-black/5 hover:bg-black/10 text-black'} transition-all duration-300 hover:scale-105`}
+          title={language === 'en' ? 'التبديل إلى العربية' : 'Switch to English'}
+        >
+          <Languages className="w-5 h-5" />
+        </button>
+        
+        <button
+          onClick={() => setShowMenu(!showMenu)}
+          className={`p-3 rounded-xl ${isDark ? 'bg-white/5 hover:bg-white/10 text-white' : 'bg-black/5 hover:bg-black/10 text-black'} transition-all duration-300 hover:scale-105 lg:hidden`}
+        >
+          {showMenu ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
+      </div>
+    </div>
+  </header>
+
+  {/* About SAFI Modal */}
+  {showAbout && (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-lg animate-fadeIn">
+      <div className={`relative max-w-3xl w-full ${isDark ? 'bg-gradient-to-br from-gray-900 via-black to-gray-900 border-white/20' : 'bg-gradient-to-br from-gray-50 via-white to-gray-50 border-black/20'} border-2 rounded-3xl shadow-2xl overflow-hidden animate-slideUp`}>
+        <button
+          onClick={() => setShowAbout(false)}
+          className={`absolute top-6 right-6 p-2 rounded-xl ${isDark ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-black/10 hover:bg-black/20 text-black'} transition-all z-10`}
+        >
+          <X className="w-6 h-6" />
+        </button>
+
+        <div className="p-8 md:p-12">
+          {/* Logo/Icon */}
+          <div className={`inline-flex p-4 rounded-2xl ${isDark ? 'bg-white' : 'bg-black'} mb-6 shadow-xl`}>
+            <KaiGPTLogo className="w-12 h-12" color={isDark ? '#000' : '#fff'} />
+          </div>
+
+          {/* Title */}
+          <h2 className={`text-4xl font-bold mb-8 ${isDark ? 'text-white' : 'text-black'}`}>
+            About SAFI / عن صافي
+          </h2>
+
+          {/* English Section */}
+          <div className="mb-8 pb-8 border-b border-gray-700">
+            <h3 className={`text-xl font-bold mb-4 ${isDark ? 'text-white' : 'text-black'} uppercase tracking-wider`}>
+              English
+            </h3>
+            <p className={`text-lg leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+              SAFI is Egypt's first national AI model, created by <span className="font-bold">Knowing.AI</span> to deliver intelligent, human-like interactions in Arabic and English.
+            </p>
+            <p className={`text-lg leading-relaxed mt-4 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+              She blends Egypt's heritage with advanced technology — built for <span className="font-semibold">clarity</span>, <span className="font-semibold">trust</span>, and <span className="font-semibold">knowledge</span>.
+            </p>
+          </div>
+
+          {/* Arabic Section */}
+          <div className="mb-6" dir="rtl">
+            <h3 className={`text-xl font-bold mb-4 ${isDark ? 'text-white' : 'text-black'} uppercase tracking-wider`}>
+              العربية
+            </h3>
+            <p className={`text-lg leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+              صافي هي أول نموذج ذكاء اصطناعي وطني في مصر، من تطوير <span className="font-bold">Knowing.AI</span> لتقدّم تفاعل ذكي وطبيعي بالعربي والإنجليزي.
+            </p>
+            <p className={`text-lg leading-relaxed mt-4 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+              بتجمع بين روح مصر العريقة والتقنيات الحديثة — معمولة علشان <span className="font-semibold">الوضوح</span>، و<span className="font-semibold">الثقة</span>، و<span className="font-semibold">المعرفة</span>.
+            </p>
+          </div>
+
+          {/* Powered by */}
+          <div className={`mt-8 pt-6 border-t ${isDark ? 'border-gray-800' : 'border-gray-200'} text-center`}>
+            <p className={`text-sm ${isDark ? 'text-gray-500' : 'text-gray-400'} font-medium`}>
+              Powered by Knowing.AI • مدعوم من Knowing.AI
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
+
+  {/* Main Chat Area */}
+  <main className="flex-1 overflow-y-auto px-4 py-6">
+    <div className="max-w-4xl mx-auto space-y-6">
+      {messages.map((message, index) => (
+        <div
+          key={index}
+          className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} animate-messageSlide`}
+        >
+          <div
+            className={`max-w-3xl rounded-3xl px-6 py-5 shadow-lg transition-all duration-300 hover:shadow-2xl ${
+              message.role === 'user'
+                ? isDark 
+                  ? 'bg-white text-black' 
+                  : 'bg-black text-white'
+                : isDark 
+                  ? 'bg-gradient-to-br from-gray-900 to-gray-800 text-white border border-white/10' 
+                  : 'bg-gradient-to-br from-gray-50 to-gray-100 text-black border border-black/10'
+            }`}
+          >
+            <div className={`text-xs font-bold mb-2 uppercase tracking-wider ${message.role === 'user' ? 'opacity-70' : 'opacity-60'}`}>
+              {message.role === 'user' ? (language === 'en' ? 'You' : 'أنت') : 'SAFI'}
+            </div>
+            <div className="text-base leading-relaxed whitespace-pre-wrap">
+              {message.content}
+            </div>
+          </div>
+        </div>
+      ))}
+      
+      {isTyping && (
+        <div className="flex justify-start animate-messageSlide">
+          <div className={`max-w-3xl rounded-3xl px-6 py-5 ${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-800 border border-white/10' : 'bg-gradient-to-br from-gray-50 to-gray-100 border border-black/10'}`}>
+            <div className="flex space-x-2">
+              <div className={`w-3 h-3 rounded-full ${isDark ? 'bg-white/40' : 'bg-black/40'} animate-bounce`} style={{animationDelay: '0ms'}}></div>
+              <div className={`w-3 h-3 rounded-full ${isDark ? 'bg-white/40' : 'bg-black/40'} animate-bounce`} style={{animationDelay: '150ms'}}></div>
+              <div className={`w-3 h-3 rounded-full ${isDark ? 'bg-white/40' : 'bg-black/40'} animate-bounce`} style={{animationDelay: '300ms'}}></div>
+            </div>
+          </div>
+        </div>
+      )}
+      <div ref={messagesEndRef} />
+    </div>
+  </main>
+
+  {/* Premium Input Area */}
+  <footer className={`${isDark ? 'bg-black border-white/10' : 'bg-white border-black/10'} border-t backdrop-blur-xl transition-all duration-300`}>
+    <div className="max-w-4xl mx-auto px-4 py-5">
+      <div className={`flex items-center space-x-3 ${isDark ? 'bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-white/20' : 'bg-gradient-to-r from-gray-50 via-white to-gray-50 border-black/20'} border-2 rounded-2xl px-5 py-4 shadow-2xl transition-all duration-300 focus-within:shadow-3xl ${isDark ? 'focus-within:border-white/40' : 'focus-within:border-black/40'}`}>
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder={language === 'en' ? 'Ask about the Grand Egyptian Museum...' : 'اسأل عن المتحف المصري الكبير...'}
+          className={`flex-1 ${isDark ? 'bg-transparent text-white placeholder-gray-500' : 'bg-transparent text-black placeholder-gray-400'} outline-none text-base`}
+          dir={language === 'ar' ? 'rtl' : 'ltr'}
+        />
+        <button
+          onClick={handleSend}
+          disabled={!input.trim()}
+          className={`p-3 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 ${
+            input.trim()
+              ? isDark 
+                ? 'bg-white text-black hover:bg-gray-100 shadow-lg' 
+                : 'bg-black text-white hover:bg-gray-900 shadow-lg'
+              : isDark 
+                ? 'bg-gray-800 text-gray-600 cursor-not-allowed' 
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+          }`}
+        >
+          <Send className="w-5 h-5" />
+        </button>
+      </div>
+      <p className={`text-center text-xs mt-4 ${isDark ? 'text-gray-600' : 'text-gray-400'} font-medium`}>
+        {language === 'en' 
+          ? 'SAFI - Egypt\'s First AI Assistant | Powered by Knowing.AI'
+          : 'صافي - أول مساعد ذكاء اصطناعي مصري | بدعم من Knowing.AI'
         }
-    </style>
-</head>
-<body>
-    <div id="root"></div>
+      </p>
+    </div>
+  </footer>
+
+  <style jsx>{`
+    @keyframes messageSlide {
+      from { 
+        opacity: 0; 
+        transform: translateY(20px);
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0);
+      }
+    }
     
-    <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideUp {
+      from { 
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    .animate-messageSlide {
+      animation: messageSlide 0.4s ease-out;
+    }
+    
+    .animate-fadeIn {
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    .animate-slideUp {
+      animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+  `}</style>
+</div>
+```
 
-        // Lucide Icons as components
-        const Send = () => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-            </svg>
-        );
+);
+};
 
-        const Languages = () => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M5 8l6 6"></path>
-                <path d="M4 14l6-6 2-3"></path>
-                <path d="M2 5h12"></path>
-                <path d="M7 2h1"></path>
-                <path d="M22 22l-5-10-5 10"></path>
-                <path d="M14 18h6"></path>
-            </svg>
-        );
-
-        const Info = () => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="16" x2="12" y2="12"></line>
-                <line x1="12" y1="8" x2="12.01" y2="8"></line>
-            </svg>
-        );
-
-        const X = () => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-        );
-
-        const ArrowLeft = () => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="19" y1="12" x2="5" y2="12"></line>
-                <polyline points="12 19 5 12 12 5"></polyline>
-            </svg>
-        );
-
-        const Sun = () => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="5"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-            </svg>
-        );
-
-        const Moon = () => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
-        );
-
-        // KaiGPT Logo Component
-        const KaiGPTLogo = ({ className, color = "#fff" }) => (
-            <svg viewBox="0 0 300 200" className={className} style={{ width: '100%', height: '100%' }}>
-                <path d="M150,30 C195,30 235,50 260,85 L245,100 C225,70 190,55 150,55 C110,55 75,70 55,100 L40,85 C65,50 105,30 150,30 Z" fill={color}/>
-                <path d="M150,170 C105,170 65,150 40,115 L55,100 C75,130 110,145 150,145 C190,145 225,130 245,100 L260,115 C235,150 195,170 150,170 Z" fill={color}/>
-                <circle cx="150" cy="100" r="45" fill={color}/>
-                <circle cx="150" cy="100" r="20" fill="#000"/>
-                <circle cx="210" cy="100" r="12" fill={color}/>
-                <circle cx="240" cy="120" r="12" fill={color}/>
-                <line x1="150" y1="100" x2="210" y2="100" stroke="#000" strokeWidth="8"/>
-                <line x1="210" y1="100" x2="240" y2="120" stroke="#000" strokeWidth="8"/>
-            </svg>
-        );
-
-        const KaiGPTSAFI = () => {
-            const [messages, setMessages] = useState([]);
-            const [input, setInput] = useState('');
-            const [language, setLanguage] = useState('en');
-            const [isDark, setIsDark] = useState(true);
-            const [showAbout, setShowAbout] = useState(false);
-            const [isTyping, setIsTyping] = useState(false);
-            const messagesEndRef = useRef(null);
-
-            const gemDatabase = [
-                {
-                    id: 1,
-                    keywords: ["when", "open", "opening", "date", "متى", "افتتاح"],
-                    en: { a: "The official opening date is November 1st, 2025." },
-                    ar: { a: "التاريخ الرسمي للافتتاح هو 1 نوفمبر 2025." }
-                },
-                {
-                    id: 2,
-                    keywords: ["where", "location", "located", "أين", "موقع"],
-                    en: { a: "It is located one mile from the Giza Pyramids, Cairo, Egypt." },
-                    ar: { a: "يقع على بعد ميل واحد من أهرامات الجيزة في القاهرة، مصر." }
-                },
-                {
-                    id: 3,
-                    keywords: ["size", "large", "area", "مساحة", "حجم"],
-                    en: { a: "It covers approximately 480,000 square meters and is the largest museum dedicated to a single civilization." },
-                    ar: { a: "يغطي حوالي 480,000 متر مربع وهو أكبر متحف مخصص لحضارة واحدة." }
-                },
-                {
-                    id: 4,
-                    keywords: ["treasures", "tutankhamun", "artifacts", "كنوز", "توت"],
-                    en: { a: "It houses over 100,000 ancient artifacts, including the complete collection of King Tutankhamun's treasures displayed together for the first time." },
-                    ar: { a: "يضم أكثر من 100,000 قطعة أثرية قديمة، بما في ذلك مجموعة كنوز توت عنخ آمون كاملة معروضة معاً لأول مرة." }
-                }
-            ];
-
-            useEffect(() => {
-                const welcomeMsg = language === 'en' 
-                    ? "Hello! I'm SAFI, Egypt's first AI assistant. Ask me anything about the Grand Egyptian Museum! 🏛️✨"
-                    : "أهلاً! أنا صافي، أول مساعد ذكاء اصطناعي مصري. اسألني عن المتحف المصري الكبير! 🏛️✨";
-                
-                setMessages([{ role: 'assistant', content: welcomeMsg }]);
-            }, [language]);
-
-            useEffect(() => {
-                messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-            }, [messages]);
-
-            const findBestMatch = (query) => {
-                const lowerQuery = query.toLowerCase();
-                for (const item of gemDatabase) {
-                    if (item.keywords.some(keyword => lowerQuery.includes(keyword.toLowerCase()))) {
-                        return language === 'en' ? item.en.a : item.ar.a;
-                    }
-                }
-                return language === 'en'
-                    ? "I'd be happy to help! Could you please rephrase your question about the Grand Egyptian Museum?"
-                    : "يسعدني المساعدة! هل يمكنك إعادة صياغة سؤالك عن المتحف المصري الكبير؟";
-            };
-
-            const handleSend = () => {
-                if (!input.trim()) return;
-                setMessages(prev => [...prev, { role: 'user', content: input }]);
-                setInput('');
-                setIsTyping(true);
-
-                setTimeout(() => {
-                    const response = findBestMatch(input);
-                    setMessages(prev => [...prev, { role: 'assistant', content: response }]);
-                    setIsTyping(false);
-                }, 1200);
-            };
-
-            const styles = {
-                container: {
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: '100vh',
-                    background: isDark ? '#000' : '#fff',
-                    transition: 'all 0.5s'
-                },
-                header: {
-                    background: isDark ? '#000' : '#fff',
-                    borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
-                    padding: '16px 24px'
-                },
-                headerContent: {
-                    maxWidth: '1200px',
-                    margin: '0 auto',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                },
-                logoSection: {
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '16px'
-                },
-                backBtn: {
-                    padding: '12px',
-                    borderRadius: '16px',
-                    background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-                    border: 'none',
-                    color: isDark ? '#fff' : '#000',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s'
-                },
-                logoBox: {
-                    padding: '12px',
-                    borderRadius: '16px',
-                    background: isDark ? '#fff' : '#000',
-                    width: '48px',
-                    height: '48px',
-                    position: 'relative'
-                },
-                pulse: {
-                    position: 'absolute',
-                    top: '-2px',
-                    right: '-2px',
-                    width: '12px',
-                    height: '12px',
-                    background: '#22c55e',
-                    borderRadius: '50%',
-                    animation: 'pulse 2s infinite'
-                },
-                title: {
-                    fontSize: '24px',
-                    fontWeight: '700',
-                    color: isDark ? '#fff' : '#000'
-                },
-                subtitle: {
-                    fontSize: '14px',
-                    color: isDark ? '#999' : '#666'
-                },
-                controls: {
-                    display: 'flex',
-                    gap: '8px'
-                },
-                controlBtn: {
-                    padding: '12px',
-                    borderRadius: '12px',
-                    background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-                    border: 'none',
-                    color: isDark ? '#fff' : '#000',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                },
-                messagesContainer: {
-                    flex: 1,
-                    overflowY: 'auto',
-                    padding: '24px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '24px'
-                },
-                messageWrapper: {
-                    display: 'flex',
-                    gap: '16px',
-                    maxWidth: '85%',
-                    animation: 'slideUp 0.4s ease-out'
-                },
-                userMessage: {
-                    marginLeft: 'auto',
-                    flexDirection: 'row-reverse'
-                },
-                avatar: {
-                    width: '44px',
-                    height: '44px',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0
-                },
-                messageContent: {
-                    padding: '16px 20px',
-                    borderRadius: '24px',
-                    fontSize: '15px',
-                    lineHeight: '1.7'
-                },
-                inputSection: {
-                    padding: '24px',
-                    background: isDark ? '#000' : '#fff',
-                    borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`
-                },
-                inputContainer: {
-                    maxWidth: '900px',
-                    margin: '0 auto',
-                    display: 'flex',
-                    gap: '12px',
-                    alignItems: 'center',
-                    background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-                    border: `2px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
-                    borderRadius: '16px',
-                    padding: '12px 16px'
-                },
-                input: {
-                    flex: 1,
-                    background: 'transparent',
-                    border: 'none',
-                    color: isDark ? '#fff' : '#000',
-                    fontSize: '15px',
-                    outline: 'none'
-                },
-                sendBtn: {
-                    width: '44px',
-                    height: '44px',
-                    background: isDark ? '#fff' : '#000',
-                    color: isDark ? '#000' : '#fff',
-                    border: 'none',
-                    borderRadius: '12px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                },
-                modal: {
-                    position: 'fixed',
-                    inset: 0,
-                    background: 'rgba(0,0,0,0.9)',
-                    backdropFilter: 'blur(10px)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '16px',
-                    zIndex: 1000
-                },
-                modalContent: {
-                    background: isDark ? 'linear-gradient(135deg, #1a1a1a 0%, #000 100%)' : 'linear-gradient(135deg, #f5f5f5 0%, #fff 100%)',
-                    border: `2px solid ${isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'}`,
-                    borderRadius: '24px',
-                    padding: '48px',
-                    maxWidth: '700px',
-                    width: '100%',
-                    position: 'relative'
-                },
-                closeBtn: {
-                    position: 'absolute',
-                    top: '24px',
-                    right: '24px',
-                    padding: '8px',
-                    background: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-                    border: 'none',
-                    borderRadius: '12px',
-                    color: isDark ? '#fff' : '#000',
-                    cursor: 'pointer'
-                },
-                modalTitle: {
-                    fontSize: '36px',
-                    fontWeight: '700',
-                    color: isDark ? '#fff' : '#000',
-                    marginBottom: '32px'
-                },
-                section: {
-                    marginBottom: '32px',
-                    paddingBottom: '32px',
-                    borderBottom: `1px solid ${isDark ? '#333' : '#ddd'}`
-                },
-                sectionTitle: {
-                    fontSize: '18px',
-                    fontWeight: '700',
-                    color: isDark ? '#fff' : '#000',
-                    marginBottom: '16px',
-                    textTransform: 'uppercase'
-                },
-                sectionText: {
-                    fontSize: '16px',
-                    lineHeight: '1.8',
-                    color: isDark ? '#ccc' : '#333'
-                },
-                footer: {
-                    textAlign: 'center',
-                    fontSize: '13px',
-                    color: isDark ? '#666' : '#999',
-                    marginTop: '16px'
-                }
-            };
-
-            return (
-                <div style={styles.container}>
-                    <style>{`
-                        @keyframes pulse {
-                            0%, 100% { opacity: 1; }
-                            50% { opacity: 0.5; }
-                        }
-                        @keyframes slideUp {
-                            from { opacity: 0; transform: translateY(20px); }
-                            to { opacity: 1; transform: translateY(0); }
-                        }
-                    `}</style>
-
-                    <header style={styles.header}>
-                        <div style={styles.headerContent}>
-                            <div style={styles.logoSection}>
-                                <button style={styles.backBtn} onClick={() => window.location.href = 'https://knowing-ai.netlify.app'}>
-                                    <ArrowLeft />
-                                </button>
-                                <div style={styles.logoBox}>
-                                    <KaiGPTLogo color={isDark ? '#000' : '#fff'} />
-                                    <div style={styles.pulse}></div>
-                                </div>
-                                <div>
-                                    <div style={styles.title}>KaiGPT & SAFI</div>
-                                    <div style={styles.subtitle}>Know More. Do More.</div>
-                                </div>
-                            </div>
-                            <div style={styles.controls}>
-                                <button style={styles.controlBtn} onClick={() => setIsDark(!isDark)}>
-                                    {isDark ? <Sun /> : <Moon />}
-                                </button>
-                                <button style={styles.controlBtn} onClick={() => setShowAbout(true)}>
-                                    <Info />
-                                </button>
-                                <button style={styles.controlBtn} onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}>
-                                    <Languages />
-                                </button>
-                            </div>
-                        </div>
-                    </header>
-
-                    {showAbout && (
-                        <div style={styles.modal} onClick={() => setShowAbout(false)}>
-                            <div style={styles.modalContent} onClick={e => e.stopPropagation()}>
-                                <button style={styles.closeBtn} onClick={() => setShowAbout(false)}>
-                                    <X />
-                                </button>
-                                <div style={{ ...styles.logoBox, display: 'inline-flex', marginBottom: '24px' }}>
-                                    <KaiGPTLogo color={isDark ? '#000' : '#fff'} />
-                                </div>
-                                <h2 style={styles.modalTitle}>About SAFI / عن صافي</h2>
-                                <div style={styles.section}>
-                                    <h3 style={styles.sectionTitle}>English</h3>
-                                    <p style={styles.sectionText}>
-                                        SAFI is Egypt's first national AI model, created by <strong>Knowing.AI</strong> to deliver intelligent, human-like interactions in Arabic and English.
-                                    </p>
-                                    <p style={{...styles.sectionText, marginTop: '16px'}}>
-                                        She blends Egypt's heritage with advanced technology — built for <strong>clarity</strong>, <strong>trust</strong>, and <strong>knowledge</strong>.
-                                    </p>
-                                </div>
-                                <div style={styles.section} dir="rtl">
-                                    <h3 style={styles.sectionTitle}>العربية</h3>
-                                    <p style={styles.sectionText}>
-                                        صافي هي أول نموذج ذكاء اصطناعي وطني في مصر، من تطوير <strong>Knowing.AI</strong> لتقدّم تفاعل ذكي وطبيعي بالعربي والإنجليزي.
-                                    </p>
-                                    <p style={{...styles.sectionText, marginTop: '16px'}}>
-                                        بتجمع بين روح مصر العريقة والتقنيات الحديثة — معمولة علشان <strong>الوضوح</strong>، و<strong>الثقة</strong>، و<strong>المعرفة</strong>.
-                                    </p>
-                                </div>
-                                <div style={styles.footer}>
-                                    Powered by Knowing.AI • مدعوم من Knowing.AI
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    <div style={styles.messagesContainer}>
-                        {messages.map((msg, i) => (
-                            <div key={i} style={{...styles.messageWrapper, ...(msg.role === 'user' && styles.userMessage)}}>
-                                <div style={{
-                                    ...styles.avatar,
-                                    background: msg.role === 'user' ? (isDark ? '#fff' : '#000') : 'rgba(255,255,255,0.1)',
-                                    color: msg.role === 'user' ? (isDark ? '#000' : '#fff') : '#fff',
-                                    border: msg.role === 'assistant' ? '2px solid #fff' : 'none'
-                                }}>
-                                    {msg.role === 'user' ? 'You' : '👸'}
-                                </div>
-                                <div style={{
-                                    ...styles.messageContent,
-                                    background: msg.role === 'user' ? (isDark ? '#fff' : '#000') : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'),
-                                    color: msg.role === 'user' ? (isDark ? '#000' : '#fff') : (isDark ? '#fff' : '#000'),
-                                    border: msg.role === 'assistant' ? `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}` : 'none'
-                                }}>
-                                    {msg.content}
-                                </div>
-                            </div>
-                        ))}
-                        {isTyping && (
-                            <div style={styles.messageWrapper}>
-                                <div style={{...styles.avatar, background: 'rgba(255,255,255,0.1)', border: '2px solid #fff'}}>
-                                    👸
-                                </div>
-                                <div style={{...styles.messageContent, background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)', display: 'flex', gap: '6px'}}>
-                                    <div style={{width: '10px', height: '10px', background: '#999', borderRadius: '50%', animation: 'bounce 1.4s infinite'}}></div>
-                                    <div style={{width: '10px', height: '10px', background: '#999', borderRadius: '50%', animation: 'bounce 1.4s infinite 0.2s'}}></div>
-                                    <div style={{width: '10px', height: '10px', background: '#999', borderRadius: '50%', animation: 'bounce 1.4s infinite 0.4s'}}></div>
-                                </div>
-                            </div>
-                        )}
-                        <div ref={messagesEndRef} />
-                    </div>
-
-                    <div style={styles.inputSection}>
-                        <div style={styles.inputContainer}>
-                            <input 
-                                style={styles.input}
-                                value={input}
-                                onChange={e => setInput(e.target.value)}
-                                onKeyPress={e => e.key === 'Enter' && handleSend()}
-                                placeholder={language === 'en' ? 'Ask about the Grand Egyptian Museum...' : 'اسأل عن المتحف المصري الكبير...'}
-                                dir={language === 'ar' ? 'rtl' : 'ltr'}
-                            />
-                            <button style={styles.sendBtn} onClick={handleSend} disabled={!input.trim()}>
-                                <Send />
-                            </button>
-                        </div>
-                        <div style={{...styles.footer, marginTop: '16px'}}>
-                            {language === 'en' 
-                                ? 'SAFI - Egypt\'s First AI Assistant | Powered by Knowing.AI'
-                                : 'صافي - أول مساعد ذكاء اصطناعي مصري | بدعم من Knowing.AI'
-                            }
-                        </div>
-                    </div>
-                </div>
-            );
-        };
-
-        ReactDOM.render(<KaiGPTSAFI />, document.getElementById('root'));
-    </script>
-</body>
-</html>
+export default KaiGPTSAFI;
