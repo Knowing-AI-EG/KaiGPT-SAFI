@@ -3,1065 +3,534 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KaiGPT - The First Egyptian AI Assistant | Knowing.AI</title>
-    <meta name="description" content="KaiGPT powered by SAFI - The first Egyptian AI assistant for the Grand Egyptian Museum opening. Know more. Do more.">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23070707'/><circle cx='32' cy='32' r='22' fill='none' stroke='%23ffffff' stroke-width='2.5'/></svg>" type="image/svg+xml">
+    <title>KaiGPT & SAFI - Egypt's First AI Assistant | Knowing.AI</title>
+    <meta name="description" content="KaiGPT powered by SAFI - Egypt's first AI assistant for the Grand Egyptian Museum opening. Know more. Do more.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23000'/><circle cx='32' cy='32' r='20' fill='none' stroke='%23fff' stroke-width='3'/></svg>">
+    
+    <!-- React and Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
-        :root {
-            --primary-black: #000000;
-            --primary-white: #ffffff;
-            --gray-900: #111827;
-            --surface-primary: #0a0a0a;
-            --surface-secondary: #151515;
-            --surface-tertiary: #202020;
-            --border-primary: #2a2a2a;
-            --border-secondary: #3a3a3a;
-            --text-primary: #ffffff;
-            --text-secondary: #b4b4b4;
-            --text-tertiary: #8a8a8a;
-        }
-
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Helvetica Neue', Arial, sans-serif;
-            background: var(--primary-black);
-            color: var(--text-primary);
-            overflow: hidden;
-            height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
-
-        .app-container {
-            display: flex;
+        
+        #root {
+            width: 100%;
             height: 100vh;
-            width: 100%;
-        }
-
-        .sidebar {
-            width: 300px;
-            background: var(--surface-primary);
-            border-right: 1px solid var(--border-primary);
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-        }
-
-        .logo-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 30px;
-            padding: 20px 10px;
-            border-bottom: 1px solid var(--border-primary);
-        }
-
-        .logo-container {
-            width: 100px;
-            height: 100px;
-            background: var(--primary-white);
-            border-radius: 20px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-
-        .logo-svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .brand-name {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 5px;
-        }
-
-        .brand-tagline {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-        }
-
-        .powered-by {
-            font-size: 11px;
-            color: var(--text-tertiary);
-        }
-
-        .new-chat-btn {
-            width: 100%;
-            padding: 14px 20px;
-            background: var(--primary-white);
-            color: var(--primary-black);
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-
-        .new-chat-btn:hover {
-            background: #f0f0f0;
-            transform: translateY(-1px);
-        }
-
-        .safi-card {
-            background: var(--surface-secondary);
-            border: 1px solid var(--border-primary);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 24px;
-        }
-
-        .safi-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .safi-avatar-small {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            border: 2px solid var(--primary-white);
-            background: var(--surface-tertiary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
-
-        .safi-info h3 {
-            font-size: 16px;
-            margin-bottom: 2px;
-        }
-
-        .safi-status {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--primary-white);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .safi-description {
-            font-size: 13px;
-            line-height: 1.6;
-            color: var(--text-secondary);
-        }
-
-        .quick-actions {
-            margin-top: 24px;
-        }
-
-        .quick-actions-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            margin-bottom: 12px;
-        }
-
-        .action-item {
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .action-item:hover {
-            background: var(--surface-secondary);
-            color: var(--text-primary);
-        }
-
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: var(--primary-black);
-        }
-
-        .main-header {
-            padding: 20px 32px;
-            border-bottom: 1px solid var(--border-primary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--surface-primary);
-        }
-
-        .chat-info h1 {
-            font-size: 20px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .gem-badge {
-            display: inline-flex;
-            padding: 4px 12px;
-            background: var(--primary-white);
-            color: var(--primary-black);
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .control-btn {
-            padding: 10px 18px;
-            background: var(--surface-secondary);
-            border: 1px solid var(--border-primary);
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .control-btn:hover {
-            background: var(--surface-tertiary);
-        }
-
-        .control-btn.active {
-            background: var(--primary-white);
-            color: var(--primary-black);
-        }
-
-        .messages-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 32px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .welcome-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100%;
-            text-align: center;
-            padding: 40px;
-        }
-
-        .safi-hero-avatar {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            border: 4px solid var(--primary-white);
-            background: linear-gradient(135deg, var(--surface-secondary), var(--surface-tertiary));
-            margin-bottom: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 80px;
-            animation: float 4s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
-        }
-
-        .welcome-title {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-
-        .welcome-subtitle {
-            font-size: 18px;
-            color: var(--text-secondary);
-            max-width: 700px;
-            line-height: 1.7;
-            margin-bottom: 40px;
-        }
-
-        .starter-prompts {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
-            width: 100%;
-            max-width: 900px;
-            margin-top: 20px;
-        }
-
-        .prompt-card {
-            padding: 20px 24px;
-            background: var(--surface-secondary);
-            border: 1px solid var(--border-primary);
-            border-radius: 12px;
-            cursor: pointer;
-            text-align: left;
-        }
-
-        .prompt-card:hover {
-            background: var(--surface-tertiary);
-            transform: translateY(-2px);
-        }
-
-        .prompt-icon {
-            font-size: 24px;
-            margin-bottom: 12px;
-        }
-
-        .prompt-text {
-            font-size: 15px;
-            line-height: 1.5;
-        }
-
-        .message-wrapper {
-            display: flex;
-            gap: 16px;
-            max-width: 85%;
-            animation: slideUp 0.3s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(16px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .message-wrapper.user {
-            margin-left: auto;
-            flex-direction: row-reverse;
-        }
-
-        .message-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .message-wrapper.user .message-avatar {
-            background: var(--primary-white);
-            color: var(--primary-black);
-            font-size: 14px;
-        }
-
-        .message-wrapper.assistant .message-avatar {
-            background: var(--surface-tertiary);
-            border: 2px solid var(--primary-white);
-            font-size: 22px;
-        }
-
-        .message-content {
-            flex: 1;
-            padding: 16px 20px;
-            border-radius: 16px;
-            font-size: 15px;
-            line-height: 1.7;
-        }
-
-        .message-wrapper.user .message-content {
-            background: var(--primary-white);
-            color: var(--primary-black);
-        }
-
-        .message-wrapper.assistant .message-content {
-            background: var(--surface-secondary);
-            border: 1px solid var(--border-primary);
-        }
-
-        .typing-indicator-wrapper {
-            display: flex;
-            gap: 16px;
-            max-width: 85%;
-        }
-
-        .typing-dots {
-            display: flex;
-            gap: 6px;
-            padding: 16px 20px;
-        }
-
-        .typing-dot {
-            width: 10px;
-            height: 10px;
-            background: var(--text-secondary);
-            border-radius: 50%;
-            animation: typingAnimation 1.4s infinite;
-        }
-
-        .typing-dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typingAnimation {
-            0%, 60%, 100% {
-                transform: translateY(0);
-                opacity: 0.7;
-            }
-            30% {
-                transform: translateY(-10px);
-                opacity: 1;
-            }
-        }
-
-        .input-section {
-            padding: 24px 32px 32px;
-            background: var(--surface-primary);
-            border-top: 1px solid var(--border-primary);
-        }
-
-        .input-wrapper-outer {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .input-container-main {
-            display: flex;
-            gap: 12px;
-            align-items: flex-end;
-            background: var(--surface-secondary);
-            border: 2px solid var(--border-primary);
-            border-radius: 16px;
-            padding: 12px 16px;
-        }
-
-        .input-container-main:focus-within {
-            border-color: var(--primary-white);
-        }
-
-        .input-field-wrapper {
-            flex: 1;
-        }
-
-        #messageInput {
-            width: 100%;
-            background: transparent;
-            border: none;
-            color: var(--text-primary);
-            font-size: 15px;
-            resize: none;
-            max-height: 200px;
-            min-height: 24px;
-            font-family: inherit;
-            line-height: 1.6;
-        }
-
-        #messageInput:focus {
-            outline: none;
-        }
-
-        #messageInput::placeholder {
-            color: var(--text-tertiary);
-        }
-
-        .input-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-icon-btn {
-            width: 40px;
-            height: 40px;
-            background: transparent;
-            border: none;
-            border-radius: 8px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 20px;
-        }
-
-        .action-icon-btn:hover {
-            background: var(--surface-tertiary);
-            color: var(--text-primary);
-        }
-
-        .action-icon-btn.recording {
-            background: var(--primary-white);
-            color: var(--primary-black);
-            animation: recordPulse 1.5s infinite;
-        }
-
-        @keyframes recordPulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        #sendButton {
-            width: 44px;
-            height: 44px;
-            background: var(--primary-white);
-            color: var(--primary-black);
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        #sendButton:hover:not(:disabled) {
-            transform: translateY(-2px);
-        }
-
-        #sendButton:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        .input-footer {
-            margin-top: 16px;
-            text-align: center;
-            font-size: 13px;
-            color: var(--text-tertiary);
-        }
-
-        .input-footer a {
-            color: var(--text-secondary);
-            text-decoration: none;
-        }
-
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--surface-tertiary);
-            border-radius: 5px;
-        }
-
-        @media (max-width: 1024px) {
-            .sidebar {
-                display: none;
-            }
-
-            .message-wrapper {
-                max-width: 95%;
-            }
-
-            .starter-prompts {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="logo-section">
-                <div class="logo-container">
-                    <svg class="logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M100 40 C70 40, 40 60, 40 90 C40 110, 50 125, 65 135 L100 170 L135 135 C150 125, 160 110, 160 90 C160 60, 130 40, 100 40 Z" fill="none" stroke="#000000" stroke-width="14"/>
-                        <circle cx="100" cy="90" r="26" fill="none" stroke="#000000" stroke-width="14"/>
-                        <circle cx="132" cy="90" r="9" fill="#000000"/>
-                        <line x1="132" y1="90" x2="148" y2="79" stroke="#000000" stroke-width="10" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div class="brand-name">Knowing.AI</div>
-                <div class="brand-tagline">Know more. Do more.</div>
-                <div class="powered-by">Powered by SAFI</div>
-            </div>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
 
-            <button class="new-chat-btn" onclick="app.newConversation()">
-                ➕ New Conversation
-            </button>
+        // Lucide Icons as components
+        const Send = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+        );
 
-            <div class="safi-card">
-                <div class="safi-header">
-                    <div class="safi-avatar-small">👸</div>
-                    <div class="safi-info">
-                        <h3>SAFI</h3>
-                        <div class="safi-status">
-                            <span class="status-dot"></span>
-                            <span>Online</span>
-                        </div>
-                    </div>
-                </div>
-                <p class="safi-description">
-                    First Egyptian AI assistant. Fluent in Arabic & English. Ready for the Grand Egyptian Museum opening.
-                </p>
-            </div>
+        const Languages = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M5 8l6 6"></path>
+                <path d="M4 14l6-6 2-3"></path>
+                <path d="M2 5h12"></path>
+                <path d="M7 2h1"></path>
+                <path d="M22 22l-5-10-5 10"></path>
+                <path d="M14 18h6"></path>
+            </svg>
+        );
 
-            <div class="quick-actions">
-                <div class="quick-actions-title">Quick Actions</div>
-                <div class="action-item" onclick="app.sendPrompt('Tell me about the Grand Egyptian Museum')">
-                    <span>🏛️</span>
-                    <span>Grand Egyptian Museum</span>
-                </div>
-                <div class="action-item" onclick="app.sendPrompt('Plan my Egypt trip')">
-                    <span>✈️</span>
-                    <span>Plan Egypt Trip</span>
-                </div>
-                <div class="action-item" onclick="app.sendPrompt('علمني عربي مصري')">
-                    <span>🗣️</span>
-                    <span>Learn Egyptian Arabic</span>
-                </div>
-                <div class="action-item" onclick="app.sendPrompt('Financial services information')">
-                    <span>💰</span>
-                    <span>Financial Services</span>
-                </div>
-                <div class="action-item" onclick="app.sendPrompt('Egyptian history lessons')">
-                    <span>📚</span>
-                    <span>History & Culture</span>
-                </div>
-            </div>
-        </aside>
+        const Info = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+        );
 
-        <main class="main-content">
-            <header class="main-header">
-                <div class="chat-info">
-                    <h1>
-                        KaiGPT
-                        <span class="gem-badge">GEM EDITION</span>
-                    </h1>
-                </div>
-                <button class="control-btn" id="voiceBtn" onclick="app.toggleVoice()">
-                    <span>🎤</span>
-                    <span id="voiceStatus">Voice: OFF</span>
-                </button>
-            </header>
+        const X = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        );
 
-            <div class="messages-container" id="messagesContainer">
-                <div class="welcome-section">
-                    <div class="safi-hero-avatar">👸</div>
-                    <h1 class="welcome-title">مرحباً! I'm SAFI</h1>
-                    <p class="welcome-subtitle">
-                        The first Egyptian AI assistant created by Knowing.AI for the Grand Egyptian Museum opening on November 1st, 2025. 
-                        I speak Egyptian Arabic and English fluently. Welcome to the future of Egyptian AI!
-                    </p>
-                    <div class="starter-prompts">
-                        <div class="prompt-card" onclick="app.sendPrompt('ازيك يا SAFI؟')">
-                            <div class="prompt-icon">👋</div>
-                            <div class="prompt-text">ازيك يا SAFI؟</div>
-                        </div>
-                        <div class="prompt-card" onclick="app.sendPrompt('Tell me about yourself')">
-                            <div class="prompt-icon">✨</div>
-                            <div class="prompt-text">Tell me about yourself</div>
-                        </div>
-                        <div class="prompt-card" onclick="app.sendPrompt('Grand Egyptian Museum details')">
-                            <div class="prompt-icon">🏛️</div>
-                            <div class="prompt-text">GEM Opening Details</div>
-                        </div>
-                        <div class="prompt-card" onclick="app.sendPrompt('How can Knowing.AI help?')">
-                            <div class="prompt-icon">💼</div>
-                            <div class="prompt-text">Business Solutions</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        const ArrowLeft = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        );
 
-            <div class="input-section">
-                <div class="input-wrapper-outer">
-                    <div class="input-container-main">
-                        <div class="input-field-wrapper">
-                            <textarea 
-                                id="messageInput" 
-                                placeholder="Message SAFI in Arabic or English..."
-                                rows="1"
-                                onkeydown="app.handleKeyPress(event)"
-                                oninput="app.autoResize(this)"
-                            ></textarea>
-                        </div>
-                        <div class="input-actions">
-                            <button class="action-icon-btn" id="micBtn" onclick="app.toggleRecording()">
-                                🎤
-                            </button>
-                        </div>
-                        <button id="sendButton" onclick="app.sendMessage()" disabled>
-                            ➤
-                        </button>
-                    </div>
-                    <div class="input-footer">
-                        KaiGPT by <a href="https://knowing-ai.netlify.app" target="_blank">Knowing.AI</a> • Grand Egyptian Museum • November 1, 2025 🇪🇬
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
+        const Sun = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+        );
 
-    <script>
-        const app = {
-            messages: [],
-            conversationHistory: [],
-            isVoiceEnabled: false,
-            isRecording: false,
-            recognition: null,
-            currentLanguage: 'ar-EG',
+        const Moon = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        );
 
-            init() {
-                this.setupSpeechRecognition();
-                this.setupInputHandlers();
-                this.loadVoices();
-            },
+        // KaiGPT Logo Component
+        const KaiGPTLogo = ({ className, color = "#fff" }) => (
+            <svg viewBox="0 0 300 200" className={className} style={{ width: '100%', height: '100%' }}>
+                <path d="M150,30 C195,30 235,50 260,85 L245,100 C225,70 190,55 150,55 C110,55 75,70 55,100 L40,85 C65,50 105,30 150,30 Z" fill={color}/>
+                <path d="M150,170 C105,170 65,150 40,115 L55,100 C75,130 110,145 150,145 C190,145 225,130 245,100 L260,115 C235,150 195,170 150,170 Z" fill={color}/>
+                <circle cx="150" cy="100" r="45" fill={color}/>
+                <circle cx="150" cy="100" r="20" fill="#000"/>
+                <circle cx="210" cy="100" r="12" fill={color}/>
+                <circle cx="240" cy="120" r="12" fill={color}/>
+                <line x1="150" y1="100" x2="210" y2="100" stroke="#000" strokeWidth="8"/>
+                <line x1="210" y1="100" x2="240" y2="120" stroke="#000" strokeWidth="8"/>
+            </svg>
+        );
 
-            setupSpeechRecognition() {
-                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                    this.recognition = new SpeechRecognition();
-                    this.recognition.continuous = false;
-                    this.recognition.interimResults = false;
-                    
-                    this.recognition.onresult = (event) => {
-                        const transcript = event.results[0][0].transcript;
-                        document.getElementById('messageInput').value = transcript;
-                        document.getElementById('sendButton').disabled = false;
-                        this.isRecording = false;
-                        document.getElementById('micBtn').classList.remove('recording');
-                    };
+        const KaiGPTSAFI = () => {
+            const [messages, setMessages] = useState([]);
+            const [input, setInput] = useState('');
+            const [language, setLanguage] = useState('en');
+            const [isDark, setIsDark] = useState(true);
+            const [showAbout, setShowAbout] = useState(false);
+            const [isTyping, setIsTyping] = useState(false);
+            const messagesEndRef = useRef(null);
 
-                    this.recognition.onerror = () => {
-                        this.isRecording = false;
-                        document.getElementById('micBtn').classList.remove('recording');
-                    };
+            const gemDatabase = [
+                {
+                    id: 1,
+                    keywords: ["when", "open", "opening", "date", "متى", "افتتاح"],
+                    en: { a: "The official opening date is November 1st, 2025." },
+                    ar: { a: "التاريخ الرسمي للافتتاح هو 1 نوفمبر 2025." }
+                },
+                {
+                    id: 2,
+                    keywords: ["where", "location", "located", "أين", "موقع"],
+                    en: { a: "It is located one mile from the Giza Pyramids, Cairo, Egypt." },
+                    ar: { a: "يقع على بعد ميل واحد من أهرامات الجيزة في القاهرة، مصر." }
+                },
+                {
+                    id: 3,
+                    keywords: ["size", "large", "area", "مساحة", "حجم"],
+                    en: { a: "It covers approximately 480,000 square meters and is the largest museum dedicated to a single civilization." },
+                    ar: { a: "يغطي حوالي 480,000 متر مربع وهو أكبر متحف مخصص لحضارة واحدة." }
+                },
+                {
+                    id: 4,
+                    keywords: ["treasures", "tutankhamun", "artifacts", "كنوز", "توت"],
+                    en: { a: "It houses over 100,000 ancient artifacts, including the complete collection of King Tutankhamun's treasures displayed together for the first time." },
+                    ar: { a: "يضم أكثر من 100,000 قطعة أثرية قديمة، بما في ذلك مجموعة كنوز توت عنخ آمون كاملة معروضة معاً لأول مرة." }
                 }
-            },
+            ];
 
-            setupInputHandlers() {
-                const input = document.getElementById('messageInput');
-                input.addEventListener('input', () => {
-                    document.getElementById('sendButton').disabled = !input.value.trim();
-                });
-            },
-
-            loadVoices() {
-                if ('speechSynthesis' in window) {
-                    speechSynthesis.onvoiceschanged = () => {
-                        speechSynthesis.getVoices();
-                    };
-                }
-            },
-
-            autoResize(textarea) {
-                textarea.style.height = 'auto';
-                textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
-            },
-
-            handleKeyPress(event) {
-                if (event.key === 'Enter' && !event.shiftKey) {
-                    event.preventDefault();
-                    this.sendMessage();
-                }
-            },
-
-            toggleVoice() {
-                this.isVoiceEnabled = !this.isVoiceEnabled;
-                const voiceBtn = document.getElementById('voiceBtn');
-                const voiceStatus = document.getElementById('voiceStatus');
+            useEffect(() => {
+                const welcomeMsg = language === 'en' 
+                    ? "Hello! I'm SAFI, Egypt's first AI assistant. Ask me anything about the Grand Egyptian Museum! 🏛️✨"
+                    : "أهلاً! أنا صافي، أول مساعد ذكاء اصطناعي مصري. اسألني عن المتحف المصري الكبير! 🏛️✨";
                 
-                if (this.isVoiceEnabled) {
-                    voiceBtn.classList.add('active');
-                    voiceStatus.textContent = 'Voice: ON';
-                } else {
-                    voiceBtn.classList.remove('active');
-                    voiceStatus.textContent = 'Voice: OFF';
+                setMessages([{ role: 'assistant', content: welcomeMsg }]);
+            }, [language]);
+
+            useEffect(() => {
+                messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+            }, [messages]);
+
+            const findBestMatch = (query) => {
+                const lowerQuery = query.toLowerCase();
+                for (const item of gemDatabase) {
+                    if (item.keywords.some(keyword => lowerQuery.includes(keyword.toLowerCase()))) {
+                        return language === 'en' ? item.en.a : item.ar.a;
+                    }
                 }
-            },
+                return language === 'en'
+                    ? "I'd be happy to help! Could you please rephrase your question about the Grand Egyptian Museum?"
+                    : "يسعدني المساعدة! هل يمكنك إعادة صياغة سؤالك عن المتحف المصري الكبير؟";
+            };
 
-            toggleRecording() {
-                if (!this.recognition) {
-                    alert('Speech recognition is not supported in your browser.');
-                    return;
-                }
-
-                const micBtn = document.getElementById('micBtn');
-                
-                if (this.isRecording) {
-                    this.recognition.stop();
-                    this.isRecording = false;
-                    micBtn.classList.remove('recording');
-                } else {
-                    this.recognition.lang = this.currentLanguage;
-                    this.recognition.start();
-                    this.isRecording = true;
-                    micBtn.classList.add('recording');
-                }
-            },
-
-            sendPrompt(text) {
-                const input = document.getElementById('messageInput');
-                input.value = text;
-                document.getElementById('sendButton').disabled = false;
-                this.sendMessage();
-            },
-
-            async sendMessage() {
-                const input = document.getElementById('messageInput');
-                const message = input.value.trim();
-                
-                if (!message) return;
-
-                input.value = '';
-                input.style.height = 'auto';
-                document.getElementById('sendButton').disabled = true;
-
-                const welcomeSection = document.querySelector('.welcome-section');
-                if (welcomeSection) {
-                    welcomeSection.remove();
-                }
-
-                this.addMessage(message, 'user');
-                this.conversationHistory.push({ role: 'user', content: message });
-
-                this.showTypingIndicator();
-                await this.getAIResponse(message);
-            },
-
-            addMessage(content, role) {
-                const container = document.getElementById('messagesContainer');
-                const wrapper = document.createElement('div');
-                wrapper.className = `message-wrapper ${role}`;
-
-                const avatar = document.createElement('div');
-                avatar.className = 'message-avatar';
-                avatar.textContent = role === 'user' ? 'You' : '👸';
-                if (role === 'user') {
-                    avatar.style.fontSize = '12px';
-                }
-
-                const messageContent = document.createElement('div');
-                messageContent.className = 'message-content';
-                messageContent.textContent = content;
-
-                wrapper.appendChild(avatar);
-                wrapper.appendChild(messageContent);
-                container.appendChild(wrapper);
-
-                container.scrollTop = container.scrollHeight;
-
-                if (role === 'assistant' && this.isVoiceEnabled) {
-                    this.speak(content);
-                }
-
-                this.messages.push({ role, content });
-            },
-
-            showTypingIndicator() {
-                const container = document.getElementById('messagesContainer');
-                const wrapper = document.createElement('div');
-                wrapper.className = 'typing-indicator-wrapper';
-                wrapper.id = 'typingIndicator';
-
-                const avatar = document.createElement('div');
-                avatar.className = 'message-avatar';
-                avatar.style.background = 'var(--surface-tertiary)';
-                avatar.style.border = '2px solid var(--primary-white)';
-                avatar.textContent = '👸';
-
-                const dotsContainer = document.createElement('div');
-                dotsContainer.className = 'message-content typing-dots';
-                
-                for (let i = 0; i < 3; i++) {
-                    const dot = document.createElement('div');
-                    dot.className = 'typing-dot';
-                    dotsContainer.appendChild(dot);
-                }
-
-                wrapper.appendChild(avatar);
-                wrapper.appendChild(dotsContainer);
-                container.appendChild(wrapper);
-                container.scrollTop = container.scrollHeight;
-            },
-
-            removeTypingIndicator() {
-                const indicator = document.getElementById('typingIndicator');
-                if (indicator) indicator.remove();
-            },
-
-            async getAIResponse(userMessage) {
-                const isArabic = /[\u0600-\u06FF]/.test(userMessage);
-                this.currentLanguage = isArabic ? 'ar-EG' : 'en-US';
-
-                const response = this.generateSAFIResponse(userMessage, isArabic);
+            const handleSend = () => {
+                if (!input.trim()) return;
+                setMessages(prev => [...prev, { role: 'user', content: input }]);
+                setInput('');
+                setIsTyping(true);
 
                 setTimeout(() => {
-                    this.removeTypingIndicator();
-                    this.addMessage(response, 'assistant');
-                    this.conversationHistory.push({ role: 'assistant', content: response });
-                }, 1800);
-            },
+                    const response = findBestMatch(input);
+                    setMessages(prev => [...prev, { role: 'assistant', content: response }]);
+                    setIsTyping(false);
+                }, 1200);
+            };
 
-            generateSAFIResponse(message, isArabic) {
-                const lowerMsg = message.toLowerCase();
-
-                if (lowerMsg.includes('museum') || lowerMsg.includes('gem') || lowerMsg.includes('متحف')) {
-                    return isArabic ? 
-                        'المتحف المصري الكبير هو أكبر متحف أثري في العالم! يقع بالقرب من أهرامات الجيزة ويحتوي على أكثر من 100,000 قطعة أثرية من العصور الفرعونية واليونانية والرومانية. تم تصميمه بشكل مبتكر ليعكس روح الأهرامات، ويضم قاعات عرض عالمية تقدم تجربة غنية بالتاريخ. الافتتاح في 1 نوفمبر 2025 سيكون حدثاً عالمياً تاريخياً! 🏛️' :
-                        'The Grand Egyptian Museum is the largest archaeological museum in the world! Located near the Giza Pyramids, it houses over 100,000 artifacts from Pharaonic, Greek, and Roman eras. Designed innovatively to reflect the spirit of the pyramids with world-class exhibition halls. Opening November 1st, 2025 will be a historic global event! 🏛️';
+            const styles = {
+                container: {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100vh',
+                    background: isDark ? '#000' : '#fff',
+                    transition: 'all 0.5s'
+                },
+                header: {
+                    background: isDark ? '#000' : '#fff',
+                    borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+                    padding: '16px 24px'
+                },
+                headerContent: {
+                    maxWidth: '1200px',
+                    margin: '0 auto',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                },
+                logoSection: {
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '16px'
+                },
+                backBtn: {
+                    padding: '12px',
+                    borderRadius: '16px',
+                    background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                    border: 'none',
+                    color: isDark ? '#fff' : '#000',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s'
+                },
+                logoBox: {
+                    padding: '12px',
+                    borderRadius: '16px',
+                    background: isDark ? '#fff' : '#000',
+                    width: '48px',
+                    height: '48px',
+                    position: 'relative'
+                },
+                pulse: {
+                    position: 'absolute',
+                    top: '-2px',
+                    right: '-2px',
+                    width: '12px',
+                    height: '12px',
+                    background: '#22c55e',
+                    borderRadius: '50%',
+                    animation: 'pulse 2s infinite'
+                },
+                title: {
+                    fontSize: '24px',
+                    fontWeight: '700',
+                    color: isDark ? '#fff' : '#000'
+                },
+                subtitle: {
+                    fontSize: '14px',
+                    color: isDark ? '#999' : '#666'
+                },
+                controls: {
+                    display: 'flex',
+                    gap: '8px'
+                },
+                controlBtn: {
+                    padding: '12px',
+                    borderRadius: '12px',
+                    background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                    border: 'none',
+                    color: isDark ? '#fff' : '#000',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                },
+                messagesContainer: {
+                    flex: 1,
+                    overflowY: 'auto',
+                    padding: '24px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '24px'
+                },
+                messageWrapper: {
+                    display: 'flex',
+                    gap: '16px',
+                    maxWidth: '85%',
+                    animation: 'slideUp 0.4s ease-out'
+                },
+                userMessage: {
+                    marginLeft: 'auto',
+                    flexDirection: 'row-reverse'
+                },
+                avatar: {
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0
+                },
+                messageContent: {
+                    padding: '16px 20px',
+                    borderRadius: '24px',
+                    fontSize: '15px',
+                    lineHeight: '1.7'
+                },
+                inputSection: {
+                    padding: '24px',
+                    background: isDark ? '#000' : '#fff',
+                    borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`
+                },
+                inputContainer: {
+                    maxWidth: '900px',
+                    margin: '0 auto',
+                    display: 'flex',
+                    gap: '12px',
+                    alignItems: 'center',
+                    background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                    border: `2px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+                    borderRadius: '16px',
+                    padding: '12px 16px'
+                },
+                input: {
+                    flex: 1,
+                    background: 'transparent',
+                    border: 'none',
+                    color: isDark ? '#fff' : '#000',
+                    fontSize: '15px',
+                    outline: 'none'
+                },
+                sendBtn: {
+                    width: '44px',
+                    height: '44px',
+                    background: isDark ? '#fff' : '#000',
+                    color: isDark ? '#000' : '#fff',
+                    border: 'none',
+                    borderRadius: '12px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                },
+                modal: {
+                    position: 'fixed',
+                    inset: 0,
+                    background: 'rgba(0,0,0,0.9)',
+                    backdropFilter: 'blur(10px)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '16px',
+                    zIndex: 1000
+                },
+                modalContent: {
+                    background: isDark ? 'linear-gradient(135deg, #1a1a1a 0%, #000 100%)' : 'linear-gradient(135deg, #f5f5f5 0%, #fff 100%)',
+                    border: `2px solid ${isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'}`,
+                    borderRadius: '24px',
+                    padding: '48px',
+                    maxWidth: '700px',
+                    width: '100%',
+                    position: 'relative'
+                },
+                closeBtn: {
+                    position: 'absolute',
+                    top: '24px',
+                    right: '24px',
+                    padding: '8px',
+                    background: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                    border: 'none',
+                    borderRadius: '12px',
+                    color: isDark ? '#fff' : '#000',
+                    cursor: 'pointer'
+                },
+                modalTitle: {
+                    fontSize: '36px',
+                    fontWeight: '700',
+                    color: isDark ? '#fff' : '#000',
+                    marginBottom: '32px'
+                },
+                section: {
+                    marginBottom: '32px',
+                    paddingBottom: '32px',
+                    borderBottom: `1px solid ${isDark ? '#333' : '#ddd'}`
+                },
+                sectionTitle: {
+                    fontSize: '18px',
+                    fontWeight: '700',
+                    color: isDark ? '#fff' : '#000',
+                    marginBottom: '16px',
+                    textTransform: 'uppercase'
+                },
+                sectionText: {
+                    fontSize: '16px',
+                    lineHeight: '1.8',
+                    color: isDark ? '#ccc' : '#333'
+                },
+                footer: {
+                    textAlign: 'center',
+                    fontSize: '13px',
+                    color: isDark ? '#666' : '#999',
+                    marginTop: '16px'
                 }
+            };
 
-                if (lowerMsg.includes('who are you') || lowerMsg.includes('yourself') || lowerMsg.includes('مين') || lowerMsg.includes('انتي')) {
-                    return isArabic ?
-                        'أنا SAFI، أول مساعد ذكاء اصطناعي مصري من Knowing.AI! 👸🇪🇬 متخصصة في السياحة المصرية، التعليم، التكنولوجيا، والخدمات المالية. أتحدث العربية المصرية والإنجليزية بطلاقة. تم إنشائي خصيصاً لدعم افتتاح المتحف المصري الكبير. هدفي خدمة مصر والعالم!' :
-                        'I\'m SAFI, the first Egyptian AI assistant from Knowing.AI! 👸🇪🇬 I specialize in Egyptian tourism, education, technology, and financial services. I speak Egyptian Arabic and English fluently. Created specifically for the Grand Egyptian Museum opening. My goal is to serve Egypt and the world!';
-                }
+            return (
+                <div style={styles.container}>
+                    <style>{`
+                        @keyframes pulse {
+                            0%, 100% { opacity: 1; }
+                            50% { opacity: 0.5; }
+                        }
+                        @keyframes slideUp {
+                            from { opacity: 0; transform: translateY(20px); }
+                            to { opacity: 1; transform: translateY(0); }
+                        }
+                    `}</style>
 
-                if (lowerMsg.includes('hello') || lowerMsg.includes('hi') || lowerMsg.includes('ازيك') || lowerMsg.includes('السلام') || lowerMsg.includes('مرحبا')) {
-                    return isArabic ?
-                        'أهلاً وسهلاً! 👸✨ أنا SAFI من Knowing.AI. كيف يمكنني مساعدتك اليوم؟ يمكنني مساعدتك في السياحة، التعليم، الخدمات المالية، أو معلومات عن المتحف المصري الكبير! 🇪🇬' :
-                        'Hello! 👸✨ I\'m SAFI from Knowing.AI. How can I help you today? I can assist with tourism, education, financial services, or Grand Egyptian Museum information! 🇪🇬';
-                }
-
-                if (lowerMsg.includes('trip') || lowerMsg.includes('visit') || lowerMsg.includes('travel') || lowerMsg.includes('رحلة') || lowerMsg.includes('سياحة')) {
-                    return isArabic ?
-                        'مصر وجهة سياحية رائعة! 🌟 يمكنني مساعدتك في التخطيط لزيارة المتحف المصري الكبير، الأهرامات، الأقصر، أسوان، البحر الأحمر، والمزيد. ما المدة التي تخطط للإقامة؟' :
-                        'Egypt is an amazing destination! 🌟 I can help you plan visits to the Grand Egyptian Museum, Pyramids, Luxor, Aswan, Red Sea, and more. How long are you planning to stay?';
-                }
-
-                if (lowerMsg.includes('arabic') || lowerMsg.includes('language') || lowerMsg.includes('عربي') || lowerMsg.includes('علمني')) {
-                    return isArabic ?
-                        'اللهجة المصرية جميلة! 😊 بعض العبارات الأساسية: ازيك؟ (how are you)، تمام (okay/good)، يلا (let\'s go)، ماشي (alright)، شكراً (thank you). عايز تتعلم أكتر؟' :
-                        'Egyptian Arabic is beautiful! 😊 Basic phrases: ازيك؟ (how are you), تمام (okay/good), يلا (let\'s go), ماشي (alright), شكراً (thank you). Want to learn more?';
-                }
-
-                if (lowerMsg.includes('bank') || lowerMsg.includes('financial') || lowerMsg.includes('loan') || lowerMsg.includes('بنك') || lowerMsg.includes('قرض')) {
-                    return isArabic ?
-                        'Knowing.AI تقدم حلول ذكاء اصطناعي للخدمات المالية والبنكية. 💰 يمكنني مساعدتك بمعلومات عن القروض، الحسابات البنكية، الاستثمارات، والتخطيط المالي. ما الذي تحتاج معرفته؟' :
-                        'Knowing.AI provides AI solutions for financial and banking services. 💰 I can help with information about loans, bank accounts, investments, and financial planning. What do you need to know?';
-                }
-
-                if (lowerMsg.includes('history') || lowerMsg.includes('pharaoh') || lowerMsg.includes('ancient') || lowerMsg.includes('تاريخ') || lowerMsg.includes('فرعون')) {
-                    return isArabic ?
-                        'الحضارة المصرية القديمة من أعظم الحضارات! 🏺 استمرت أكثر من 3000 سنة وأنتجت الأهرامات، أبو الهول، والمعابد. الفراعنة مثل توت عنخ آمون، رمسيس الثاني، وكليوباترا تركوا إرثاً خالداً. عن أي جزء من التاريخ المصري تريد أن تعرف؟' :
-                        'Ancient Egyptian civilization is one of the greatest! 🏺 It lasted over 3,000 years and produced the Pyramids, Sphinx, and temples. Pharaohs like Tutankhamun, Ramesses II, and Cleopatra left an eternal legacy. Which part of Egyptian history interests you?';
-                }
-
-                if (lowerMsg.includes('knowing') || lowerMsg.includes('company') || lowerMsg.includes('شركة')) {
-                    return isArabic ?
-                        'Knowing.AI هي شركة مصرية رائدة في الذكاء الاصطناعي! 🚀 شعارنا "Know more. Do more" - اعرف أكتر، اعمل أكتر. نطور حلول ذكية للبنوك، السياحة، التعليم، والخدمات المختلفة. أنا SAFI جزء من منتجاتهم المميزة!' :
-                        'Knowing.AI is a leading Egyptian AI company! 🚀 Our motto: "Know more. Do more." We develop smart solutions for banking, tourism, education, and various services. I\'m SAFI, one of their flagship products!';
-                }
-
-                if (lowerMsg.includes('november') || lowerMsg.includes('opening') || lowerMsg.includes('نوفمبر') || lowerMsg.includes('افتتاح')) {
-                    return isArabic ?
-                        'يوم 1 نوفمبر 2025 سيكون يوماً تاريخياً! 🎉 افتتاح المتحف المصري الكبير، أكبر متحف أثري في العالم. العالم كله سيشاهد كنوز مصر العظيمة. أنا فخورة بأن أكون جزءاً من هذا الحدث التاريخي! 🇪🇬' :
-                        'November 1st, 2025 will be a historic day! 🎉 Opening of the Grand Egyptian Museum, the world\'s largest archaeological museum. The whole world will see Egypt\'s magnificent treasures. I\'m proud to be part of this historic event! 🇪🇬';
-                }
-
-                if (lowerMsg.includes('technology') || lowerMsg.includes('tech') || lowerMsg.includes('ai') || lowerMsg.includes('تكنولوجيا') || lowerMsg.includes('ذكاء')) {
-                    return isArabic ?
-                        'يستخدم المتحف تقنيات متقدمة! 🤖 تشمل الواقع الافتراضي والواقع المعزز، شاشات تفاعلية، ذكاء اصطناعي للشروحات الصوتية، خرائط تفاعلية، وسينما ثلاثية الأبعاد. التكنولوجيا تعزز تجربة الزوار بشكل كبير!' :
-                        'The museum uses advanced technology! 🤖 Including Virtual Reality and Augmented Reality, interactive screens, AI for audio explanations, interactive maps, and 3D cinema. Technology greatly enhances the visitor experience!';
-                }
-
-                return isArabic ?
-                    'شكراً لسؤالك! 😊 أنا SAFI من Knowing.AI. يمكنني مساعدتك في: المتحف المصري الكبير 🏛️، السياحة في مصر ✈️، التعليم والثقافة 📚، الخدمات المالية 💰، أو التكنولوجيا 🤖. كيف يمكنني مساعدتك؟' :
-                    'Thanks for your question! 😊 I\'m SAFI from Knowing.AI. I can help you with: Grand Egyptian Museum 🏛️, Tourism in Egypt ✈️, Education & Culture 📚, Financial Services 💰, or Technology 🤖. How can I help you?';
-            },
-
-            speak(text) {
-                if ('speechSynthesis' in window) {
-                    window.speechSynthesis.cancel();
-                    
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.lang = this.currentLanguage;
-                    utterance.rate = 0.95;
-                    utterance.pitch = 1.05;
-
-                    const voices = window.speechSynthesis.getVoices();
-                    
-                    if (this.currentLanguage === 'ar-EG') {
-                        const arabicVoice = voices.find(v => v.lang.startsWith('ar'));
-                        if (arabicVoice) utterance.voice = arabicVoice;
-                    } else {
-                        const englishVoice = voices.find(v => v.lang.startsWith('en'));
-                        if (englishVoice) utterance.voice = englishVoice;
-                    }
-
-                    window.speechSynthesis.speak(utterance);
-                }
-            },
-
-            newConversation() {
-                this.messages = [];
-                this.conversationHistory = [];
-                
-                const container = document.getElementById('messagesContainer');
-                container.innerHTML = `
-                    <div class="welcome-section">
-                        <div class="safi-hero-avatar">👸</div>
-                        <h1 class="welcome-title">مرحباً! I'm SAFI</h1>
-                        <p class="welcome-subtitle">
-                            The first Egyptian AI assistant created by Knowing.AI for the Grand Egyptian Museum opening on November 1st, 2025. 
-                            I speak Egyptian Arabic and English fluently. Welcome to the future of Egyptian AI!
-                        </p>
-                        <div class="starter-prompts">
-                            <div class="prompt-card" onclick="app.sendPrompt('ازيك يا SAFI؟')">
-                                <div class="prompt-icon">👋</div>
-                                <div class="prompt-text">ازيك يا SAFI؟</div>
+                    <header style={styles.header}>
+                        <div style={styles.headerContent}>
+                            <div style={styles.logoSection}>
+                                <button style={styles.backBtn} onClick={() => window.location.href = 'https://knowing-ai.netlify.app'}>
+                                    <ArrowLeft />
+                                </button>
+                                <div style={styles.logoBox}>
+                                    <KaiGPTLogo color={isDark ? '#000' : '#fff'} />
+                                    <div style={styles.pulse}></div>
+                                </div>
+                                <div>
+                                    <div style={styles.title}>KaiGPT & SAFI</div>
+                                    <div style={styles.subtitle}>Know More. Do More.</div>
+                                </div>
                             </div>
-                            <div class="prompt-card" onclick="app.sendPrompt('Tell me about yourself')">
-                                <div class="prompt-icon">✨</div>
-                                <div class="prompt-text">Tell me about yourself</div>
-                            </div>
-                            <div class="prompt-card" onclick="app.sendPrompt('Grand Egyptian Museum details')">
-                                <div class="prompt-icon">🏛️</div>
-                                <div class="prompt-text">GEM Opening Details</div>
-                            </div>
-                            <div class="prompt-card" onclick="app.sendPrompt('How can Knowing.AI help?')">
-                                <div class="prompt-icon">💼</div>
-                                <div class="prompt-text">Business Solutions</div>
+                            <div style={styles.controls}>
+                                <button style={styles.controlBtn} onClick={() => setIsDark(!isDark)}>
+                                    {isDark ? <Sun /> : <Moon />}
+                                </button>
+                                <button style={styles.controlBtn} onClick={() => setShowAbout(true)}>
+                                    <Info />
+                                </button>
+                                <button style={styles.controlBtn} onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}>
+                                    <Languages />
+                                </button>
                             </div>
                         </div>
-                    </div>
-                `;
+                    </header>
 
-                if (window.speechSynthesis) {
-                    window.speechSynthesis.cancel();
-                }
-            }
+                    {showAbout && (
+                        <div style={styles.modal} onClick={() => setShowAbout(false)}>
+                            <div style={styles.modalContent} onClick={e => e.stopPropagation()}>
+                                <button style={styles.closeBtn} onClick={() => setShowAbout(false)}>
+                                    <X />
+                                </button>
+                                <div style={{ ...styles.logoBox, display: 'inline-flex', marginBottom: '24px' }}>
+                                    <KaiGPTLogo color={isDark ? '#000' : '#fff'} />
+                                </div>
+                                <h2 style={styles.modalTitle}>About SAFI / عن صافي</h2>
+                                <div style={styles.section}>
+                                    <h3 style={styles.sectionTitle}>English</h3>
+                                    <p style={styles.sectionText}>
+                                        SAFI is Egypt's first national AI model, created by <strong>Knowing.AI</strong> to deliver intelligent, human-like interactions in Arabic and English.
+                                    </p>
+                                    <p style={{...styles.sectionText, marginTop: '16px'}}>
+                                        She blends Egypt's heritage with advanced technology — built for <strong>clarity</strong>, <strong>trust</strong>, and <strong>knowledge</strong>.
+                                    </p>
+                                </div>
+                                <div style={styles.section} dir="rtl">
+                                    <h3 style={styles.sectionTitle}>العربية</h3>
+                                    <p style={styles.sectionText}>
+                                        صافي هي أول نموذج ذكاء اصطناعي وطني في مصر، من تطوير <strong>Knowing.AI</strong> لتقدّم تفاعل ذكي وطبيعي بالعربي والإنجليزي.
+                                    </p>
+                                    <p style={{...styles.sectionText, marginTop: '16px'}}>
+                                        بتجمع بين روح مصر العريقة والتقنيات الحديثة — معمولة علشان <strong>الوضوح</strong>، و<strong>الثقة</strong>، و<strong>المعرفة</strong>.
+                                    </p>
+                                </div>
+                                <div style={styles.footer}>
+                                    Powered by Knowing.AI • مدعوم من Knowing.AI
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    <div style={styles.messagesContainer}>
+                        {messages.map((msg, i) => (
+                            <div key={i} style={{...styles.messageWrapper, ...(msg.role === 'user' && styles.userMessage)}}>
+                                <div style={{
+                                    ...styles.avatar,
+                                    background: msg.role === 'user' ? (isDark ? '#fff' : '#000') : 'rgba(255,255,255,0.1)',
+                                    color: msg.role === 'user' ? (isDark ? '#000' : '#fff') : '#fff',
+                                    border: msg.role === 'assistant' ? '2px solid #fff' : 'none'
+                                }}>
+                                    {msg.role === 'user' ? 'You' : '👸'}
+                                </div>
+                                <div style={{
+                                    ...styles.messageContent,
+                                    background: msg.role === 'user' ? (isDark ? '#fff' : '#000') : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'),
+                                    color: msg.role === 'user' ? (isDark ? '#000' : '#fff') : (isDark ? '#fff' : '#000'),
+                                    border: msg.role === 'assistant' ? `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}` : 'none'
+                                }}>
+                                    {msg.content}
+                                </div>
+                            </div>
+                        ))}
+                        {isTyping && (
+                            <div style={styles.messageWrapper}>
+                                <div style={{...styles.avatar, background: 'rgba(255,255,255,0.1)', border: '2px solid #fff'}}>
+                                    👸
+                                </div>
+                                <div style={{...styles.messageContent, background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)', display: 'flex', gap: '6px'}}>
+                                    <div style={{width: '10px', height: '10px', background: '#999', borderRadius: '50%', animation: 'bounce 1.4s infinite'}}></div>
+                                    <div style={{width: '10px', height: '10px', background: '#999', borderRadius: '50%', animation: 'bounce 1.4s infinite 0.2s'}}></div>
+                                    <div style={{width: '10px', height: '10px', background: '#999', borderRadius: '50%', animation: 'bounce 1.4s infinite 0.4s'}}></div>
+                                </div>
+                            </div>
+                        )}
+                        <div ref={messagesEndRef} />
+                    </div>
+
+                    <div style={styles.inputSection}>
+                        <div style={styles.inputContainer}>
+                            <input 
+                                style={styles.input}
+                                value={input}
+                                onChange={e => setInput(e.target.value)}
+                                onKeyPress={e => e.key === 'Enter' && handleSend()}
+                                placeholder={language === 'en' ? 'Ask about the Grand Egyptian Museum...' : 'اسأل عن المتحف المصري الكبير...'}
+                                dir={language === 'ar' ? 'rtl' : 'ltr'}
+                            />
+                            <button style={styles.sendBtn} onClick={handleSend} disabled={!input.trim()}>
+                                <Send />
+                            </button>
+                        </div>
+                        <div style={{...styles.footer, marginTop: '16px'}}>
+                            {language === 'en' 
+                                ? 'SAFI - Egypt\'s First AI Assistant | Powered by Knowing.AI'
+                                : 'صافي - أول مساعد ذكاء اصطناعي مصري | بدعم من Knowing.AI'
+                            }
+                        </div>
+                    </div>
+                </div>
+            );
         };
 
-        document.addEventListener('DOMContentLoaded', () => {
-            app.init();
-            console.log('🇪🇬 KaiGPT Professional - Powered by SAFI');
-            console.log('Knowing.AI - Know more. Do more.');
-            console.log('Grand Egyptian Museum Opening - November 1, 2025');
-        });
+        ReactDOM.render(<KaiGPTSAFI />, document.getElementById('root'));
     </script>
 </body>
 </html>
