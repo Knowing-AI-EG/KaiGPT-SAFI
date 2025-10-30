@@ -3,41 +3,41 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>KaiGPT • SAFI — Knowing.AI (Official)</title>
+<title>KaiGPT • SAFI — Knowing.AI (Final)</title>
 <meta name="description" content="KaiGPT powered by SAFI — Knowing.AI — Grand Egyptian Museum assistant. Know more. Do more."/>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23000000'/><circle cx='32' cy='32' r='22' fill='none' stroke='%23D4AF37' stroke-width='2.5'/></svg>">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000000'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%2388d6ce' stroke-width='2.5'/%3E%3C/svg%3E">
 <style>
   :root{
-    --bg:#090909;
-    --panel:#0f0f10;
-    --muted:#a8b0b6;
-    --text:#f3f6f7;
-    --gold:#d4af37;
+    --bg:#070707;
+    --panel:#0e0e0f;
+    --muted:#9aa3a8;
+    --text:#eef2f3;
+    --accent:#00b7a9; /* calm teal accent (not yellow) */
     --glass: rgba(255,255,255,0.02);
     --radius:12px;
     --max-width:980px;
   }
   *{box-sizing:border-box}
   html,body{height:100%;margin:0;font-family:Inter, "Segoe UI", Roboto, system-ui, -apple-system;background:linear-gradient(180deg,var(--bg),#050505);color:var(--text);-webkit-font-smoothing:antialiased}
-  a{color:var(--gold);text-decoration:none}
+  a{color:var(--accent);text-decoration:none}
 
   /* layout */
   .root{display:flex;min-height:100vh;padding:18px;gap:18px}
   .sidebar{
     width:320px;background:linear-gradient(180deg,var(--panel),#0b0b0b);border-radius:var(--radius);
     padding:20px;display:flex;flex-direction:column;gap:16px;border:1px solid rgba(255,255,255,0.03);
-    box-shadow:0 10px 40px rgba(0,0,0,0.6)
+    box-shadow:0 8px 30px rgba(0,0,0,0.6)
   }
 
   .brand{display:flex;align-items:center;gap:12px}
   .logo{
-    width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#111,#1a1a1a);display:flex;align-items:center;justify-content:center;
-    border:2px solid rgba(255,255,255,0.03); font-weight:800;color:var(--gold); font-size:20px;
+    width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#111,#141414);
+    display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,0.03); font-weight:800;color:var(--accent); font-size:20px;
   }
   .brand h1{margin:0;font-size:18px}
   .brand .sub{color:var(--muted);font-size:13px;margin-top:2px}
 
-  .slogan{font-weight:700;color:var(--gold);margin-top:8px}
+  .slogan{font-weight:700;color:var(--accent);margin-top:8px}
   .powered{color:var(--muted);font-size:12px;margin-top:12px}
 
   .quick{display:flex;flex-direction:column;gap:10px}
@@ -65,23 +65,23 @@
   .bubble{padding:14px 16px;border-radius:12px;max-width:78%;line-height:1.6;white-space:pre-wrap;word-wrap:break-word}
   .msg.user .bubble{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));color:var(--text);border:1px solid rgba(255,255,255,0.02)}
   .msg.bot .bubble{background:linear-gradient(180deg, rgba(0,0,0,0.35), rgba(255,255,255,0.01));color:var(--text);border:1px solid rgba(0,0,0,0.18);box-shadow:0 6px 18px rgba(2,4,6,0.6)}
-  .bubble .title-small{font-weight:700;color:var(--gold);font-size:13px;margin-bottom:6px}
+  .bubble .title-small{font-weight:700;color:var(--accent);font-size:13px;margin-bottom:6px}
 
   .composer{padding:16px 18px;border-top:1px solid rgba(255,255,255,0.02);background:linear-gradient(180deg, rgba(255,255,255,0.005), transparent)}
   .composer-inner{display:flex;gap:12px;align-items:flex-end;max-width:var(--max-width);margin:0 auto}
   textarea.input{flex:1;min-height:48px;max-height:260px;resize:none;border-radius:12px;padding:12px;background:var(--panel);border:1px solid rgba(255,255,255,0.02);color:var(--text);font-size:15px;outline:none}
   .controls{display:flex;gap:8px;align-items:center}
   .btn{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--text);padding:10px 12px;border-radius:10px;cursor:pointer}
-  .btn.primary{background:linear-gradient(90deg,var(--gold),#b88b2f);color:#021;border:none;font-weight:800;box-shadow:0 8px 20px rgba(212,175,55,0.08)}
+  .btn.primary{background:linear-gradient(90deg,var(--accent),#009888);color:#021;border:none;font-weight:800;box-shadow:0 8px 20px rgba(0,183,169,0.08)}
 
   .small-note{color:var(--muted);font-size:13px;text-align:center;margin-top:8px}
 
   .right-col{width:320px;display:flex;flex-direction:column;gap:12px}
   .card{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);color:var(--muted)}
 
-  /* subtle pyramid graphic */
+  /* subtle pyramid graphic (decorative) */
   .bg-pyramid{
-    position:fixed;right:8%;top:6%;opacity:0.035;pointer-events:none;transform:scale(1.5);
+    position:fixed;right:8%;top:6%;opacity:0.03;pointer-events:none;transform:scale(1.5);
   }
 
   @media (max-width:1100px){
@@ -96,11 +96,10 @@
     width:100%; text-align:center; padding:12px 0; color:var(--muted); font-size:13px;
     background:transparent; border-top:1px solid rgba(255,255,255,0.02)
   }
-
 </style>
 </head>
 <body>
-  <!-- subtle pyramid background (decorative) -->
+  <!-- decorative pyramid -->
   <svg class="bg-pyramid" width="540" height="420" viewBox="0 0 540 420" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <path d="M270 10 L500 380 H40 L270 10 Z" fill="#ffffff"/>
   </svg>
@@ -201,10 +200,7 @@
   </div>
 
 <script>
-/* ========================= Knowledge base =========================
-   Extended Q&A for GEM, SAFI, Knowing.AI, Egypt.
-   Ready to expand by editing the KNOWLEDGE array or loading JSON.
-*/
+/* ========================= Knowledge base ========================= */
 const KNOWLEDGE = [
   { id:1, keywords:["متى","افتتاح","opening","when","november","1 november","1 نوفمبر"], a_ar:"1 نوفمبر 2025.", a_en:"November 1, 2025." },
   { id:2, keywords:["اين","أين","مكان","where","location","giza","الجيزة","اهرامات","pyramids"], a_ar:"على بعد ميل من أهرامات الجيزة، القاهرة، مصر.", a_en:"One mile from the Giza Pyramids, Cairo, Egypt." },
@@ -216,7 +212,7 @@ const KNOWLEDGE = [
   { id:8, keywords:["عجائب","wonders","seven wonders","اهرامات","library","pharos","الاسكندرية"], a_ar:"تاريخياً احتوت مصر على 3 من عجائب الدنيا القديمة: الهرم الأكبر، مكتبة الإسكندرية، ومنارة الإسكندرية (الفاروس).", a_en:"Historically Egypt hosted 3 of the ancient world's wonders: the Great Pyramid, the Library of Alexandria, and the Lighthouse (Pharos)." },
   { id:9, keywords:["زوار","visitors","tourism","سياحة"], a_ar:"المتحف متوقع أن يجذب ملايين الزوار سنوياً ويعزز السياحة المصرية.", a_en:"The museum is expected to attract millions of visitors annually and boost Egyptian tourism." },
   { id:10, keywords:["تقنيات","technology","vr","hologram","تكنولوجيا","الواقع الافتراضي"], a_ar:"يستخدم المتحف تقنيات متقدمة مثل الواقع الافتراضي، الهولوجرام، وشاشات تفاعلية.", a_en:"The museum uses advanced technologies like VR, holograms, and interactive touchscreens." },
-  { id:11, keywords:["متى تذاكر","tickets","حجز","تذاكر"], a_ar:"تفاصيل التذاكر والمواعيد ستكون متاحة رسمياً عبر موقع المتحف وقنوات البيع قبل الافتتاح. يُنصح بمتابعة الصفحات الرسمية.", a_en:"Ticketing details and schedules will be published officially via the museum channels before opening. Please follow official pages." },
+  { id:11, keywords:["تذاكر","tickets","حجز","booking","مواعيد"], a_ar:"تفاصيل التذاكر ومواعيد الزيارة تكون متاحة رسمياً عبر قنوات المتحف — يُنصح بالتحقق من الموقع الرسمي عند الاقتراب من تاريخ الافتتاح.", a_en:"Ticketing details and visiting schedules will be published officially via the museum channels — check official pages closer to opening." },
   { id:12, keywords:["اتصل","contact","support","email","knowing.ai.eg"], a_ar:"للدعم أو الملاحظات: knowing.ai.eg@outlook.com", a_en:"For support or feedback: knowing.ai.eg@outlook.com" }
 ];
 
@@ -224,6 +220,7 @@ const KNOWLEDGE = [
 function isArabic(text){ return /[\u0600-\u06FF]/.test(text); }
 function normalize(s){ return (s||'').toLowerCase().replace(/[^\w\u0600-\u06FF\s]+/g,' ').replace(/\s+/g,' ').trim(); }
 
+/* scoring with token overlap and substring checks */
 function scoreMatch(text, entry){
   const norm = normalize(text);
   if(!norm) return 0;
@@ -360,7 +357,7 @@ function escapeHtml(s){ return String(s).replace(/</g,'&lt;').replace(/>/g,'&gt;
 
 /* expose app */
 window.app = app;
-document.addEventListener('DOMContentLoaded', ()=>{ app.init(); if(window.speechSynthesis) window.speechSynthesis.getVoices(); console.log('KaiGPT • SAFI — Final demo ready.'); });
+document.addEventListener('DOMContentLoaded', ()=>{ app.init(); if(window.speechSynthesis) window.speechSynthesis.getVoices(); console.log('KaiGPT • SAFI — Final ready.'); });
 </script>
 </body>
 </html>
