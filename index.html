@@ -1,482 +1,232 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>KaiGPT • SAFI — Knowing.AI — GEM Edition</title>
-<meta name="description" content="KaiGPT powered by SAFI — First Egyptian AI assistant for the Grand Egyptian Museum opening. Know more. Do more." />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23000000'/><circle cx='32' cy='32' r='22' fill='none' stroke='%23D4AF37' stroke-width='2.5'/></svg>">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KaiGPT & SAFI | Knowing.AI</title>
 <style>
-:root{
-  --black:#000;
-  --white:#fff;
-  --surface-1:#070707;
-  --surface-2:#0f0f0f;
-  --muted:#bdbdbd;
-  --gold:#d4af37;
-  --glass: rgba(255,255,255,0.03);
-}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-  background:linear-gradient(180deg,var(--black),#050505);color:var(--white);-webkit-font-smoothing:antialiased;overflow:hidden;
-}
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: #0e0e0e;
+    color: #ffffff;
+    display: flex;
+    height: 100vh;
+  }
 
-/* layout */
-.app{display:flex;height:100vh;width:100%}
-aside.sidebar{width:320px;padding:26px;background:linear-gradient(180deg,var(--surface-1),var(--surface-2));border-right:1px solid rgba(255,255,255,0.03);display:flex;flex-direction:column;gap:16px}
-.brand{display:flex;gap:12px;align-items:center}
-.logo{width:68px;height:68px;border-radius:12px;background:var(--white);display:flex;align-items:center;justify-content:center}
-.brand-text .title{font-weight:800;font-size:18px;color:var(--white)}
-.brand-text .tag{font-size:12px;color:var(--muted)}
-.new-btn{width:100%;padding:12px;background:var(--white);color:var(--black);border-radius:10px;border:none;font-weight:800;cursor:pointer}
-.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
-.avatar-s{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,#111,#222);display:flex;align-items:center;justify-content:center;font-size:20px;border:2px solid var(--gold)}
-.quick-actions{display:flex;flex-direction:column;gap:8px}
-.qa-item{padding:10px;border-radius:8px;color:var(--muted);cursor:pointer}
-.qa-item:hover{background:rgba(255,255,255,0.02);color:var(--white)}
+  /* Sidebar */
+  .sidebar {
+    width: 250px;
+    background: #000;
+    border-right: 1px solid #222;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .logo {
+    text-align: center;
+    font-size: 1.4em;
+    color: #ffd700;
+    font-weight: bold;
+  }
+  .slogan {
+    text-align: center;
+    color: #ccc;
+    font-size: 0.9em;
+    margin-top: 10px;
+  }
 
-/* main */
-main.viewer{flex:1;display:flex;flex-direction:column;background:linear-gradient(180deg,var(--surface-2),#000)}
-header.topbar{display:flex;justify-content:space-between;align-items:center;padding:20px 26px;border-bottom:1px solid rgba(255,255,255,0.03)}
-.title-main h1{font-size:20px;margin:0;font-weight:800}
-.gem-badge{background:var(--white);color:var(--black);padding:6px 10px;border-radius:8px;font-weight:800}
+  /* Chat container */
+  .chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+  }
+  .message {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+  }
+  .message.user .bubble {
+    background: #333;
+    color: #fff;
+    margin-left: auto;
+  }
+  .message.bot .bubble {
+    background: #1a1a1a;
+    border: 1px solid #ffd70050;
+    color: #fff;
+  }
+  .bubble {
+    padding: 12px 16px;
+    border-radius: 12px;
+    max-width: 80%;
+    line-height: 1.5;
+  }
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #ffd700;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 10px;
+  }
 
-/* messages */
-.messages{flex:1;overflow:auto;padding:34px;display:flex;flex-direction:column;gap:18px}
-.welcome{display:flex;flex-direction:column;align-items:center;text-align:center;margin-top:20px}
-.hero-avatar{width:150px;height:150px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:68px;border:5px solid var(--white);background:linear-gradient(135deg,#111,#222)}
-.welcome h2{font-size:36px;margin:0}
-.welcome p{color:var(--muted);max-width:820px;line-height:1.6}
+  /* Input area */
+  .input-area {
+    border-top: 1px solid #333;
+    padding: 15px;
+    display: flex;
+    background: #0e0e0e;
+  }
+  .input-area input {
+    flex: 1;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 6px;
+    color: #fff;
+    padding: 10px;
+    outline: none;
+  }
+  .input-area button {
+    background: #ffd700;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    margin-left: 10px;
+    padding: 0 20px;
+    cursor: pointer;
+    font-weight: bold;
+  }
 
-/* bubbles */
-.msg-row{display:flex;gap:12px;align-items:flex-start;max-width:86%}
-.msg-row.user{margin-left:auto;flex-direction:row-reverse}
-.msg-avatar{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700}
-.bubble{padding:14px 16px;border-radius:14px;font-size:15px;line-height:1.6;box-shadow:0 6px 18px rgba(0,0,0,0.6)}
-.bubble.assistant{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);color:var(--white)}
-.bubble.user{background:var(--white);color:var(--black)}
-
-/* composer */
-.composer{padding:18px 26px;border-top:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
-.input-wrap{max-width:1100px;margin:0 auto;display:flex;gap:12px;align-items:flex-end}
-.input-area{flex:1;background:var(--glass);border-radius:12px;padding:10px;display:flex;gap:8px;align-items:flex-end;border:1px solid rgba(255,255,255,0.03)}
-textarea#input{width:100%;min-height:48px;max-height:220px;resize:none;border:none;background:transparent;color:var(--white);font-size:15px;padding:8px;outline:none}
-.actions{display:flex;gap:8px}
-.icon-btn{width:44px;height:44px;border-radius:10px;border:none;background:transparent;color:var(--white);font-size:18px;cursor:pointer}
-.send-btn{width:52px;height:52px;border-radius:12px;background:var(--gold);color:var(--black);border:none;font-weight:800;cursor:pointer}
-
-/* responsive */
-@media(max-width:1024px){aside.sidebar{display:none}.welcome h2{font-size:28px}}
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    body {
+      flex-direction: column;
+    }
+    .sidebar {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #222;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .slogan {
+      margin-top: 0;
+    }
+  }
 </style>
 </head>
 <body>
-<div class="app">
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="logo" aria-hidden="true">
-        <!-- simple gold-accent mark -->
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="48" height="48">
-          <path d="M18 74 L50 20 L82 74 Z" fill="none" stroke="#000" stroke-width="6"/>
-          <path d="M36 56 A16 16 0 1 0 64 56" fill="none" stroke="#d4af37" stroke-width="4"/>
-        </svg>
-      </div>
-      <div class="brand-text">
-        <div class="title">Knowing.AI</div>
-        <div class="tag">KaiGPT • SAFI — GEM Edition</div>
-      </div>
+
+<div class="sidebar">
+  <div>
+    <div class="logo">Knowing.AI</div>
+    <div class="slogan">Know more. Do more.</div>
+  </div>
+  <div style="color:#555; font-size:0.8em; text-align:center;">© 2025 Knowing.AI</div>
+</div>
+
+<div class="chat-container">
+  <div class="messages" id="messages">
+    <div class="message bot">
+      <div class="avatar">👸🏻</div>
+      <div class="bubble">أنا صافي، جاهزة أجاوبك عن كل حاجة تخص المتحف المصري الكبير.</div>
     </div>
-
-    <button class="new-btn" onclick="app.newConversation()">➕ New Conversation</button>
-
-    <div class="card">
-      <div style="display:flex;gap:10px;align-items:center">
-        <div class="avatar-s">👸</div>
-        <div>
-          <div style="font-weight:800">SAFI</div>
-          <div style="font-size:12px;color:var(--muted)">مرشدة مصرية ذكية — صوت دافئ وودود</div>
-        </div>
-      </div>
-      <div style="margin-top:10px;font-size:13px;color:var(--muted)">
-        Bilingual: العربية المصرية & English<br>Opening: 1 November 2025
-      </div>
-    </div>
-
-    <div class="card">
-      <div style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:8px">Quick Prompts</div>
-      <div class="quick-actions">
-        <div class="qa-item" onclick="app.sendPrompt('When will the Grand Egyptian Museum officially open?')">🏛 Opening date / موعد الافتتاح</div>
-        <div class="qa-item" onclick="app.sendPrompt('Where is the GEM located?')">📍 Location / الموقع</div>
-        <div class="qa-item" onclick="app.sendPrompt('Tell me about SAFI')">👸 About SAFI / عن صافي</div>
-        <div class="qa-item" onclick="app.sendPrompt('What is Knowing.AI?')">🚀 Knowing.AI</div>
-      </div>
-    </div>
-
-    <div style="margin-top:auto;font-size:12px;color:var(--muted)">
-      KaiGPT • SAFI — Knowing.AI<br>Know more. Do more.
-    </div>
-  </aside>
-
-  <main class="viewer">
-    <header class="topbar">
-      <div class="title-main"><h1>KaiGPT</h1><div class="gem-badge" style="margin-left:12px">GEM EDITION</div></div>
-      <div class="controls">
-        <button id="voiceToggle" class="icon-btn" onclick="app.toggleVoice()">🎤</button>
-        <button class="icon-btn" onclick="app.newConversation()">⟲ Reset</button>
-      </div>
-    </header>
-
-    <section class="messages" id="messages">
-      <div class="welcome" id="welcome">
-        <div class="hero-avatar">👸</div>
-        <h2>مرحباً — I'm SAFI</h2>
-        <p>أنا صافي — المرشدة الذكية من Knowing.AI. اسأل عن المتحف المصري الكبير، عن مصر، أو عن Knowing.AI — هرد عليك بالعربية المصرية أو بالإنجليزي بطابع دافئ وواقعي.</p>
-
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;width:100%;max-width:920px;margin-top:12px">
-          <div class="card" style="cursor:pointer" onclick="app.sendPrompt('When will the Grand Egyptian Museum officially open?')">When will the Grand Egyptian Museum officially open?</div>
-          <div class="card" style="cursor:pointer" onclick="app.sendPrompt('أين يقع المتحف المصري الكبير؟')">أين يقع المتحف المصري الكبير؟</div>
-          <div class="card" style="cursor:pointer" onclick="app.sendPrompt('Tell me about SAFI')">Tell me about SAFI</div>
-        </div>
-      </div>
-    </section>
-
-    <footer class="composer">
-      <div class="input-wrap">
-        <div class="input-area">
-          <textarea id="input" placeholder="Message SAFI in Arabic or English... (مثال: متى الافتتاح؟ / When is the opening?)" oninput="app.onInput()" onkeydown="app.onKey(event)"></textarea>
-          <div class="actions">
-            <button id="mic" class="icon-btn" onclick="app.toggleRecording()">🎙</button>
-            <button id="langBtn" class="icon-btn" onclick="app.toggleExample()">🌐</button>
-            <button id="send" class="send-btn" onclick="app.sendMessage()">➤</button>
-          </div>
-        </div>
-      </div>
-    </footer>
-  </main>
+  </div>
+  <div class="input-area">
+    <input type="text" id="userInput" placeholder="اكتب سؤالك هنا..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
 </div>
 
 <script>
-/* =========================== KNOWLEDGE BASE =========================== */
-/* Extended Q&A for GEM, SAFI, Knowing.AI, and Egypt highlights (EN + AR) */
-const KNOWLEDGE = [
-  /* 1 - 20 previously included (kept) */
-  { id:1, q_en:"When will the Grand Egyptian Museum officially open?", q_ar:"متى سيفتتح المتحف المصري الكبير رسمياً؟",
-    a_en:"November 1, 2025.", a_ar:"1 نوفمبر 2025.",
-    keywords:["grand egyptian museum","opening date","official launch","opening","موعد الافتتاح","المتحف المصري الكبير","الافتتاح"] },
-
-  { id:2, q_en:"Where is the GEM located?", q_ar:"أين يقع المتحف المصري الكبير؟",
-    a_en:"One mile from the Giza Pyramids, Cairo, Egypt.", a_ar:"على بعد ميل من أهرامات الجيزة، القاهرة، مصر.",
-    keywords:["location","giza","giza plateau","cairo","الموقع","هضبة الجيزة","القاهرة","أهرامات"] },
-
-  { id:3, q_en:"How large is the Grand Egyptian Museum?", q_ar:"كم تبلغ مساحة المتحف المصري الكبير؟",
-    a_en:"Approximately 480,000 square meters, the largest archaeological museum dedicated to a single civilization.",
-    a_ar:"حوالي 480,000 متر مربع، أكبر متحف أثري مخصص لحضارة واحدة.",
-    keywords:["size","area","480000","مساحة","حجم","متر مربع","المتحف"] },
-
-  { id:4, q_en:"What is special about the GEM’s collection?", q_ar:"ما الذي يجعل مجموعات المتحف المصري الكبير مميزة؟",
-    a_en:"It houses over 100,000 artifacts including the complete treasures of King Tutankhamun.",
-    a_ar:"يضم أكثر من 100,000 قطعة أثرية بما في ذلك كنوز توت عنخ آمون كاملة.",
-    keywords:["artifacts","tutankhamun","treasures","كنوز توت","القطع الأثرية","توت عنخ آمون"] },
-
-  { id:5, q_en:"Who designed the Grand Egyptian Museum building?", q_ar:"من صمم مبنى المتحف المصري الكبير؟",
-    a_en:"Designed by Heneghan Peng Architects, combining modern design with ancient Egyptian motifs.",
-    a_ar:"صممه مكتب هنغان بينغ للعمارة، يجمع بين التصميم العصري والزخارف المصرية القديمة.",
-    keywords:["heneghan","peng","architecture","design","الهندسة المعمارية","تصميم","هنغان"] },
-
-  { id:6, q_en:"What is unique about the museum’s gates and logo?", q_ar:"ما الذي يميز بوابات المتحف وشعاره؟",
-    a_en:"Gates are engraved with hieroglyphics symbolizing Egyptian culture; the logo blends a pyramid with the letter 'G'.",
-    a_ar:"البوابات محفورة بالهيروغليفية التي ترمز للثقافة المصرية، والشعار يجمع بين الهرم وحرف 'G'.",
-    keywords:["gates","hieroglyphics","logo","بوابات","هيروغليفية","شعار"] },
-
-  { id:7, q_en:"How does GEM preserve and protect its artifacts?", q_ar:"كيف يحافظ المتحف على القطع الأثرية ويحميها؟",
-    a_en:"Through advanced climate control, anti-seismic technology, specialized display cases, and security systems.",
-    a_ar:"باستخدام تحكم مناخي متقدم، تصميم مقاوم للزلازل، وعلب عرض خاصة، وأنظمة أمنية متطورة.",
-    keywords:["preservation","climate control","security","المحافظة","أمن","ترميم"] },
-
-  { id:8, q_en:"What is the significance of the Grand Hall?", q_ar:"ما هي أهمية القاعة الكبرى؟",
-    a_en:"It features the colossal 83-ton statue of Ramses II and panoramic views of the pyramids.",
-    a_ar:"تحتوي على تمثال ضخم لرمسيس الثاني يزن 83 طنًا، وإطلالات بانورامية على الأهرامات.",
-    keywords:["grand hall","ramses","ramesses","رعمسيس","القاعة الكبرى","تمثال"] },
-
-  { id:9, q_en:"Are there interactive and digital exhibits?", q_ar:"هل توجد معارض تفاعلية ورقمية؟",
-    a_en:"Yes, including VR presentations, holograms, and multi-language touchscreens.",
-    a_ar:"نعم، تشمل عروض الواقع الافتراضي، الهولوجرامات، وشاشات باللمس متعددة اللغات.",
-    keywords:["vr","virtual reality","hologram","interactive","الواقع الافتراضي","هولوجرام","تفاعلية"] },
-
-  { id:10, q_en:"What languages are supported for tours and guides?", q_ar:"ما هي اللغات المدعومة للجولات والمشرفين؟",
-    a_en:"Arabic, English, French, German, Spanish, Italian, Japanese, and Chinese.",
-    a_ar:"العربية، الإنجليزية، الفرنسية، الألمانية، الإسبانية، الإيطالية، اليابانية، والصينية.",
-    keywords:["languages","tours","guides","اللغات","جولات"] },
-
-  { id:11, q_en:"How many artifacts does GEM hold?", q_ar:"كم عدد القطع الأثرية التي يحتويها المتحف؟",
-    a_en:"Over 57,000 artifacts including more than 5,000 pieces from King Tutankhamun’s treasures displayed together for the first time.",
-    a_ar:"يحتوي على أكثر من 57 ألف قطعة أثرية، منها أكثر من 5 آلاف قطعة من كنوز الملك توت عنخ آمون.",
-    keywords:["57000","57,000","artifacts count","pieces","القطع الأثرية","٥٧٠٠٠","كنوز توت"] },
-
-  { id:12, q_en:"What technologies does GEM use for exhibits?", q_ar:"ما هي التقنيات التي يستخدمها المتحف في المعارض؟",
-    a_en:"Uses advanced digital and interactive display technologies, VR, and applications for an educational and entertaining visitor experience.",
-    a_ar:"يعتمد المتحف على أحدث تقنيات العرض الرقمي والتفاعلي والواقع الافتراضي لتقديم تجربة تعليمية وترفيهية.",
-    keywords:["technology","tech","digital","exhibits tech","تقنيات","الواقع الافتراضي"] },
-
-  { id:13, q_en:"What is the significance of the Children’s Museum at GEM?", q_ar:"ما هي أهمية متحف الأطفال في المتحف؟",
-    a_en:"It spans 5,000 sqm and provides interactive learning areas and educational apps to introduce children to ancient Egyptian civilization.",
-    a_ar:"يمتد على مساحة 5000 متر مربع ويضم مناطق تعليمية تفاعلية وتطبيقات تعليمية.",
-    keywords:["children","children's museum","5000","متحف الأطفال","تعليم"] },
-
-  { id:14, q_en:"How many visitors is GEM expected to attract annually?", q_ar:"كم عدد الزوار المتوقع للمتحف سنويًا؟",
-    a_en:"Around five million visitors per year.",
-    a_ar:"من المتوقع أن يستقطب نحو خمسة ملايين زائر سنويًا.",
-    keywords:["visitors","annual attendance","five million","الزوار","السياحة"] },
-
-  { id:15, q_en:"What was the timeline for GEM’s construction and development?", q_ar:"ما هو جدول بناء وتطوير المتحف؟",
-    a_en:"Groundbreaking in 2002, construction began 2005, with completion of the main building in 2021 and opening in 2025.",
-    a_ar:"بدأ وضع حجر الأساس عام 2002، والإنشاء عام 2005، تم الانتهاء من المبنى الرئيسي عام 2021، والافتتاح عام 2025.",
-    keywords:["timeline","construction","2002","2005","2021","الجدول الزمني","البناء"] },
-
-  { id:16, q_en:"How does GEM support Egyptian tourism?", q_ar:"كيف يدعم المتحف السياحة في مصر؟",
-    a_en:"It is a national project aimed at attracting millions of tourists annually and elevating Egypt’s cultural image globally.",
-    a_ar:"مشروع قومي يهدف لجذب ملايين السياح سنوياً وتعزيز صورة مصر الثقافية عالمياً.",
-    keywords:["tourism support","cultural image","tourism","السياحة"] },
-
-  { id:17, q_en:"What are the main functional components inside GEM?", q_ar:"ما هي المكونات الوظيفية الأساسية داخل المتحف؟",
-    a_en:"Exhibition halls, restoration center, educational zones, cinema, conference center, commercial areas, and gardens.",
-    a_ar:"قاعات العرض، مركز ترميم الآثار، مناطق تعليمية، سينما، مركز مؤتمرات، مناطق تجارية وحدائق.",
-    keywords:["facilities","restoration","education","cinema","مرافق"] },
-
-  { id:18, q_en:"What notable artifacts are prominently displayed?", q_ar:"ما هي القطع الأثرية اللافتة المعروضة؟",
-    a_en:"Besides Tutankhamun’s treasures, statues of Ramses II, Queen Hetepheres, King Khufu’s boats, and artifacts from Pre-Dynastic to Roman times.",
-    a_ar:"بالإضافة إلى كنوز توت عنخ آمون، تماثيل رمسيس الثاني وحتب حرس، مراكب خوفو وقطع من العصر قبل الأسرات حتى العصر الروماني.",
-    keywords:["ramses","khufu","boats","notable artifacts","تماثيل","مراكب خوفو"] },
-
-  { id:19, q_en:"How was the winning design for GEM chosen?", q_ar:"كيف تم اختيار تصميم المتحف؟",
-    a_en:"Through an international architectural competition with international architects aiming to blend sunlight and pyramid symbolism.",
-    a_ar:"عبر مسابقة معمارية دولية تهدف لدمج أشعة الشمس ورمز الهرم في التصميم.",
-    keywords:["competition","unesco","design selection","مسابقة","اليونسكو"] },
-
-  { id:20, q_en:"What cultural and entertainment services exist at GEM?", q_ar:"ما هي الخدمات الثقافية والترفيهية في المتحف؟",
-    a_en:"Cultural activities, temporary exhibitions, events, restaurants, cafes, and retail stores representing Egyptian heritage.",
-    a_ar:"أنشطة ثقافية، معارض مؤقتة، فعاليات، مطاعم، مقاهي ومتاجر تعكس التراث المصري.",
-    keywords:["events","restaurants","cafes","cultural services","فعاليات","مطاعم"] },
-
-  /* ===== SAFI & Knowing.AI & Egypt extra entries ===== */
-  { id:21, q_en:"Tell me about SAFI", q_ar:"أخبرني عن صافي",
-    a_en:"SAFI is the Egyptian guide assistant from Knowing.AI — a warm, bilingual voice designed for the Grand Egyptian Museum experience. She explains exhibits, answers visitor questions, and invites people to explore Egypt's heritage.",
-    a_ar:"صافي هي المرشدة الذكية المصرية من Knowing.AI — صوت دافئ ثنائي اللغة مخصص لتجربة المتحف المصري الكبير. بتشرح المعروضات، جاية تجاوب على أسئلة الزوار، وتدعو الناس لاستكشاف تراث مصر.",
-    keywords:["safi","who is safi","about safi","من هي صافي","صافي"] },
-
-  { id:22, q_en:"What is Knowing.AI?", q_ar:"ما هي Knowing.AI؟",
-    a_en:"Knowing.AI is Egypt's unified AI platform creating local intelligent assistants and solutions for tourism, education, banking, and national projects. Mission: Know more. Do more.",
-    a_ar:"Knowing.AI هي المنصة المصرية الموحدة للذكاء الاصطناعي التي تطور مساعدين وحلول ذكية محلية للسياحة، التعليم، البنوك، والمشروعات القومية. الرسالة: اعرف أكتر. اعمل أكتر.",
-    keywords:["knowing.ai","what is knowing.ai","about knowing.ai","knowing ai","من هي knowing.ai"] },
-
-  { id:23, q_en:"Can SAFI speak Egyptian Arabic and English?", q_ar:"هل تتكلم صافي العربية المصرية والإنجليزية؟",
-    a_en:"Yes. SAFI answers in Egyptian Arabic and English. Visitors can ask in either language and receive natural, friendly replies.",
-    a_ar:"نعم. صافي ترد بالعربية المصرية والإنجليزية. الزائر يقدر يسأل بأي لغة ويستقبل ردود طبيعية ودافئة.",
-    keywords:["languages safi","safi language","عربي انجليزي"] },
-
-  { id:24, q_en:"Who built SAFI?", q_ar:"من الذي بنى صافي؟",
-    a_en:"SAFI was developed by Knowing.AI with local Egyptian linguists, designers, and engineers to ensure cultural accuracy and a warm voice.",
-    a_ar:"تم تطوير صافي بواسطة Knowing.AI مع لغويين ومصممين ومهندسين مصريين لضمان دقة ثقافية وصوت دافئ.",
-    keywords:["who built safi","developed by","صافي من مين","developed"] },
-
-  { id:25, q_en:"Why does Egypt matter to the world?", q_ar:"لماذا مصر مهمة للعالم؟",
-    a_en:"Egypt is a cradle of civilization — its monuments, knowledge, and culture influenced art, science, and religion across millennia. Its heritage is global.",
-    a_ar:"مصر مهد حضارة — آثارها ومعرفتها وثقافتها أثرت الفن والعلوم والأديان عبر آلاف السنين. تراثها عالمي.",
-    keywords:["why egypt matters","egypt importance","مصر ليه مهمة","تراث"] },
-
-  { id:26, q_en:"Did Egypt host wonders of the ancient world?", q_ar:"هل كانت مصر تحتوي على عجائب الدنيا القديمة؟",
-    a_en:"Yes — historically three of the Seven Wonders were in Egypt: the Great Pyramid of Giza, the Library of Alexandria, and the Lighthouse of Alexandria (the Pharos).",
-    a_ar:"نعم — تاريخياً كان في مصر ثلاث من عجائب الدنيا السبع: الهرم الأكبر بالجيزة، مكتبة الإسكندرية، ومنارة الإسكندرية (الفَاروس).",
-    keywords:["seven wonders","pyramids","library of alexandria","pharos","عجائب الدنيا","الاهرامات","الاسكندرية"] },
-
-  { id:27, q_en:"How can Knowing.AI help Egypt's sectors?", q_ar:"كيف تساعد Knowing.AI قطاعات مصر؟",
-    a_en:"By supplying AI tools for museums (visitor guides & personalization), banks (fraud detection & customer service), education (localized learning), and SME support.",
-    a_ar:"من خلال توفير أدوات ذكاء اصطناعي للمتاحف (مرشدين وتخصيص تجربة)، البنوك (كشف احتيال وخدمة عملاء)، التعليم (تعلم محلي)، ودعم الشركات الصغيرة والمتوسطة.",
-    keywords:["how knowing.ai helps","use cases","use cases knowing.ai","خدمات"] },
-
-  { id:28, q_en:"How to cite or report an issue about SAFI?", q_ar:"كيف أبلغ عن مشكلة تتعلق بصافي؟",
-    a_en:"Use the contact email: knowing.ai.eg@outlook.com or visit the official Knowing.AI website for support and feedback.",
-    a_ar:"استخدم الإيميل: knowing.ai.eg@outlook.com أو زر موقع Knowing.AI الرسمي للدعم والملاحظات.",
-    keywords:["support","contact","report issue","knowing.ai contact","اتصل"] }
-];
-
-/* =========================== Utilities =========================== */
-function isArabic(text){ return /[\u0600-\u06FF]/.test(text); }
-function normalize(s){ return (s||'').toLowerCase().replace(/[^\w\u0600-\u06FF\s]+/g,' ').replace(/\s+/g,' ').trim(); }
-
-/* better matching: count keyword occurrences and small fuzzy via substring of tokens */
-function findBestMatch(userText){
-  const norm = normalize(userText);
-  if(!norm) return null;
-  const tokens = norm.split(' ').filter(Boolean);
-  const scored = KNOWLEDGE.map(item=>{
-    let score = 0;
-    const hay = (normalize(item.keywords.join(' ')) + ' ' + normalize(item.q_en) + ' ' + normalize(item.q_ar));
-    for(const t of tokens){
-      if(t.length<2) continue;
-      if(hay.includes(t)) score += 1;
+  const qaPairs = [
+    {
+      keywords: ["متحف", "grand", "egyptian", "museum", "متى", "افتتاح", "opening"],
+      answer: "المتحف المصري الكبير هيفتتح رسميًا يوم 1 نوفمبر 2025 / The Grand Egyptian Museum officially opens on November 1, 2025."
+    },
+    {
+      keywords: ["مكان", "location", "في", "where"],
+      answer: "المتحف موجود على بعد ميل من أهرامات الجيزة، القاهرة، مصر / It's located one mile from the Giza Pyramids in Cairo, Egypt."
+    },
+    {
+      keywords: ["مساحة", "size", "large", "كبير"],
+      answer: "مساحته حوالي 480,000 متر مربع، وهو أكبر متحف أثري مخصص لحضارة واحدة / Around 480,000 m² — the largest museum dedicated to a single civilization."
+    },
+    {
+      keywords: ["Knowing", "AI", "Knowing.AI", "من", "صافي", "SAFI"],
+      answer: "صافي 👸🏻 هي أول مرشدة ذكية من Knowing.AI — بتدمج المعرفة والحب لمصر في تجربة رقمية متكاملة / SAFI 👸🏻 is the first intelligent guide from Knowing.AI — merging Egypt’s heritage with smart interaction."
+    },
+    {
+      keywords: ["تحية", "hello", "hi", "hey", "السلام"],
+      answer: "أهلاً بيك! 👸🏻 أنا صافي، جاهزة أجاوبك بالعربي أو الإنجليزي عن كل حاجة تخص المتحف المصري الكبير."
     }
-    // boost exact year or numbers match
-    if(norm.match(/2025|1 november|1 نوفمبر|480000|57000|57,000|5,000/)) score += 1;
-    return {item,score};
-  });
-  scored.sort((a,b)=> b.score - a.score);
-  if(scored[0].score>0) return scored[0].item;
-  // fallback: try keyword substring match
-  for(const entry of KNOWLEDGE){
-    for(const kw of entry.keywords){
-      if(norm.includes(normalize(kw))) return entry;
-    }
+  ];
+
+  function detectLanguage(text) {
+    const arabic = /[\u0600-\u06FF]/;
+    return arabic.test(text) ? "ar" : "en";
   }
-  return null;
-}
 
-/* =========================== App logic =========================== */
-const app = {
-  isVoice:false,
-  recognition:null,
-  isRecording:false,
-  init(){
-    this.messagesEl = document.getElementById('messages');
-    this.inputEl = document.getElementById('input');
-    this.sendBtn = document.getElementById('send');
-    this.voiceBtn = document.getElementById('voiceToggle');
-    this.micBtn = document.getElementById('mic');
-    this.bindEvents();
-    this.setupSpeech();
-  },
-
-  bindEvents(){
-    this.inputEl.addEventListener('input', ()=>{ this.sendBtn.disabled = !this.inputEl.value.trim(); });
-  },
-
-  setupSpeech(){
-    if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window){
-      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      this.recognition = new SR();
-      this.recognition.continuous = false;
-      this.recognition.interimResults = false;
-      this.recognition.onresult = (e)=>{
-        const t = e.results[0][0].transcript;
-        this.inputEl.value = t;
-        this.sendBtn.disabled = false;
-        this.isRecording = false;
-        this.micBtn.classList.remove('active');
-      };
-      this.recognition.onerror = ()=>{ this.isRecording=false; this.micBtn.classList.remove('active'); };
+  function getAnswer(input) {
+    input = input.toLowerCase();
+    for (let pair of qaPairs) {
+      for (let keyword of pair.keywords) {
+        if (input.includes(keyword.toLowerCase())) {
+          return pair.answer;
+        }
+      }
     }
-  },
+    return detectLanguage(input) === "ar"
+      ? "مش متأكدة من الإجابة دي 👸🏻، ممكن تسألني عن المتحف أو Knowing.AI؟"
+      : "I'm not sure about that 👸🏻. You can ask me about the Grand Egyptian Museum or Knowing.AI.";
+  }
 
-  toggleVoice(){ this.isVoice = !this.isVoice; this.voiceBtn.classList.toggle('active', this.isVoice); },
+  function sendMessage() {
+    const input = document.getElementById("userInput");
+    const text = input.value.trim();
+    if (!text) return;
 
-  toggleRecording(){
-    if(!this.recognition){ alert("Speech recognition not supported in this browser."); return; }
-    if(this.isRecording){ this.recognition.stop(); this.isRecording=false; this.micBtn.classList.remove('active'); }
-    else{ this.recognition.lang = isArabic(this.inputEl.value||'') ? 'ar-EG' : 'en-US'; this.recognition.start(); this.isRecording=true; this.micBtn.classList.add('active'); }
-  },
+    addMessage("user", text);
+    input.value = "";
 
-  onInput(){ const el=this.inputEl; el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,220)+'px'; },
+    setTimeout(() => {
+      const response = getAnswer(text);
+      addMessage("bot", response);
+    }, 500);
+  }
 
-  onKey(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); this.sendMessage(); } },
+  function addMessage(sender, text) {
+    const messages = document.getElementById("messages");
+    const msg = document.createElement("div");
+    msg.classList.add("message", sender);
 
-  newConversation(){
-    const welcome = document.getElementById('welcome');
-    this.messagesEl.innerHTML = welcome ? welcome.outerHTML : '';
-    window.scrollTo(0,0);
-  },
+    const avatar = document.createElement("div");
+    avatar.classList.add("avatar");
+    avatar.textContent = sender === "bot" ? "👸🏻" : "🧑‍💻";
 
-  sendPrompt(text){ this.inputEl.value = text; this.sendBtn.disabled=false; this.sendMessage(); },
+    const bubble = document.createElement("div");
+    bubble.classList.add("bubble");
+    bubble.textContent = text;
 
-  async sendMessage(){
-    const text = this.inputEl.value.trim();
-    if(!text) return;
-    const welcomeNode = document.getElementById('welcome'); if(welcomeNode) welcomeNode.remove();
-    this.addMessage(text,'user');
-    this.inputEl.value=''; this.onInput(); this.sendBtn.disabled=true;
-    const typingNode = this.showTyping();
-
-    // compute reply
-    await this.sleep(500);
-    const match = findBestMatch(text);
-    await this.sleep(400);
-
-    this.removeTyping(typingNode);
-
-    if(match){
-      const langArabic = isArabic(text);
-      const answer = langArabic ? match.a_ar : match.a_en;
-      this.addMessage(answer,'assistant');
-      if(this.isVoice) this.speak(answer, langArabic ? 'ar-EG' : 'en-US');
-    } else {
-      const fallbackAr = "معذرةً، المعلومة غير متوفرة حالياً. جرب تسأل بطريقة مختلفة أو استخدم أحد الأسئلة السريعة.";
-      const fallbackEn = "Sorry, that information isn't available right now. Try rephrasing or choose a quick prompt.";
-      const reply = isArabic(text) ? fallbackAr : fallbackEn;
-      this.addMessage(reply,'assistant');
-      if(this.isVoice) this.speak(reply, isArabic(text)?'ar-EG':'en-US');
-    }
-    this.messagesEl.scrollTop = this.messagesEl.scrollHeight;
-  },
-
-  addMessage(content, role){
-    const row = document.createElement('div');
-    row.className = 'msg-row ' + (role==='user' ? 'user' : '');
-    const avatar = document.createElement('div');
-    avatar.className = 'msg-avatar';
-    avatar.style.background = role==='user' ? 'var(--white)' : 'linear-gradient(135deg,#111,#222)';
-    avatar.style.color = role==='user' ? 'var(--black)' : 'var(--gold)';
-    avatar.textContent = role==='user' ? 'You' : '👸';
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble ' + (role==='user' ? 'user' : 'assistant');
-    bubble.innerHTML = sanitize(content);
-    row.appendChild(avatar); row.appendChild(bubble);
-    this.messagesEl.appendChild(row);
-    this.messagesEl.scrollTop = this.messagesEl.scrollHeight;
-  },
-
-  showTyping(){
-    const row = document.createElement('div'); row.className='msg-row'; row.id='typing-indicator';
-    const avatar = document.createElement('div'); avatar.className='msg-avatar'; avatar.textContent='👸'; avatar.style.background='linear-gradient(135deg,#111,#222)'; avatar.style.color='var(--gold)';
-    const bubble = document.createElement('div'); bubble.className='bubble assistant'; bubble.innerHTML='<span style="opacity:0.9">SAFI is typing...</span>';
-    row.appendChild(avatar); row.appendChild(bubble); this.messagesEl.appendChild(row); this.messagesEl.scrollTop=this.messagesEl.scrollHeight;
-    return row;
-  },
-
-  removeTyping(node){ if(node && node.remove) node.remove(); const el=document.getElementById('typing-indicator'); if(el) el.remove(); },
-
-  sleep(ms){ return new Promise(r=>setTimeout(r,ms)); },
-
-  speak(text, lang){
-    if(!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = lang || 'ar-EG'; u.rate = 0.95; u.pitch = 1.02;
-    const vlist = window.speechSynthesis.getVoices();
-    if(lang && lang.startsWith('ar')){
-      const v = vlist.find(x=>x.lang && x.lang.startsWith('ar')) || vlist[0];
-      if(v) u.voice = v;
-    } else {
-      const v = vlist.find(x=>x.lang && x.lang.startsWith('en')) || vlist[0];
-      if(v) u.voice = v;
-    }
-    window.speechSynthesis.speak(u);
-  },
-
-  toggleExample(){
-    // insert sample bilingual example
-    const sample = isArabic(this.inputEl.value || '') ? "Tell me about SAFI" : "أخبرني عن صافي";
-    this.inputEl.value = sample; this.sendBtn.disabled=false;
-  },
-
-  toggleRecording(){ this.toggleRecording(); } // placeholder to avoid errors
-};
-
-/* small sanitize */
-function sanitize(s){ return String(s).replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
-
-/* expose */
-window.app = app;
-document.addEventListener('DOMContentLoaded', ()=>{ app.init(); console.log('KaiGPT • SAFI local rule-based ready.'); });
+    msg.appendChild(avatar);
+    msg.appendChild(bubble);
+    messages.appendChild(msg);
+    messages.scrollTop = messages.scrollHeight;
+  }
 </script>
 </body>
 </html>
