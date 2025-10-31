@@ -1,1043 +1,1072 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html>
+
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>KaiGPT • SAFI — Knowing.AI (GEM Opening Edition)</title>
-<meta name="description" content="KaiGPT powered by SAFI — Egypt's First AI Guide for the Grand Egyptian Museum. The world's largest archaeological museum opens November 1, 2025!"/>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000000'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23ffffff' stroke-width='2.5'/%3E%3C/circle%3E%3C/svg%3E">
-<style>
-  /* --- 1. ROOT VARIABLES (DARK MODE - AMAZING BLACK) --- */
-  :root{
-    --bg: #000000; 
-    --panel: #0a0a0a; 
-    --muted: #999999; 
-    --text: #ffffff; 
-    --accent: #ffffff; 
-    --secondary-accent: #e0e0e0; 
-    --gold: #ffffff; 
-    --egyptian-blue: #0f0f0f; 
-    --glass: rgba(255,255,255,0.05); 
-    --shadow: rgba(255,255,255,0.05); 
-    --radius:12px;
-    --max-width:980px;
-  }
-  
-  /* --- 2. LIGHT MODE (AMAZING WHITE) --- */
-  body.light-mode {
-    --bg: #ffffff; 
-    --panel: #f0f0f0; 
-    --muted: #666666; 
-    --text: #000000; 
-    --accent: #000000; 
-    --secondary-accent: #333333; 
-    --gold: #000000; 
-    --egyptian-blue: #eeeeee; 
-    --glass: rgba(0,0,0,0.05); 
-    --shadow: rgba(0,0,0,0.1); 
-    background: linear-gradient(180deg,var(--bg),#fcfcfc);
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KaiGPT & SAFI - Egypt's First AI Assistant | Knowing.AI</title>
+    <meta name="description" content="Experience SAFI, Egypt's first national AI assistant. Built for the Grand Egyptian Museum opening. Know More. Do More.">
+    <meta property="og:title" content="KaiGPT & SAFI - Egypt's First AI Assistant">
+    <meta property="og:description" content="The first Egyptian AI model created by Knowing.AI">
+    <meta property="og:image" content="https://kaigpt-safi.netlify.app/og-image.png">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%23000'/><circle cx='50' cy='50' r='30' fill='none' stroke='%23fff' stroke-width='4'/></svg>">
 
-  /* --- 3. BASE STYLES --- */
-  *{box-sizing:border-box}
-  html,body{
-    height:100%;margin:0;font-family:Inter, "Segoe UI", Roboto, "Cairo", system-ui, -apple-system;
-    background:linear-gradient(180deg,var(--bg),#050505);
-    color:var(--text);-webkit-font-smoothing:antialiased;
-    transition: background 0.5s, color 0.5s;
-  }
-  a{color:var(--secondary-accent);text-decoration:none}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  /* Enhanced animations */
-  @keyframes glow {
-    0%, 100% { box-shadow: 0 0 10px var(--shadow); }
-    50% { box-shadow: 0 0 20px var(--shadow); }
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-  }
-  @keyframes slideIn {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --gray-50: #fafafa;
+            --gray-100: #f5f5f5;
+            --gray-200: #e5e5e5;
+            --gray-300: #d4d4d4;
+            --gray-400: #a3a3a3;
+            --gray-500: #737373;
+            --gray-600: #525252;
+            --gray-700: #404040;
+            --gray-800: #262626;
+            --gray-900: #171717;
+            --gray-950: #0a0a0a;
+        }
 
-  /* --- 4. LAYOUT --- */
-  .root{display:flex;min-height:100vh;padding:18px;gap:18px}
-  .sidebar{
-    width:340px;background:linear-gradient(180deg,var(--panel),var(--bg));border-radius:var(--radius);
-    padding:20px;display:flex;flex-direction:column;gap:16px;border:1px solid var(--glass);
-    box-shadow:0 8px 30px rgba(0,0,0,0.8);
-    transition: background 0.5s, border-color 0.5s;
-  }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow: hidden;
+            height: 100vh;
+        }
 
-  .brand{display:flex;align-items:center;gap:12px}
-  .logo{
-    width:72px;height:72px;border-radius:12px;background:var(--egyptian-blue);
-    display:flex;align-items:center;justify-content:center;border:2px solid var(--glass); 
-    font-weight:800;color:var(--accent); font-size:18px;
-    position:relative;overflow:hidden;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  
-  .brand h1{margin:0;font-size:19px;background:linear-gradient(135deg, var(--accent), var(--secondary-accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-  .brand .sub{color:var(--muted);font-size:13px;margin-top:2px}
+        body.dark {
+            background: var(--black);
+            color: var(--white);
+        }
 
-  .slogan{font-weight:700;color:var(--accent);margin-top:8px;font-size:15px}
-  .powered{color:var(--muted);font-size:12px;margin-top:12px}
+        body.light {
+            background: var(--white);
+            color: var(--black);
+        }
 
-  .countdown{
-    background:linear-gradient(135deg, var(--egyptian-blue), var(--panel));
-    padding:16px;border-radius:12px;text-align:center;margin:12px 0;
-    border:1px solid var(--glass);
-    animation:glow 2s ease-in-out infinite;
-  }
-  .countdown-text{font-weight:800;color:var(--text);font-size:14px;margin-bottom:8px}
-  .countdown-time{font-size:20px;font-weight:900;color:var(--accent);text-shadow:0 0 8px var(--shadow)}
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100%;
+        }
 
-  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
-  .stat{background:var(--glass);padding:12px;border-radius:8px;text-align:center;border:1px solid var(--glass)}
-  .stat-number{font-size:18px;font-weight:800;color:var(--accent)}
-  .stat-label{font-size:11px;color:var(--muted);margin-top:4px}
+        /* HEADER */
+        .header {
+            border-bottom: 1px solid;
+            padding: 16px 24px;
+            backdrop-filter: blur(20px);
+            position: relative;
+            z-index: 100;
+        }
 
-  /* Quick buttons section */
-  .quick button{background:transparent;border:1px solid var(--glass);color:var(--muted);padding:12px;border-radius:10px;text-align:right;cursor:pointer;transition:all 0.3s ease}
-  .quick button:hover{color:var(--text);background:var(--glass);border-color:var(--accent);transform:translateX(-3px)}
+        .dark .header {
+            background: rgba(0, 0, 0, 0.8);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
 
-  .sidebar .footer{margin-top:auto;color:var(--muted);font-size:12px;text-align:center;padding:12px 0;border-top:1px solid var(--glass)}
+        .light .header {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
 
-  /* --- 5. MAIN CONTENT --- */
-  .main{flex:1;display:flex;flex-direction:column;gap:12px}
-  .topbar{display:flex;align-items:center;justify-content:space-between;padding:6px 12px}
-  .title{font-size:22px;font-weight:800;background:linear-gradient(135deg, var(--accent), var(--secondary-accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-  .tag{background:var(--glass);padding:8px 12px;border-radius:10px;color:var(--accent);font-weight:700;border:1px solid var(--glass)}
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-  .container{flex:1;display:flex;gap:18px;align-items:stretch}
-  .chat-column{flex:1;max-width:var(--max-width);margin:0 auto;display:flex;flex-direction:column;border-radius:var(--radius);overflow:hidden;border:1px solid var(--glass);background:linear-gradient(180deg,rgba(0,0,0,0.01),transparent)}
-  .messages{flex:1;padding:28px;overflow:auto;display:flex;flex-direction:column;gap:18px;min-height:420px}
-  
-  .welcome{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:12px;background:linear-gradient(180deg, var(--glass), transparent);animation:slideIn 0.6s ease-out}
-  .avatar{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;background:var(--egyptian-blue);border:3px solid var(--glass);position:relative}
-  .avatar::after{content:'';position:absolute;inset:-3px;border-radius:50%;background:conic-gradient(var(--accent), var(--secondary-accent), var(--accent));z-index:-1;animation:spin 4s linear infinite}
-  
-  .welcome-text h2{margin:0 0 8px 0;font-size:24px;background:linear-gradient(135deg, var(--accent), var(--secondary-accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-  .welcome-text p{margin:0;color:var(--muted);line-height:1.6;max-width:720px}
-  .welcome-text p:last-of-type{padding:12px;background:var(--glass);border-radius:8px;border:1px solid var(--glass)}
-  .welcome-text strong{color:var(--accent)}
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
 
-  .msg{display:flex;gap:12px;align-items:flex-start;animation:slideIn 0.4s ease-out}
-  .msg.user{flex-direction:row-reverse;justify-content:flex-end}
-  .bubble{padding:16px 18px;border-radius:12px;max-width:78%;line-height:1.6;white-space:pre-wrap;word-wrap:break-word;position:relative;box-shadow: 0 4px 12px rgba(0,0,0,0.2)}
-  .msg.user .bubble{background:linear-gradient(180deg, var(--glass), rgba(255,255,255,0.02));color:var(--text);border:1px solid var(--glass)}
-  .msg.bot .bubble{background:linear-gradient(180deg, var(--panel), var(--bg));color:var(--text);border:1px solid var(--glass)}
-  .bubble .title-small{font-weight:700;color:var(--accent);font-size:14px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
-  .bubble .title-small::before{content:'👸🏻';font-size:16px}
-  
-  /* Styling for the new kids' stories popup */
-  .story-menu {
-      background: var(--panel);
-      padding: 18px;
-      border-radius: 12px;
-      margin-top: 12px;
-      border: 1px solid var(--glass);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-  }
-  .story-menu-title {
-      font-weight: 800;
-      color: var(--accent);
-      font-size: 16px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-  }
-  .story-menu button {
-      width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--glass);
-      color: var(--text);
-      padding: 12px;
-      margin-bottom: 8px;
-      border-radius: 8px;
-      text-align: right;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 600;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-  }
-  .story-menu button:hover {
-      background: var(--glass);
-      border-color: var(--accent);
-  }
+        .btn {
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            background: transparent;
+        }
 
-  .composer{padding:18px;border-top:1px solid var(--glass);background:linear-gradient(180deg, rgba(255,255,255,0.005), transparent)}
-  .composer-inner{display:flex;gap:12px;align-items:flex-end;max-width:var(--max-width);margin:0 auto}
-  textarea.input{flex:1;min-height:56px;max-height:260px;resize:none;border-radius:12px;padding:16px;background:var(--panel);border:1px solid var(--glass);color:var(--text);font-size:16px;outline:none;font-family:inherit;transition:border-color 0.3s ease}
-  textarea.input:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--shadow)}
-  
-  .controls{display:flex;gap:8px;align-items:center}
-  .btn{background:transparent;border:1px solid var(--glass);color:var(--text);padding:12px 14px;border-radius:10px;cursor:pointer;transition:all 0.3s ease}
-  .btn:hover{background:var(--glass);border-color:var(--accent)}
-  .btn.primary{
-    background:linear-gradient(90deg,var(--accent),var(--secondary-accent));
-    color:var(--bg); 
-    border:1px solid var(--accent);font-weight:800;
-    box-shadow:0 8px 20px var(--shadow);transform:scale(1)
-  }
-  .btn.primary:hover{transform:scale(1.05);box-shadow:0 12px 30px var(--shadow);border-color:var(--secondary-accent)}
+        .dark .btn {
+            color: var(--white);
+            background: rgba(255, 255, 255, 0.05);
+        }
 
-  .small-note{color:var(--muted);font-size:13px;text-align:center;margin-top:10px}
+        .dark .btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
 
-  .right-col{width:340px;display:flex;flex-direction:column;gap:12px}
-  .card{background:linear-gradient(180deg, var(--glass), transparent);padding:16px;border-radius:12px;border:1px solid var(--glass);color:var(--muted)}
-  .card h3{margin:0 0 10px 0;color:var(--text);font-size:16px}
+        .light .btn {
+            color: var(--black);
+            background: rgba(0, 0, 0, 0.05);
+        }
 
-  .live-info{background:linear-gradient(135deg, var(--bg), var(--panel));border:2px solid var(--accent);animation:glow 3s ease-in-out infinite}
-  .live-badge{display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:var(--bg);padding:4px 8px;border-radius:6px;font-size:11px;font-weight:800;margin-bottom:8px}
-  .live-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 1s infinite}
+        .light .btn:hover {
+            background: rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
 
-  /* --- 6. MEDIA QUERIES --- */
-  @media (max-width:1100px){
-    .root{padding:12px;flex-direction:column}
-    .sidebar{width:100%;order:2}
-    .right-col{width:100%;order:3}
-    .chat-column{max-width:100%;order:1}
-    .container{flex-direction:column}
-    .msg.user{flex-direction:row}
-    .bubble{max-width:90%}
-  }
+        .logo-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
 
-  /* Typing indicator */
-  .typing-dots{display:inline-flex;gap:4px;align-items:center}
-  .typing-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;animation:typing 1.4s infinite}
-  .typing-dot:nth-child(2){animation-delay:0.2s}
-  .typing-dot:nth-child(3){animation-delay:0.4s}
-  @keyframes typing {
-    0%, 60%, 100% { transform: translateY(0); }
-    30% { transform: translateY(-10px); }
-  }
+        .dark .logo-box {
+            background: var(--white);
+        }
 
-  footer.app-footer{
-    width:100%; text-align:center; padding:16px 0; color:var(--muted); font-size:12px;
-    background:transparent; border-top:1px solid var(--glass)
-  }
-</style>
+        .light .logo-box {
+            background: var(--black);
+        }
+
+        .logo-svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .status-dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 12px;
+            height: 12px;
+            background: #22c55e;
+            border-radius: 50%;
+            border: 2px solid;
+            animation: pulse 2s infinite;
+        }
+
+        .dark .status-dot {
+            border-color: var(--black);
+        }
+
+        .light .status-dot {
+            border-color: var(--white);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        .brand-info h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 2px;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-info p {
+            font-size: 13px;
+            opacity: 0.6;
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        /* MESSAGES CONTAINER */
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px 24px;
+            scroll-behavior: smooth;
+        }
+
+        .messages-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .message {
+            display: flex;
+            gap: 16px;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .dark .message.user .avatar {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .light .message.user .avatar {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .dark .message.assistant .avatar {
+            background: var(--gray-800);
+            border: 2px solid var(--white);
+        }
+
+        .light .message.assistant .avatar {
+            background: var(--gray-100);
+            border: 2px solid var(--black);
+        }
+
+        .message-content {
+            flex: 1;
+            max-width: 700px;
+            padding: 14px 18px;
+            border-radius: 20px;
+            font-size: 15px;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+
+        .dark .message.user .message-content {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .light .message.user .message-content {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .dark .message.assistant .message-content {
+            background: var(--gray-900);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .light .message.assistant .message-content {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 6px;
+            padding: 14px 18px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--gray-400);
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.7;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        /* INPUT SECTION */
+        .input-section {
+            padding: 20px 24px 24px;
+            border-top: 1px solid;
+        }
+
+        .dark .input-section {
+            background: rgba(0, 0, 0, 0.8);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .light .input-section {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .input-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+            padding: 12px 16px;
+            border-radius: 16px;
+            border: 2px solid;
+            transition: border-color 0.2s;
+        }
+
+        .dark .input-container {
+            background: var(--gray-900);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .dark .input-container:focus-within {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .light .input-container {
+            background: var(--gray-50);
+            border-color: var(--gray-200);
+        }
+
+        .light .input-container:focus-within {
+            border-color: var(--gray-400);
+        }
+
+        .input-field {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            resize: none;
+            max-height: 200px;
+            font-family: inherit;
+            line-height: 1.5;
+        }
+
+        .dark .input-field {
+            color: var(--white);
+        }
+
+        .light .input-field {
+            color: var(--black);
+        }
+
+        .input-field::placeholder {
+            opacity: 0.4;
+        }
+
+        .send-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .dark .send-btn {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .dark .send-btn:hover:not(:disabled) {
+            background: var(--gray-100);
+            transform: translateY(-2px);
+        }
+
+        .light .send-btn {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .light .send-btn:hover:not(:disabled) {
+            background: var(--gray-800);
+            transform: translateY(-2px);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .input-footer {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 13px;
+            opacity: 0.5;
+        }
+
+        /* MODAL */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            z-index: 1000;
+            animation: fadeIn 0.2s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            max-width: 700px;
+            width: 100%;
+            border-radius: 24px;
+            padding: 48px;
+            position: relative;
+            animation: slideUp 0.3s ease-out;
+            border: 2px solid;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .dark .modal-content {
+            background: linear-gradient(135deg, var(--gray-900) 0%, var(--black) 100%);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .light .modal-content {
+            background: linear-gradient(135deg, var(--white) 0%, var(--gray-50) 100%);
+            border-color: var(--gray-300);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .dark .close-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+        }
+
+        .dark .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .light .close-btn {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--black);
+        }
+
+        .light .close-btn:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 24px;
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dark .modal-logo {
+            background: var(--white);
+        }
+
+        .light .modal-logo {
+            background: var(--black);
+        }
+
+        /* FIX: Ensure inner SVG elements are correctly colored based on theme */
+        .dark .modal-logo .logo-svg circle:nth-child(4),
+        .dark .modal-logo .logo-svg line {
+            fill: var(--black);
+            stroke: var(--black);
+        }
+
+        .light .modal-logo .logo-svg circle:nth-child(4),
+        .light .modal-logo .logo-svg line {
+            fill: var(--white);
+            stroke: var(--white);
+        }
+
+        .modal-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 32px;
+        }
+
+        .modal-section {
+            margin-bottom: 32px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid;
+        }
+
+        .dark .modal-section {
+            border-color: var(--gray-800);
+        }
+
+        .light .modal-section {
+            border-color: var(--gray-200);
+        }
+
+        .modal-section:last-child {
+            border: none;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            opacity: 0.8;
+        }
+
+        .section-text {
+            font-size: 16px;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        .section-text + .section-text {
+            margin-top: 16px;
+        }
+
+        .modal-footer {
+            text-align: center;
+            font-size: 13px;
+            opacity: 0.5;
+            margin-top: 24px;
+        }
+
+        /* ICONS */
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: var(--gray-700);
+            border-radius: 4px;
+        }
+
+        .light ::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 4px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header {
+                padding: 12px 16px;
+            }
+
+            .logo-section {
+                gap: 12px;
+            }
+
+            .brand-info h1 {
+                font-size: 18px;
+            }
+
+            .brand-info p {
+                font-size: 12px;
+            }
+
+            .messages-container {
+                padding: 20px 16px;
+            }
+
+            .message-content {
+                font-size: 14px;
+            }
+
+            .input-section {
+                padding: 16px;
+            }
+
+            .modal-content {
+                padding: 32px 24px;
+            }
+
+            .modal-title {
+                font-size: 28px;
+            }
+        }
+    </style>
 </head>
-<body class="dark-mode">
-  <div class="root" role="application" aria-label="KaiGPT • SAFI">
-    <aside class="sidebar" aria-label="Sidebar">
-      <div>
-        <div class="brand">
-          <div class="logo" aria-hidden="true">KAI</div>
-          <div>
-            <h1>Knowing.AI</h1>
-            <div class="sub">KaiGPT • SAFI — <span id="gem-edition">GEM</span> Opening Edition</div>
-          </div>
-        </div>
-
-        <div class="slogan" id="slogan">“Know more. Do more.”</div>
-
-        <div class="countdown">
-          <div class="countdown-text" id="countdown-text">🏛️ المتحف المصري الكبير</div>
-          <div class="countdown-time" id="countdown">OPENING DAY!</div>
-          <div style="font-size:12px;color:var(--text);margin-top:4px" id="countdown-date">1 November 2025</div>
-        </div>
-
-        <div class="stats">
-          <div class="stat">
-            <div class="stat-number" id="stat-1">100K+</div>
-            <div class="stat-label" id="label-1">قطعة أثرية</div>
-          </div>
-          <div class="stat">
-            <div class="stat-number" id="stat-2">5000+</div>
-            <div class="stat-label" id="label-2">كنوز توت</div>
-          </div>
-          <div class="stat">
-            <div class="stat-number" id="stat-3">480K</div>
-            <div class="stat-label" id="label-3">م² مساحة</div>
-          </div>
-          <div class="stat">
-            <div class="stat-number" id="stat-4">5M</div>
-            <div class="stat-label" id="label-4">زائر سنوياً</div>
-          </div>
-        </div>
-
-        <div style="margin-top:14px;">
-          <div class="card" style="margin-bottom:12px">
-            <strong style="color:var(--text)" id="safi-title-small">SAFI — المرشدة المصرية الذكية</strong>
-            <div style="margin-top:8px;color:var(--muted);font-size:13px" id="safi-desc">
-              صافي -أول نموذج ذكاء اصطناعي مصري وشخصية ومؤثرة، وأول مرشدة ذكية تتحدث اللغة العربية المصرية الأصيلة والإنجليزية بطلاقة، وتتمتع بخبرة في التاريخ والمتحف المصري الكبير.
+<body class="dark">
+    <div class="app-container">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <button class="btn" id="backBtn" title="Back to Home">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                    </button>
+                    <div class="logo-box">
+                        <svg class="logo-svg" viewBox="0 0 300 200">
+                            <path d="M150,30 C195,30 235,50 260,85 L245,100 C225,70 190,55 150,55 C110,55 75,70 55,100 L40,85 C65,50 105,30 150,30 Z" fill="currentColor"/>
+                            <path d="M150,170 C105,170 65,150 40,115 L55,100 C75,130 110,145 150,145 C190,145 225,130 245,100 L260,115 C235,150 195,170 150,170 Z" fill="currentColor"/>
+                            <circle cx="150" cy="100" r="45" fill="currentColor"/>
+                            <circle cx="150" cy="100" r="20" fill="#000"/>
+                            <circle cx="210" cy="100" r="12" fill="currentColor"/>
+                            <circle cx="240" cy="120" r="12" fill="currentColor"/>
+                            <line x1="150" y1="100" x2="210" y2="100" stroke="#000" stroke-width="8"/>
+                            <line x1="210" y1="100" x2="240" y2="120" stroke="#000" stroke-width="8"/>
+                        </svg>
+                        <div class="status-dot"></div>
+                    </div>
+                    <div class="brand-info">
+                        <h1>KaiGPT & SAFI</h1>
+                        <p>Know More. Do More.</p>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button class="btn" id="themeBtn" title="Toggle Theme">
+                        <svg class="icon theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="icon theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                    <button class="btn" id="aboutBtn" title="About SAFI">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                    </button>
+                    <button class="btn" id="langBtn" title="Switch Language">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 8l6 6"></path>
+                            <path d="M4 14l6-6 2-3"></path>
+                            <path d="M2 5h12"></path>
+                            <path d="M7 2h1"></path>
+                            <path d="M22 22l-5-10-5 10"></path>
+                            <path d="M14 18h6"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
-          </div>
+        </header>
 
-          <div class="card" style="margin-bottom:12px">
-            <button class="btn primary" style="width:100%; color: var(--bg); font-size:16px;" onclick="app.showKidsMenu()">
-              👶🏻 وضع الأطفال - القصص التفاعلية
+        <main class="messages-container" id="messagesContainer">
+            <div class="messages-wrapper" id="messagesWrapper">
+                </div>
+        </main>
+
+        <div class="input-section">
+            <div class="input-wrapper">
+                <div class="input-container">
+                    <textarea 
+                        id="messageInput" 
+                        class="input-field" 
+                        placeholder="Ask about the Grand Egyptian Museum..."
+                        rows="1"
+                    ></textarea>
+                    <button class="send-btn" id="sendBtn" disabled>
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </div>
+                <div class="input-footer">
+                    <span id="footerText">SAFI - Egypt's First AI Assistant | Powered by Knowing.AI</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="aboutModal" style="display:none;">
+        <div class="modal-content">
+            <button class="close-btn" id="closeModal">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
             </button>
-          </div>
-
-          <div class="card">
-            <div style="font-weight:700;margin-bottom:8px;color:var(--text)" id="quick-title">🎯 أسئلة سريعة</div>
-            <div style="display:flex;flex-direction:column;gap:8px" id="quick-prompts">
-              </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer" id="footer">
-        © 2025 Knowing.AI — Egypt's First Unified AI Platform • Powered by SAFI
-        <div id="developer-note">Developer: Knowing.AI - KaiGPT</div>
-      </div>
-    </aside>
-
-    <main class="main" role="main">
-      <div class="topbar">
-        <div class="title" id="main-title">KaiGPT <span class="tag" style="margin-left:12px"><span id="tag-text">🏛️ GEM OPENING</span></span></div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <button class="btn" onclick="app.toggleTheme()" title="تبديل وضع الإضاءة">🔆</button>
-          <button class="btn" onclick="app.toggleLanguage()" title="تبديل اللغة والأسئلة السريعة">🌐</button>
-          <button class="btn" onclick="app.reset()" id="reset-btn">🔄 Reset</button>
-          <button id="voiceBtn" class="btn" onclick="app.toggleVoice()" title="تفعيل/إلغاء الرد الصوتي">🎤 Voice</button>
-          <button class="btn" onclick="app.showInfo()">ℹ️ Info</button>
-        </div>
-      </div>
-
-      <div class="container">
-        <section class="chat-column" aria-label="Chat Column">
-          <div class="messages" id="messages" role="log" aria-live="polite">
-            <div class="welcome" id="welcome">
-              <div class="avatar" aria-hidden="true">👸🏻</div>
-              <div class="welcome-text">
-                <h2 id="welcome-title">أهلاً بيك! أنا صافي 🇪🇬</h2>
-                <p id="welcome-text-1">أنا صافي، أول مرشدة ذكية مصرية من Knowing.AI، وأنا هنا عشان أساعدك تعرف كل حاجة عن المتحف المصري الكبير اللي هيفتح بكرة 1 نوفمبر 2025! إسأل بالعربي المصري أو بالإنجليزي، وهجاوبك بكل حب وفخر بتاريخنا العظيم. 🏛️✨</p>
-                <p style="margin-top:12px;" id="welcome-text-2">
-                  <strong id="news-strong">🎉 خبر عاجل:</strong> المتحف المصري الكبير، أكبر متحف أثري في العالم، يفتح أبوابه رسمياً بكرة في حفل عالمي مهيب!
+            <div class="modal-logo">
+                <svg class="logo-svg" viewBox="0 0 300 200">
+                    <path d="M150,30 C195,30 235,50 260,85 L245,100 C225,70 190,55 150,55 C110,55 75,70 55,100 L40,85 C65,50 105,30 150,30 Z" fill="currentColor"/>
+                    <path d="M150,170 C105,170 65,150 40,115 L55,100 C75,130 110,145 150,145 C190,145 225,130 245,100 L260,115 C235,150 195,170 150,170 Z" fill="currentColor"/>
+                    <circle cx="150" cy="100" r="45" fill="currentColor"/>
+                    <circle cx="150" cy="100" r="20" fill="currentColor"/> 
+                    <circle cx="210" cy="100" r="12" fill="currentColor"/>
+                    <circle cx="240" cy="120" r="12" fill="currentColor"/>
+                    <line x1="150" y1="100" x2="210" y2="100" stroke="currentColor" stroke-width="8"/> 
+                    <line x1="210" y1="100" x2="240" y2="120" stroke="currentColor" stroke-width="8"/>
+                </svg>
+            </div>
+            <h2 class="modal-title">About SAFI / عن صافي</h2>
+            <div class="modal-section">
+                <h3 class="section-title">English</h3>
+                <p class="section-text">
+                    SAFI is Egypt's first national AI model, created by <strong>Knowing.AI</strong> to deliver intelligent, human-like interactions in Arabic and English.
                 </p>
-              </div>
+                <p class="section-text">
+                    She blends Egypt's heritage with advanced technology — built for <strong>clarity</strong>, <strong>trust</strong>, and <strong>knowledge</strong>.
+                </p>
             </div>
-          </div>
-
-          <div class="composer" aria-label="Composer">
-            <div class="composer-inner">
-              <textarea id="input" class="input" placeholder="اسألني أي حاجة عن المتحف المصري الكبير... 🏛️ (مثال: متى الافتتاح؟)" oninput="app.onInput()" onkeydown="app.onKey(event)"></textarea>
-              <div class="controls">
-                <button id="mic" class="btn" onclick="app.toggleRecording()" title="تسجيل صوتي">🎙️</button>
-                <button class="btn primary" onclick="app.send()" id="send-btn">➤ إرسال</button>
-              </div>
+            <div class="modal-section" dir="rtl">
+                <h3 class="section-title">العربية</h3>
+                <p class="section-text">
+                    صافي هي أول نموذج ذكاء اصطناعي وطني في مصر، من تطوير <strong>Knowing.AI</strong> لتقدّم تفاعل ذكي وطبيعي بالعربي والإنجليزي.
+                </p>
+                <p class="section-text">
+                    بتجمع بين روح مصر العريقة والتقنيات الحديثة — معمولة علشان <strong>الوضوح</strong>، و<strong>الثقة</strong>، و<strong>المعرفة</strong>.
+                </p>
             </div>
-            <div class="small-note" id="small-note">“Know more. Do more.”</div>
-          </div>
-        </section>
-
-        <aside class="right-col" aria-hidden="true">
-          <div class="card live-info">
-            <div class="live-badge">
-              <div class="live-dot"></div>
-              LIVE UPDATE
+            <div class="modal-footer">
+                Powered by Knowing.AI • مدعوم من Knowing.AI
             </div>
-            <h3 id="live-info-title">🏛️ افتتاح تاريخي</h3>
-            <p id="live-info-text">المتحف المصري الكبير يفتح غداً 1 نوفمبر 2025 في حفل يشهده العالم كله! 🌍</p>
-            <ul style="margin:8px 0;padding:0 0 0 20px;color:var(--text)" id="live-info-list">
-              <li>البث المباشر على TikTok</li>
-              <li>حضور قادة ومسؤولين من العالم</li>
-              <li>افتتاح معارض توت عنخ آمون</li>
-            </ul>
-          </div>
-
-          <div class="card">
-            <h3 id="facts-title">📊 حقائق مذهلة</h3>
-            <ul style="margin:8px 0 0 18px;color:var(--muted);padding:0;" id="facts-list">
-              </ul>
-          </div>
-
-          <div class="card">
-            <h3 id="about-kai-title">🎯 About Knowing.AI</h3>
-            <p id="about-kai-text">منصة مصرية رائدة للذكاء الاصطناعي، تقدم حلول مبتكرة للسياحة والتعليم والتكنولوجيا والذكاء الصناعي.</p>
-            <div style="margin-top:12px;font-size:12px;color:var(--secondary-accent)">
-              <strong id="developer-label">Developer:</strong> Knowing.AI - KaiGPT
-            </div>
-          </div>
-        </aside>
-      </div>
-
-      <footer class="app-footer" id="app-footer-2">
-        🇪🇬 Made with Love in Egypt • © 2025 Knowing.AI — Egypt's First Unified AI Platform • Powered by SAFI
-      </footer>
-
-    </main>
-  </div>
-
-<script>
-/* ========================= COMPREHENSIVE KNOWLEDGE BASE (80+ ENTRIES) ========================= */
-// تم دمج الـ ٨٠ سؤال/جواب/Keywords هنا
-const ENHANCED_KNOWLEDGE = [
-  // --- Opening & Basic Info ---
-  { id: 1, keywords: ["متى","افتتاح","opening","when","november","1 november","1 نوفمبر","موعد","تاريخ","date"], a_ar: "🎉 المتحف المصري الكبير يفتح رسمياً غداً 1 نوفمبر 2025 في حفل عالمي مهيب! الحفل هيبقى live على TikTok والعالم كله هيشوف أعظم افتتاح متحف في التاريخ.", a_en: "🎉 The Grand Egyptian Museum (GEM) officially opens tomorrow, November 1, 2025, in a magnificent global ceremony! The event will be live-streamed for the world to witness the greatest museum opening in history." },
-  { id: 2, keywords: ["اين","أين","مكان","where","location","giza","الجيزة","اهرامات","pyramids","عنوان","address"], a_ar: "🏛️ المتحف موجود في هضبة الجيزة، على بعد مئات الأمتار من أهرامات الجيزة العظيمة. الموقع مثالي ويطل على الأهرامات مباشرة!", a_en: "🏛️ The GEM is located on the Giza plateau, just a few hundred meters from the iconic Pyramids of Giza. The location is perfect with direct views of the pyramids!" },
-  { id: 3, keywords: ["اكبر","الأكبر","world's largest","largest","مساحة","size","why largest","480k"], a_ar: "🌍 المتحف هو الأكبر عالمياً لأنه يغطي مساحة ٤٨٠ ألف متر مربع ويضم أكبر عدد من القطع الأثرية في مكان واحد (أكثر من ١٠٠ ألف قطعة).", a_en: "🌍 The GEM is the world's largest because it covers an area of 480K square meters and houses the largest number of artifacts in one location (more than 100K pieces)." },
-  { id: 4, keywords: ["توت","توت عنخ","tutankhamun","treasures","كنوز","mask","قناع","5000","خمسة آلاف"], a_ar: "👑 لأول مرة في التاريخ، كل كنوز الملك توت عنخ آمون الـ٥٠٠٠ قطعة هتبقى معروضة في مكان واحد! شامل القناع الذهبي الشهير وتماثيله.", a_en: "👑 For the first time in history, all 5,000+ treasures of King Tutankhamun will be displayed in one place at the GEM! This includes the famous golden funeral mask and life-size wooden statues." },
-  { id: 5, keywords: ["تذكرة","أسعار","tickets","price","how much","كم", "تكلفة"], a_ar: "🎫 أسعار التذاكر: للأجانب البالغين: ٣٠ يورو، للطلاب الأجانب: ١٥ يورو. المصريون والعرب: يختلف السعر حسب الفئة.", a_en: "🎫 Ticket Prices: For adult foreigners: €30, for foreign students: €15. Prices vary for Egyptians and Arabs depending on the category." },
-
-  // --- SAFI & Knowing.AI Info ---
-  { id: 6, keywords: ["صافي","safi","من انتي","who are you","knowing.ai","kai","model"], a_ar: "👸🏻 أنا صافي، أول مرشدة ذكية مصرية من Knowing.AI. أنا أول نموذج ذكاء اصطناعي مصري وشخصية مؤثرة، أتحدث العربية بطلاقة والإنجليزية، متخصصة في تاريخ مصر والمتحف المصري الكبير.", a_en: "👸🏻 I am SAFI, Egypt's first intelligent guide from Knowing.AI. I am Egypt's first AI model, personality, and influencer, fluent in Arabic and English, specialized in Egyptian history and the Grand Egyptian Museum (GEM)." },
-  { id: 7, keywords: ["what is knowing.ai","ما هي","منصة","platform"], a_ar: "Knowing.AI هي منصة مصرية رائدة للذكاء الاصطناعي، تقدم حلول مبتكرة للسياحة والتعليم والأعمال والتكنولوجيا في مصر.", a_en: "Knowing.AI is a leading Egyptian AI platform, offering innovative solutions for tourism, education, business, and technology in Egypt." },
-  
-  // --- Visitor Experience ---
-  { id: 8, keywords: ["إزاي أروح","how to get there","مواصلات","transport","taxi","مترو"], a_ar: "🚗 أسهل طريقة هي التاكسي أو خدمات النقل المشترك (Uber/Careem). قريباً سيتم افتتاح خطوط مترو وحافلات مباشرة للمتحف.", a_en: "🚗 The easiest way is by taxi or ride-sharing services (Uber/Careem). Soon, direct metro and bus lines will open to the museum." },
-  { id: 9, keywords: ["مواعيد","ساعات العمل","hours","time to visit","امتى"], a_ar: "🏛️ مواعيد العمل المتوقعة هي من ٩ صباحاً حتى ٦ مساءً، مع إمكانية تمديدها في مواسم الذروة أو الأمسيات الخاصة.", a_en: "🏛️ Expected operating hours are from 9 AM to 6 PM, with potential extensions during peak seasons or for special evening events." },
-  { id: 10, keywords: ["تجربة","experience","what to see","ماذا أشاهد","نشاطات"], a_ar: "تجربة لا تُنسى! هتشوف هرم خوفو الأكبر، وهتمشي في البهو العظيم لرؤية تمثال رمسيس الثاني، وتكتشف كنوز توت عنخ آمون الكاملة.", a_en: "An unforgettable experience! You will see the Great Pyramid of Khufu, walk through the Grand Atrium to see the statue of Ramses II, and discover the complete Tutankhamun treasures." },
-  
-  // --- Kids Stories (Fixed to appear on prompt) ---
-  { id: 21, keywords: ["قصة رمسيس","ramses story","رمسيس الثاني","بطل القوة","tell story ramses"], a_ar: "👑 **قصة الملك رمسيس الثاني - بطل القوة والعدل:** تخيل يا بطل أن رمسيس تولى الحكم وهو شاب قوي وشجاع. حارب وانتصر (في قادش)، وبنى معابد ضخمة (أبو سمبل) تبرز قوته وعدله. العبرة هي: **بالقوة والإرادة والحكمة، تصبح قائداً عظيماً ويخلد اسمك!**", a_en: "👑 **The Story of King Ramses II - Hero of Strength and Justice:** Imagine, young hero, Ramses became king when he was young, strong, and brave. He fought and won battles (like Kadesh), and built massive temples (Abu Simbel) showing his strength and justice. The moral is: **With strength, willpower, and wisdom, you become a great leader and immortalize your name!**" },
-  { id: 22, keywords: ["قصة حتشبسوت","hatshepsut story","ملكة العقل","ملكة الجمال","tell story hatshepsut"], a_ar: "👸🏻 **قصة الملكة حتشبسوت - ملكة العقل والجمال:** كانت حتشبسوت ذكية جداً وجميلة، حكمت مصر بقوة العقل وليس السيف! بنت معبد الدير البحري وأرسلت رحلات تجارية ضخمة. العبرة هي: **يمكنك أن تكوني قوية ومؤثرة بذكائك وجمالك وحكمتك، فالعقل قوة!**", a_en: "👸🏻 **The Story of Queen Hatshepsut - Queen of Mind and Beauty:** Hatshepsut was very intelligent and beautiful. She ruled Egypt with the power of the mind, not the sword! She built the magnificent Deir el-Bahari Temple and sent huge trade expeditions. The moral: **You can be strong and influential with your intelligence, beauty, and wisdom, for the mind is power!**" },
-  { id: 23, keywords: ["سر قناع توت","golden mask","قناع توت عنخ آمون","ذهب","tell story mask"], a_ar: "✨ **سر قناع الملك توت عنخ آمون الذهبي:** هذا القناع الذهبي لا يقدر بثمن لأنه مصنوع من الذهب الخالص والأحجار الكريمة. لم يكن مجرد قناع، بل كان رمزاً ليصبح توت عنخ آمون إلهاً بعد موته، يعبر عن اعتقاد المصريين بالحياة الأبدية! العبرة: **تاريخنا كنز من الأسرار والقيم التي يجب أن نحافظ عليها!**", a_en: "✨ **The Secret of Tutankhamun's Golden Mask:** This priceless mask is made of pure gold and gemstones. It wasn't just a mask; it was a symbol for Tutankhamun to become a god after death, representing the Egyptians' belief in eternal life! The moral: **Our history is a treasure of secrets and values we must preserve!**" },
-  
-  // --- Advanced/Specific Queries (Example of adding more based on user's 80 inputs) ---
-  { id: 30, keywords: ["معمل ترميم","conservation center","restoration","معامل"], a_ar: "يضم المتحف أكبر معمل ترميم في العالم، وهو مجهز بأحدث التقنيات للحفاظ على كنوزنا الأثرية وحمايتها للأجيال القادمة.", a_en: "The GEM houses the world's largest conservation center, equipped with the latest technologies to preserve our archaeological treasures for future generations." },
-  { id: 31, keywords: ["الدرج العظيم","grand staircase","سلم","سلالم"], a_ar: "الدرج العظيم هو أحد أهم مناطق المتحف، حيث يعرض تماثيل ضخمة وقطع فنية تسرد تاريخ مصر من العصور القديمة حتى العصر الروماني.", a_en: "The Grand Staircase is one of the GEM's highlights, displaying colossal statues and artworks that narrate Egypt's history from ancient times to the Roman era." },
-  { id: 32, keywords: ["التمثال","رمسيس الثاني","statue of ramses","بهو","grand atrium"], a_ar: "تمثال رمسيس الثاني الضخم (ارتفاعه أكثر من ١١ متر) هو أول ما يراه الزائر في البهو العظيم، وهو يرحب بالزوار كرمز لقوة وعظمة مصر.", a_en: "The colossal statue of Ramses II (over 11 meters tall) is the first thing visitors see in the Grand Atrium, welcoming guests as a symbol of Egypt's power and grandeur." },
-  { id: 33, keywords: ["حفلات","مناسبات","events","conferences","حفلات زفاف"], a_ar: "المتحف مجهز بأماكن متميزة لإقامة المؤتمرات الدولية والحفلات الكبرى والمناسبات الخاصة، مما يجعله مركزاً ثقافياً عالمياً.", a_en: "The museum is equipped with distinguished venues for international conferences, grand parties, and special events, making it a global cultural center." },
-  { id: 34, keywords: ["كافيتريا","مطاعم","restaurants","food","مأكولات"], a_ar: "توجد مجموعة متنوعة من المطاعم والمقاهي الراقية التي تقدم المأكولات المصرية والعالمية، مع إطلالات ساحرة على الأهرامات.", a_en: "There is a variety of high-end restaurants and cafes offering Egyptian and international cuisine, with enchanting views of the Pyramids." },
-  { id: 35, keywords: ["كيف تم النقل","نقل التماثيل","moving statues","transportation"], a_ar: "عملية نقل تمثال رمسيس الثاني والقطع الضخمة كانت تحدياً هندسياً هائلاً، تمت بعناية فائقة واستخدمت أحدث التقنيات للحفاظ على سلامة القطع.", a_en: "The transportation of the Ramses II statue and other colossal pieces was a huge engineering challenge, executed with extreme care using the latest technologies to ensure the artifacts' safety." },
-  { id: 36, keywords: ["مصر القديمة","ancient egypt","history","تاريخ"], a_ar: "المتحف يغطي تاريخ مصر من عصور ما قبل الأسرات وحتى العصر اليوناني الروماني، مع تركيز خاص على فنون وكنوز الدولة الحديثة.", a_en: "The museum covers Egyptian history from pre-dynastic periods up to the Greco-Roman era, with a special focus on the arts and treasures of the New Kingdom." },
-  // ... (Assume 80 similar entries are integrated here) ...
-];
-
-/* ========================= LOCALIZED CONTENT DATA ========================= */
-const CONTENT = {
-    ar: {
-        slogan: "اعرف اكتر. افعل اكتر.",
-        countdownText: "🏛️ المتحف المصري الكبير",
-        quickTitle: "🎯 أسئلة سريعة",
-        sendBtn: "➤ إرسال",
-        smallNote: "استمتع بأول تجربة ذكاء اصطناعي مصرية أصيلة • اعرف اكتر. افعل اكتر.",
-        typing: "صافي بتكتب",
-        resetBtn: "🔄 إعادة تعيين",
-        liveInfoTitle: "🏛️ افتتاح تاريخي",
-        liveInfoText: "المتحف المصري الكبير يفتح غداً 1 نوفمبر 2025 في حفل يشهده العالم كله! 🌍",
-        factsTitle: "📊 حقائق مذهلة",
-        aboutKaiTitle: "🎯 عن Knowing.AI",
-        aboutKaiText: "منصة مصرية رائدة للذكاء الاصطناعي، تقدم حلول مبتكرة للسياحة والتعليم والأعمال والتكنولوجيا والذكاء الصناعي.",
-        developerLabel: "المطور:",
-        developerNote: "المطور: Knowing.AI - KaiGPT",
-        footer: "© 2025 Knowing.AI — Egypt's First Unified AI Platform • Powered by SAFI",
-        footer2: "🇪🇬 صنع بكل حب في مصر • © 2025 Knowing.AI — أول منصة ذكاء اصطناعي موحدة في مصر • مدعوم من SAFI",
-        safiTitleSmall: "SAFI — المرشدة المصرية الذكية",
-        tagText: "🏛️ المتحف المصري الكبير",
-        gemEdition: "المتحف المصري الكبير",
-        countdownDate: "1 نوفمبر 2025",
-
-        stats: [
-            { num: "أكثر من ١٠٠ ألف", label: "قطعة أثرية" },
-            { num: "أكثر من ٥٠٠٠", label: "كنوز الملك توت عنخ آمون" },
-            { num: "٤٨٠ ألف", label: "متر مربع" },
-            { num: "أكثر من ٥ مليون", label: "زائر سنوياً" }
-        ],
-        
-        welcomeTitle: "أهلاً بيك! أنا صافي 🇪🇬",
-        welcomeText1: "أنا صافي، أول مرشدة ذكية مصرية من Knowing.AI، وأنا هنا عشان أساعدك تعرف كل حاجة عن المتحف المصري الكبير اللي هيفتح بكرة 1 نوفمبر 2025! إسأل بالعربي المصري أو بالإنجليزي، وهجاوبك بكل حب وفخر بتاريخنا العظيم. 🏛️✨",
-        newsStrong: "🎉 خبر عاجل:",
-        welcomeText2: "المتحف المصري الكبير، أكبر متحف أثري في العالم، يفتح أبوابه رسمياً بكرة في حفل عالمي مهيب!",
-        safiDesc: "صافي -أول نموذج ذكاء اصطناعي مصري وشخصية ومؤثرة، وأول مرشدة ذكية تتحدث اللغة العربية المصرية الأصيلة والإنجليزية بطلاقة، وتتمتع بخبرة في التاريخ والمتحف المصري الكبير.",
-
-        quickPrompts: [
-            { text: "🏛️ موعد الافتتاح", prompt: "متى افتتاح المتحف المصري الكبير؟" },
-            { text: "🌍 الأكبر عالمياً", prompt: "ما الذي يجعل المتحف المصري الكبير الأكبر عالمياً؟" },
-            { text: "👑 كنوز توت", prompt: "أيه أهم كنوز توت عنخ آمون في المتحف؟" },
-            { text: "🤖 عن صافي", prompt: "من هي صافي وما هي Knowing.AI؟" },
-            { text: "🎫 أسعار التذاكر", prompt: "أسعار تذاكر المتحف أيه؟" },
-            { text: "🚗 إزاي أروح", prompt: "كيف يمكنني زيارة المتحف المصري الكبير من القاهرة؟" }
-        ],
-        kidsMenuTitle: "👶🏻 قائمة قصص الأطفال",
-        kidsStories: [
-            { text: "👑 حكاية الملك رمسيس الثاني (بطل القوة والعدل)", prompt: "احكي قصة الملك رمسيس الثاني للأطفال" },
-            { text: "👸🏻 حكاية الملكة حتشبسوت (ملكة العقل والجمال)", prompt: "احكي قصة الملكة حتشبسوت للأطفال" },
-            { text: "🏺 سر قناع توت عنخ آمون الذهبي", prompt: "احكي قصة سر قناع توت عنخ آمون الذهبي للأطفال" }
-        ],
-        placeholder: "اسألني أي حاجة عن المتحف المصري الكبير... 🏛️ (مثال: متى الافتتاح؟)"
-    },
-    en: {
-        slogan: "Know more. Do more.",
-        countdownText: "🏛️ The Grand Egyptian Museum (GEM)",
-        quickTitle: "🎯 Quick Prompts",
-        sendBtn: "➤ Send",
-        smallNote: "Enjoy Egypt's first authentic AI experience • Know more. Do more.",
-        typing: "SAFI is typing",
-        resetBtn: "🔄 Reset",
-        liveInfoTitle: "🏛️ Historic Opening",
-        liveInfoText: "The Grand Egyptian Museum (GEM) opens tomorrow, November 1, 2025, in a global ceremony! 🌍",
-        factsTitle: "📊 Amazing Facts",
-        aboutKaiTitle: "🎯 About Knowing.AI",
-        aboutKaiText: "A leading Egyptian AI platform, offering innovative solutions for tourism, education, technology, and Artificial Intelligence.",
-        developerLabel: "Developer:",
-        developerNote: "Developer: Knowing.AI - KaiGPT",
-        footer: "© 2025 Knowing.AI — Egypt's First Unified AI Platform • Powered by SAFI",
-        footer2: "🇪🇬 Made with Love in Egypt • © 2025 Knowing.AI — Egypt's First Unified AI Platform • Powered by SAFI",
-        safiTitleSmall: "SAFI — The Intelligent Egyptian Guide",
-        tagText: "🏛️ GEM OPENING",
-        gemEdition: "GEM",
-        countdownDate: "1 November 2025",
-
-        stats: [
-            { num: "100K+", label: "Artifacts" },
-            { num: "5000+", label: "King Tut's Treasures" },
-            { num: "480K", label: "Square Meters" },
-            { num: "5M+", label: "Annual Visitors" }
-        ],
-
-        welcomeTitle: "Welcome! I am SAFI 🇪🇬",
-        welcomeText1: "I am SAFI, Egypt's first intelligent AI guide from Knowing.AI. I'm here to help you know everything about the Grand Egyptian Museum (GEM), opening tomorrow, November 1, 2025! Ask in Egyptian Arabic or English, and I will answer with love and pride in our great history. 🏛️✨",
-        newsStrong: "🎉 Breaking News:",
-        welcomeText2: "The Grand Egyptian Museum (GEM), the world's largest archaeological museum, officially opens its doors tomorrow in a magnificent global ceremony!",
-        safiDesc: "SAFI - Egypt's first AI model, personality, and influencer, and the first intelligent guide fluent in authentic Egyptian Arabic and English, with expertise in history and the Grand Egyptian Museum (GEM).",
-        
-        quickPrompts: [
-            { text: "🏛️ Opening Date", prompt: "When does the Grand Egyptian Museum open?" },
-            { text: "🌍 World's Largest", prompt: "What makes GEM the world's largest museum?" },
-            { text: "👑 Tut's Treasures", prompt: "What are the most important Tutankhamun treasures in the museum?" },
-            { text: "🤖 About SAFI", prompt: "Tell me about SAFI and Knowing.AI" },
-            { text: "🎫 Ticket Prices", prompt: "What are the museum's ticket prices?" },
-            { text: "🚗 How to get there", prompt: "How can I visit GEM from Cairo?" }
-        ],
-        kidsMenuTitle: "👶🏻 Kids Stories Menu",
-        kidsStories: [
-            { text: "👑 The Story of King Ramses II (Hero of Strength and Justice)", prompt: "Tell the story of King Ramses II for children" },
-            { text: "👸🏻 The Story of Queen Hatshepsut (Queen of Mind and Beauty)", prompt: "Tell the story of Queen Hatshepsut for children" },
-            { text: "🏺 The Secret of Tutankhamun's Golden Mask", prompt: "Tell the story of Tutankhamun's Golden Mask for children" }
-        ],
-        placeholder: "Ask me anything about the Grand Egyptian Museum (GEM)... 🏛️ (Example: When is the opening?)"
-    }
-};
-
-/* ========================= ENHANCED MATCHING & RESPONSE SYSTEM ========================= */
-function isArabic(text) { 
-  return /[\u0600-\u06FF]/.test(text); 
-}
-
-function normalize(s) { 
-  return (s || '').toLowerCase()
-    .replace(/[^\w\u0600-\u06FF\s]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim(); 
-}
-
-// FIX: Made scoring more robust to catch single keywords
-function scoreMatch(text, entry) {
-  const norm = normalize(text);
-  if (!norm) return 0;
-  let score = 0;
-  
-  for (const kw of entry.keywords) {
-    const nk = normalize(kw);
-    // Exact phrase match gives a high score
-    if (norm.includes(nk)) score += 10;
-    
-    // Keyword token match
-    const keywordTokens = nk.split(' ').filter(Boolean);
-    const textTokens = norm.split(' ').filter(Boolean);
-    
-    for (const kt of keywordTokens) {
-        for (const tt of textTokens) {
-            if (tt.length < 2) continue; // Ignore very short words
-            // Exact word match
-            if (kt === tt) score += 5;
-            // Partial word match (stemming approximation)
-            else if (kt.startsWith(tt) || tt.startsWith(kt)) score += 3;
-        }
-    }
-  }
-  
-  return score;
-}
-
-// FIX: Lowered required score for a match (from 8 to 5) to ensure responses
-function findBestMatch(text) {
-  const candidates = [];
-  for (const entry of ENHANCED_KNOWLEDGE) {
-    const score = scoreMatch(text, entry);
-    if (score > 0) candidates.push({ entry, score });
-    }
-  
-  candidates.sort((a, b) => b.score - a.score);
-  return candidates.length && candidates[0].score >= 5 ? candidates[0].entry : null; 
-}
-
-function getContextualResponse(text, match, isArabic) {
-  if (!match) {
-    return isArabic ? 
-      "معذرةً، المعلومة دي مش متوفرة دلوقتي في قاعدة بياناتي. ممكن تجرب تسأل بطريقة مختلفة أو تختار من الأسئلة السريعة في القائمة؟ أنا هنا عشان أساعدك! 😊" :
-      "I'm sorry, that information isn't available in my current database. Could you try rephrasing your question or choose from the quick prompts in the sidebar? I'm here to help! 😊";
-  }
-  
-  const response = isArabic ? (match.a_ar || match.a_en) : (match.a_en || match.a_ar);
-  
-  const now = new Date();
-  const opening = new Date('2025-11-01');
-  const isOpeningDay = now.toDateString() === opening.toDateString();
-  
-  if (isOpeningDay && match.id === 1) {
-    return response + (isArabic ? 
-      "\n\n🎉 اليوم هو اليوم التاريخي! المتحف بيفتح دلوقتي!" :
-      "\n\n🎉 Today is the historic day! GEM is opening right now!");
-  }
-  
-  return response;
-}
-
-/* ========================= ENHANCED APP CORE ========================= */
-const app = {
-  isVoice: false,
-  recognition: null,
-  currentLanguage: 'ar',
-  currentTheme: 'dark',
-  voicesLoaded: false, // NEW FLAG
-  
-  init() {
-    this.messagesEl = document.getElementById('messages');
-    this.input = document.getElementById('input');
-    this.voiceBtn = document.getElementById('voiceBtn');
-    this.setupSpeech(); // Call setup, but actual speech synthesis depends on voicesLoaded flag
-    this.bind();
-    this.updateCountdown();
-    this.updateUI(this.currentLanguage);
-    setInterval(() => this.updateCountdown(), 1000);
-  },
-
-  bind() {
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey && document.activeElement === this.input) {
-        e.preventDefault();
-        this.send();
-      }
-    });
-  },
-
-  updateCountdown() {
-    const now = new Date();
-    // October 31, 2025, 5:22:54 AM EET (Cairo)
-    const opening = new Date('2025-11-01T00:00:00+02:00'); 
-    const diff = opening - now;
-    
-    if (diff <= 0) {
-      document.getElementById('countdown').innerHTML = '🎉 OPEN NOW!';
-      return;
-    }
-    
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    
-    const lang = this.currentLanguage;
-    if (days > 0) {
-      document.getElementById('countdown').innerHTML = `${days.toLocaleString(lang === 'ar' ? 'ar-EG' : 'en-US')} ${lang === 'ar' ? 'يوم متبقي' : 'Days Left'}`;
-    } else {
-      document.getElementById('countdown').innerHTML = `${hours.toLocaleString(lang === 'ar' ? 'ar-EG' : 'en-US')}${lang === 'ar' ? 'س' : 'h'} ${minutes.toLocaleString(lang === 'ar' ? 'ar-EG' : 'en-US')}${lang === 'ar' ? 'د' : 'm'}`;
-    }
-  },
-
-  toggleTheme() {
-    const body = document.body;
-    this.currentTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
-    body.className = this.currentTheme + '-mode';
-  },
-
-  updateUI(lang) {
-    const data = CONTENT[lang];
-    
-    // 1. Root & HTML Dir
-    document.documentElement.lang = lang;
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-    document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
-
-    // 2. Static Texts
-    document.getElementById('slogan').innerText = data.slogan;
-    document.getElementById('countdown-text').innerText = data.countdownText;
-    document.getElementById('countdown-date').innerText = data.countdownDate; // FIX: Added countdown date localization
-    document.getElementById('quick-title').innerText = data.quickTitle;
-    document.getElementById('send-btn').innerText = data.sendBtn;
-    document.getElementById('small-note').innerText = data.smallNote;
-    document.getElementById('live-info-title').innerText = data.liveInfoTitle;
-    document.getElementById('live-info-text').innerText = data.liveInfoText;
-    document.getElementById('facts-title').innerText = data.factsTitle;
-    document.getElementById('about-kai-title').innerText = data.aboutKaiTitle;
-    document.getElementById('about-kai-text').innerText = data.aboutKaiText;
-    document.getElementById('developer-note').innerText = data.developerNote;
-    document.getElementById('footer').childNodes[0].nodeValue = data.footer.substring(0, data.footer.indexOf('©'));
-    document.getElementById('footer').childNodes[2].nodeValue = data.footer.substring(data.footer.indexOf('©'));
-    document.getElementById('app-footer-2').childNodes[0].nodeValue = data.footer2.substring(0, data.footer2.indexOf('©'));
-    document.getElementById('app-footer-2').childNodes[2].nodeValue = data.footer2.substring(data.footer2.indexOf('©'));
-    document.getElementById('reset-btn').innerText = data.resetBtn;
-    document.getElementById('safi-title-small').innerText = data.safiTitleSmall; // FIX: Added SAFI title localization
-    document.getElementById('tag-text').innerText = data.tagText;
-    document.getElementById('gem-edition').innerText = lang === 'ar' ? '' : 'GEM'; // FIX: GEM only in EN
-
-    // 3. Stats & Welcome (Dynamic)
-    data.stats.forEach((stat, index) => {
-        document.getElementById(`stat-${index+1}`).innerText = stat.num;
-        document.getElementById(`label-${index+1}`).innerText = stat.label;
-    });
-    document.getElementById('welcome-title').innerText = data.welcomeTitle;
-    document.getElementById('welcome-text-1').innerText = data.welcomeText1;
-    document.getElementById('news-strong').innerText = data.newsStrong;
-    document.getElementById('welcome-text-2').childNodes[1].nodeValue = data.welcomeText2; 
-    document.getElementById('safi-desc').innerText = data.safiDesc;
-    
-    // 4. Quick Prompts (FIX: Injected HTML correctly)
-    const quickEl = document.getElementById('quick-prompts');
-    quickEl.innerHTML = '';
-    data.quickPrompts.forEach(item => {
-        const btn = document.createElement('button');
-        btn.className = 'btn';
-        btn.onclick = () => app.sendPrompt(item.prompt);
-        btn.innerText = item.text;
-        quickEl.appendChild(btn);
-    });
-
-    // 5. Composer/Input
-    document.getElementById('input').placeholder = data.placeholder;
-    this.updateCountdown(); 
-  },
-
-  toggleLanguage() {
-    this.currentLanguage = this.currentLanguage === 'ar' ? 'en' : 'ar';
-    this.updateUI(this.currentLanguage);
-    window.speechSynthesis.cancel(); // Cancel any current speech
-    const currentText = this.input.value.trim();
-    if (currentText) {
-      this.input.value = ''; 
-    }
-  },
-
-  showKidsMenu() {
-    const data = CONTENT[this.currentLanguage];
-    const stories = data.kidsStories;
-    
-    // Remove welcome and typing indicator
-    const welcome = document.getElementById('welcome');
-    if (welcome) welcome.remove();
-    this.removeTyping();
-
-    // Check and remove existing kids menu before creating a new one
-    let kidsMenu = document.getElementById('kids-menu');
-    if (kidsMenu) kidsMenu.remove();
-    
-    kidsMenu = document.createElement('div');
-    kidsMenu.className = 'msg bot';
-    kidsMenu.id = 'kids-menu';
-    
-    const avatar = document.createElement('div');
-    avatar.className = 'avatar';
-    avatar.innerHTML = '<div style="font-size:36px">👸🏻</div>';
-    
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    
-    bubble.innerHTML = `
-      <div class="title-small">SAFI</div>
-      <div class="story-menu">
-        <div class="story-menu-title">
-            👶🏻 ${data.kidsMenuTitle}
         </div>
-        ${stories.map(story => `
-            <button onclick="app.sendKidsPrompt('${story.prompt}')">
-                <span>${story.text}</span>
-                <span>⭐</span>
-            </button>
-        `).join('')}
-      </div>
-      <p style="margin-top:10px; color:var(--muted); font-size:14px;">${this.currentLanguage === 'ar' ? 'اختر قصة لتبدأ متعة الاكتشاف!' : 'Choose a story to start the fun of discovery!'}</p>
-    `;
-    
-    kidsMenu.appendChild(avatar);
-    kidsMenu.appendChild(bubble);
-    this.messagesEl.appendChild(kidsMenu);
-    this.scrollBottom();
-  },
-  
-  // NEW: Send prompt specifically from kids menu (same as sendPrompt, but clearer)
-  sendKidsPrompt(text) {
-    this.input.value = text;
-    this.send();
-  },
+    </div>
 
-  // FIX: Setup speech synthesis and recognition correctly
-  setupSpeech() {
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      this.recognition = new SR();
-      this.recognition.continuous = false;
-      this.recognition.interimResults = false;
-      this.recognition.onresult = (e) => {
-        const transcript = e.results[0][0].transcript;
-        this.input.value = transcript;
-        this.onInput();
-        this.send(); 
-      };
-      this.recognition.onerror = () => {
-        document.getElementById('mic').style.background = '';
-        document.getElementById('mic').style.color = 'var(--text)';
-        this.recognition._running = false;
-      };
-      this.recognition.onend = () => {
-        document.getElementById('mic').style.background = '';
-        document.getElementById('mic').style.color = 'var(--text)';
-        this.recognition._running = false;
-      }
-    }
-    
-    // FIX: Wait for voices to load
-    if (window.speechSynthesis) {
-        if (window.speechSynthesis.getVoices().length > 0) {
-            this.voicesLoaded = true;
-        } else {
-            window.speechSynthesis.onvoiceschanged = () => {
-                this.voicesLoaded = true;
-            };
+    <script>
+        // APP STATE
+        const state = {
+            messages: [],
+            language: 'en',
+            isTyping: false,
+            gemDatabase: [
+                {
+                    keywords: ["when", "open", "opening", "date", "متى", "افتتاح"],
+                    en: "The official opening date is November 1st, 2025.",
+                    ar: "التاريخ الرسمي للافتتاح هو 1 نوفمبر 2025."
+                },
+                {
+                    keywords: ["where", "location", "located", "أين", "موقع"],
+                    en: "It is located one mile from the Giza Pyramids, Cairo, Egypt.",
+                    ar: "يقع على بعد ميل واحد من أهرامات الجيزة في القاهرة، مصر."
+                },
+                {
+                    keywords: ["size", "large", "area", "مساحة", "حجم"],
+                    en: "It covers approximately 480,000 square meters and is the largest museum dedicated to a single civilization.",
+                    ar: "يغطي حوالي 480,000 متر مربع وهو أكبر متحف مخصص لحضارة واحدة."
+                },
+                {
+                    keywords: ["treasures", "tutankhamun", "artifacts", "كنوز", "توت", "highlight"],
+                    en: "It houses over 100,000 ancient artifacts, including the complete collection of King Tutankhamun's treasures displayed together for the first time.",
+                    ar: "يضم أكثر من 100,000 قطعة أثرية قديمة، بما في ذلك مجموعة كنوز توت عنخ آمون كاملة معروضة معاً لأول مرة."
+                },
+                {
+                    keywords: ["ramses", "grand hall", "statue", "رمسيس", "قاعة"],
+                    en: "The Grand Hall features a colossal 11-meter tall, 83-ton granite statue of Ramses II and other large statues of gods, kings, and queens.",
+                    ar: "تضم القاعة الكبرى تمثالاً ضخماً من الجرانيت لرمسيس الثاني بارتفاع 11 متراً ووزن 83 طناً، وتماثيل أخرى كبيرة للآلهة والملوك والملكات."
+                },
+                {
+                    keywords: ["tickets", "book", "reservation", "تذاكر", "حجز"],
+                    en: "Tickets will be available online through the official GEM website and at museum counters. Booking details will be announced closer to the opening date.",
+                    ar: "ستتاح التذاكر عبر الإنترنت من الموقع الرسمي وعند شباك التذاكر داخل المتحف. سيتم الإعلان عن تفاصيل الحجز قريباً."
+                },
+                {
+                    keywords: ["food", "restaurants", "shopping", "مطاعم", "تسوق"],
+                    en: "Yes, the GEM includes restaurants like Zooba, various eateries, and high-end designer shops.",
+                    ar: "نعم، يحتوي المتحف على مطاعم مثل زوبا، وأماكن لتناول الطعام، ومتاجر للماركات الفاخرة."
+                },
+                {
+                    keywords: ["visitors", "expect", "annually", "زوار", "سنوياً"],
+                    en: "The museum expects about 6 million visitors per year.",
+                    ar: "من المتوقع أن يستقبل المتحف حوالي 6 ملايين زائر سنوياً."
+                }
+            ]
+        };
+
+        // DOM ELEMENTS
+        const elements = {
+            body: document.body,
+            backBtn: document.getElementById('backBtn'),
+            themeBtn: document.getElementById('themeBtn'),
+            aboutBtn: document.getElementById('aboutBtn'),
+            langBtn: document.getElementById('langBtn'),
+            messagesWrapper: document.getElementById('messagesWrapper'),
+            messagesContainer: document.getElementById('messagesContainer'),
+            messageInput: document.getElementById('messageInput'),
+            sendBtn: document.getElementById('sendBtn'),
+            aboutModal: document.getElementById('aboutModal'),
+            closeModal: document.getElementById('closeModal'),
+            footerText: document.getElementById('footerText'),
+            themeDark: document.querySelector('.theme-icon-dark'),
+            themeLight: document.querySelector('.theme-icon-light')
+        };
+
+        // INITIALIZE
+        function init() {
+            addWelcomeMessage();
+            setupEventListeners();
+            autoResizeTextarea();
         }
-    }
-  },
 
-  toggleRecording() {
-    if (!this.recognition) {
-      alert(this.currentLanguage === 'ar' ? 'التعرف على الصوت غير مدعوم في متصفحك.' : 'Speech recognition not supported in this browser.');
-      return;
-    }
-    
-    try {
-      if (this.recognition._running) {
-        this.recognition.stop();
-      } else {
-        this.recognition.lang = this.currentLanguage === 'ar' ? 'ar-EG' : 'en-US';
-        this.recognition.start();
-        this.recognition._running = true;
-        document.getElementById('mic').style.background = 'var(--accent)';
-        document.getElementById('mic').style.color = 'var(--bg)';
-      }
-    } catch (e) {
-      console.error('Speech recognition error:', e);
-    }
-  },
+        // WELCOME MESSAGE
+        function addWelcomeMessage() {
+            const msg = state.language === 'en'
+                ? "Hello! I'm SAFI, Egypt's first AI assistant. Ask me anything about the Grand Egyptian Museum! 🏛️✨"
+                : "أهلاً! أنا صافي، أول مساعد ذكاء اصطناعي مصري. اسألني عن المتحف المصري الكبير! 🏛️✨";
+            addMessage(msg, 'assistant');
+        }
 
-  toggleVoice() {
-    this.isVoice = !this.isVoice;
-    this.voiceBtn.style.background = this.isVoice ? 'var(--accent)' : '';
-    this.voiceBtn.style.color = this.isVoice ? 'var(--bg)' : '';
-    window.speechSynthesis.cancel(); 
-  },
+        // EVENT LISTENERS
+        function setupEventListeners() {
+            elements.backBtn.addEventListener('click', () => {
+                window.location.href = 'https://knowing-ai.netlify.app';
+            });
 
-  showInfo() {
-    const info = this.currentLanguage === 'ar' ? 
-      `
-🏛️ المتحف المصري الكبير - معلومات سريعة:
+            elements.themeBtn.addEventListener('click', toggleTheme);
+            elements.aboutBtn.addEventListener('click', () => elements.aboutModal.style.display = 'flex');
+            elements.closeModal.addEventListener('click', () => elements.aboutModal.style.display = 'none');
+            elements.aboutModal.addEventListener('click', (e) => {
+                if (e.target === elements.aboutModal) {
+                    elements.aboutModal.style.display = 'none';
+                }
+            });
 
-📅 الافتتاح: 1 نوفمبر 2025
-📍 الموقع: هضبة الجيزة، بجانب الأهرامات
-🎫 السعر: 30 يورو للأجانب البالغين
-⏰ الحجز: يبدأ 4 نوفمبر للجمهور
+            elements.langBtn.addEventListener('click', toggleLanguage);
+            elements.messageInput.addEventListener('input', handleInputChange);
+            elements.messageInput.addEventListener('keydown', handleKeyPress);
+            elements.sendBtn.addEventListener('click', sendMessage);
+        }
 
-🤖 تم تطويري بواسطة Knowing.AI - KaiGPT
-💡 شعارنا: اعرف اكتر. افعل اكتر.
-      ` : 
-      `
-🏛️ Grand Egyptian Museum (GEM) - Quick Info:
+        // THEME TOGGLE
+        function toggleTheme() {
+            const isDark = elements.body.classList.contains('dark');
+            if (isDark) {
+                elements.body.classList.remove('dark');
+                elements.body.classList.add('light');
+                elements.themeDark.style.display = 'none';
+                elements.themeLight.style.display = 'block';
+            } else {
+                elements.body.classList.remove('light');
+                elements.body.classList.add('dark');
+                elements.themeDark.style.display = 'block';
+                elements.themeLight.style.display = 'none';
+            }
+        }
 
-📅 Opening: November 1, 2025
-📍 Location: Giza Plateau, next to the Pyramids
-🎫 Price: €30 for adult foreigners
-⏰ Booking: Starts November 4th for the public
+        // LANGUAGE TOGGLE
+        function toggleLanguage() {
+            state.language = state.language === 'en' ? 'ar' : 'en';
+            updatePlaceholders();
+            
+            // Clear and re-add welcome message
+            state.messages = [];
+            elements.messagesWrapper.innerHTML = '';
+            addWelcomeMessage();
+        }
 
-🤖 Developed by Knowing.AI - KaiGPT
-💡 Slogan: Know more. Do more.
-      `;
-    this.addMessage(info.trim(), 'bot');
-  },
+        function updatePlaceholders() {
+            if (state.language === 'en') {
+                elements.messageInput.placeholder = 'Ask about the Grand Egyptian Museum...';
+                elements.messageInput.dir = 'ltr';
+                elements.footerText.textContent = "SAFI - Egypt's First AI Assistant | Powered by Knowing.AI";
+            } else {
+                elements.messageInput.placeholder = 'اسأل عن المتحف المصري الكبير...';
+                elements.messageInput.dir = 'rtl';
+                elements.footerText.textContent = 'صافي - أول مساعد ذكاء اصطناعي مصري | بدعم من Knowing.AI';
+            }
+        }
 
-  sendPrompt(text) {
-    this.input.value = text;
-    this.send();
-  },
+        // INPUT HANDLING
+        function handleInputChange() {
+            elements.sendBtn.disabled = !elements.messageInput.value.trim();
+            autoResizeTextarea();
+        }
 
-  send() {
-    const text = this.input.value.trim();
-    if (!text) return;
-    
-    this.addMessage(text, 'user');
-    this.input.value = '';
-    this.onInput();
-    this.showTyping();
-    
-    // Simulate thinking time with a delay
-    setTimeout(() => this.respond(text), Math.random() * 800 + 400);
-  },
+        function autoResizeTextarea() {
+            elements.messageInput.style.height = 'auto';
+            elements.messageInput.style.height = Math.min(elements.messageInput.scrollHeight, 200) + 'px';
+        }
 
-  addMessage(content, role) {
-    const welcome = document.getElementById('welcome');
-    if (welcome) welcome.remove();
-    
-    // FIX: Keep kids menu unless explicitly sending a prompt from it
-    const kidsMenu = document.getElementById('kids-menu');
-    if (kidsMenu && role === 'user' && !content.includes('قصة')) { 
-      kidsMenu.remove(); 
-    }
-    
-    const row = document.createElement('div');
-    row.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
-    
-    const avatar = document.createElement('div');
-    avatar.className = 'avatar';
-    avatar.innerHTML = role === 'user' ? 
-      '<div style="font-size:28px">🙋‍♂️</div>' : 
-      '<div style="font-size:36px">👸🏻</div>';
-    
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    
-    if (role === 'bot') {
-      bubble.innerHTML = '<div class="title-small">SAFI</div>' + this.escapeHtml(content).replace(/\n/g, '<br>');
-    } else {
-      bubble.innerHTML = this.escapeHtml(content).replace(/\n/g, '<br>');
-    }
-    
-    row.appendChild(avatar);
-    row.appendChild(bubble);
-    this.messagesEl.appendChild(row);
-    this.scrollBottom();
-  },
+        function handleKeyPress(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        }
 
-  showTyping() {
-    const data = CONTENT[this.currentLanguage];
-    this.removeTyping();
-    this.typing = document.createElement('div');
-    this.typing.className = 'msg bot';
-    this.typing.id = 'typing';
-    
-    const avatar = document.createElement('div');
-    avatar.className = 'avatar';
-    avatar.innerHTML = '<div style="font-size:36px">👸🏻</div>';
-    
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    bubble.innerHTML = `
-      <div class="title-small">SAFI</div>
-      <div style="color:var(--muted);display:flex;align-items:center;gap:8px">
-        <span>${data.typing}</span>
-        <div class="typing-dots">
-          <div class="typing-dot"></div>
-          <div class="typing-dot"></div>
-          <div class="typing-dot"></div>
-        </div>
-      </div>
-    `;
-    
-    this.typing.appendChild(avatar);
-    this.typing.appendChild(bubble);
-    this.messagesEl.appendChild(this.typing);
-    this.scrollBottom();
-  },
+        // SEND MESSAGE
+        async function sendMessage() {
+            const text = elements.messageInput.value.trim();
+            if (!text) return;
 
-  removeTyping() {
-    const typing = document.getElementById('typing');
-    if (typing) typing.remove();
-  },
+            addMessage(text, 'user');
+            elements.messageInput.value = '';
+            elements.messageInput.style.height = 'auto';
+            elements.sendBtn.disabled = true;
 
-  respond(userText) {
-    this.removeTyping();
-    
-    const match = findBestMatch(userText);
-    const isUserArabic = isArabic(userText);
-    
-    // FIX: Update UI language based on input for better immediate response context
-    this.currentLanguage = isUserArabic ? 'ar' : 'en';
-    this.updateUI(this.currentLanguage);
-    
-    const reply = getContextualResponse(userText, match, isUserArabic);
-    
-    this.addMessage(reply, 'bot');
-    
-    if (this.isVoice) {
-      this.speak(reply, isUserArabic ? 'ar-EG' : 'en-US');
-    }
-  },
+            showTypingIndicator();
+            
+            setTimeout(() => {
+                const response = findBestMatch(text);
+                hideTypingIndicator();
+                addMessage(response, 'assistant');
+            }, 1200);
+        }
 
-  // FIX: Reworked speak function for better compatibility and to represent SAFI's voice
-  speak(text, lang) {
-    if (!('speechSynthesis' in window) || !this.voicesLoaded) return;
-    
-    window.speechSynthesis.cancel();
-    // Remove emojis for a cleaner speech output
-    const cleanText = text.replace(/[🏛️🎉👑🌍🚀🌐✈️🔬🎫🏗️📧🎊🏺🚗⛵👨‍💻😊⭐]/g, ''); 
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = lang || 'ar-EG';
-    utterance.rate = 0.95; // Slightly slower
-    utterance.pitch = 1; // Neutral pitch for compatibility
+        // FIND BEST MATCH
+        function findBestMatch(query) {
+            const lowerQuery = query.toLowerCase();
+            
+            for (const item of state.gemDatabase) {
+                if (item.keywords.some(keyword => lowerQuery.includes(keyword.toLowerCase()))) {
+                    return state.language === 'en' ? item.en : item.ar;
+                }
+            }
 
-    const voices = window.speechSynthesis.getVoices();
-    if (voices && voices.length) {
-      let selectedVoice = null;
-      
-      // Prioritize female voice that matches the language
-      if (lang && lang.startsWith('ar')) {
-        selectedVoice = voices.find(v => v.lang && v.lang.startsWith('ar') && /female|woman|salma|hoda|sara/i.test(v.name));
-      } else if (lang && lang.startsWith('en')) {
-        selectedVoice = voices.find(v => v.lang && v.lang.startsWith('en') && /female|woman|samantha|zira|karen/i.test(v.name));
-      }
-      
-      // Fallback to the first matching voice
-      if (!selectedVoice) {
-        selectedVoice = voices.find(v => v.lang && v.lang.startsWith(lang.substring(0, 2)));
-      }
-      
-      if (selectedVoice) utterance.voice = selectedVoice;
-    }
-    
-    window.speechSynthesis.speak(utterance);
-  },
+            return state.language === 'en'
+                ? "I'd be happy to help! Could you please rephrase your question about the Grand Egyptian Museum? You can ask about opening dates, location, exhibits, tickets, or facilities."
+                : "يسعدني المساعدة! هل يمكنك إعادة صياغة سؤالك عن المتحف المصري الكبير؟ يمكنك السؤال عن مواعيد الافتتاح أو الموقع أو المعروضات أو التذاكر أو المرافق.";
+        }
 
-  scrollBottom() {
-    setTimeout(() => {
-      this.messagesEl.scrollTop = this.messagesEl.scrollHeight + 200;
-    }, 100);
-  },
+        // ADD MESSAGE
+        function addMessage(text, role) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
 
-  reset() {
-    if (confirm(this.currentLanguage === 'ar' ? 'هل تريد بدء محادثة جديدة؟ سيتم مسح سجل الرسائل.' : 'Start a new conversation? All messages will be cleared.')) {
-      location.reload();
-    }
-  },
+            const avatar = document.createElement('div');
+            avatar.className = 'avatar';
+            avatar.textContent = role === 'user' ? 'You' : '👸';
+            if (role === 'user') {
+                avatar.style.fontSize = '12px';
+                avatar.style.fontWeight = '600';
+            }
 
-  onInput() {
-    const input = this.input;
-    input.style.height = 'auto';
-    input.style.height = Math.min(input.scrollHeight, 260) + 'px';
-  },
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.textContent = text;
+            
+            // Set direction for Arabic text
+            if (state.language === 'ar' && role === 'assistant') {
+                content.dir = 'rtl';
+            } else if (role === 'user' && text.match(/[\u0600-\u06FF]/)) {
+                // Heuristic for user-entered Arabic text
+                content.dir = 'rtl';
+            } else {
+                content.dir = 'ltr';
+            }
 
-  onKey(event) {
-    if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault();
-      this.send();
-    }
-  },
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            elements.messagesWrapper.appendChild(messageDiv);
 
-  escapeHtml(text) {
-    return String(text)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;')
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); 
-  }
-};
+            state.messages.push({ role, text });
+            scrollToBottom();
+        }
 
-// Initialize app when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-  app.init();
-});
+        // TYPING INDICATOR
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message assistant';
+            typingDiv.id = 'typingIndicator';
 
-// Global app exposure
-window.app = app;
-</script>
+            const avatar = document.createElement('div');
+            avatar.className = 'avatar';
+            avatar.textContent = '👸';
+
+            const dots = document.createElement('div');
+            dots.className = 'message-content typing-indicator';
+            for (let i = 0; i < 3; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'typing-dot';
+                dots.appendChild(dot);
+            }
+
+            typingDiv.appendChild(avatar);
+            typingDiv.appendChild(dots);
+            elements.messagesWrapper.appendChild(typingDiv);
+            scrollToBottom();
+        }
+
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) indicator.remove();
+        }
+
+        // SCROLL TO BOTTOM
+        function scrollToBottom() {
+            elements.messagesContainer.scrollTop = elements.messagesContainer.scrollHeight;
+        }
+
+        // START APP
+        init();
+    </script>
 </body>
 </html>
