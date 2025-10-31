@@ -15,10 +15,10 @@
     --text: #ffffff; 
     --accent: #ffffff; 
     --secondary-accent: #e0e0e0; /* New: a lighter white for contrast */
-    --gold: #ffffff; /* Replaced gold with pure white */
-    --egyptian-blue: #0f0f0f; /* Dark Gray/Black */
+    --gold: #ffffff; 
+    --egyptian-blue: #0f0f0f; 
     --glass: rgba(255,255,255,0.05); 
-    --shadow: rgba(255,255,255,0.05); /* White shadow for glow */
+    --shadow: rgba(255,255,255,0.05); 
     --radius:12px;
     --max-width:980px;
   }
@@ -31,10 +31,10 @@
     --text: #000000; 
     --accent: #000000; 
     --secondary-accent: #333333; 
-    --gold: #000000; /* Black in light mode */
+    --gold: #000000; 
     --egyptian-blue: #eeeeee; 
     --glass: rgba(0,0,0,0.05); 
-    --shadow: rgba(0,0,0,0.1); /* Black shadow */
+    --shadow: rgba(0,0,0,0.1); 
     background: linear-gradient(180deg,var(--bg),#fcfcfc);
   }
 
@@ -48,7 +48,7 @@
   }
   a{color:var(--secondary-accent);text-decoration:none}
 
-  /* Enhanced animations - now using a subtle white/black glow/shadow */
+  /* Enhanced animations */
   @keyframes glow {
     0%, 100% { box-shadow: 0 0 10px var(--shadow); }
     50% { box-shadow: 0 0 20px var(--shadow); }
@@ -78,14 +78,8 @@
     font-weight:800;color:var(--accent); font-size:18px;
     position:relative;overflow:hidden;
   }
-  .logo::before{
-    content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
-    background:conic-gradient(transparent, var(--shadow), transparent);
-    animation:spin 3s linear infinite;
-  }
   @keyframes spin { to { transform: rotate(360deg); } }
   
-  /* Brand text uses a gradient between two shades of text color (white in dark, black in light) */
   .brand h1{margin:0;font-size:19px;background:linear-gradient(135deg, var(--accent), var(--secondary-accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
   .brand .sub{color:var(--muted);font-size:13px;margin-top:2px}
 
@@ -107,7 +101,6 @@
   .stat-label{font-size:11px;color:var(--muted);margin-top:4px}
 
   /* Quick buttons section */
-  .quick{display:flex;flex-direction:column;gap:10px}
   .quick button{background:transparent;border:1px solid var(--glass);color:var(--muted);padding:12px;border-radius:10px;text-align:right;cursor:pointer;transition:all 0.3s ease}
   .quick button:hover{color:var(--text);background:var(--glass);border-color:var(--accent);transform:translateX(-3px)}
 
@@ -189,7 +182,7 @@
   .btn:hover{background:var(--glass);border-color:var(--accent)}
   .btn.primary{
     background:linear-gradient(90deg,var(--accent),var(--secondary-accent));
-    color:var(--bg); /* Black text on white button for primary action */
+    color:var(--bg); 
     border:1px solid var(--accent);font-weight:800;
     box-shadow:0 8px 20px var(--shadow);transform:scale(1)
   }
@@ -244,30 +237,30 @@
           </div>
         </div>
 
-        <div class="slogan">Know more. Do more.</div>
+        <div class="slogan" id="slogan">“Know more. Do more.”</div>
 
         <div class="countdown">
-          <div class="countdown-text">🏛️ GEM المتحف المصري الكبير</div>
+          <div class="countdown-text" id="countdown-text">🏛️ المتحف المصري الكبير</div>
           <div class="countdown-time" id="countdown">OPENING DAY!</div>
           <div style="font-size:12px;color:var(--text);margin-top:4px">1 November 2025</div>
         </div>
 
         <div class="stats">
           <div class="stat">
-            <div class="stat-number">100K+</div>
-            <div class="stat-label">قطعة أثرية</div>
+            <div class="stat-number" id="stat-1">100K+</div>
+            <div class="stat-label" id="label-1">قطعة أثرية</div>
           </div>
           <div class="stat">
-            <div class="stat-number">5000+</div>
-            <div class="stat-label">كنوز توت</div>
+            <div class="stat-number" id="stat-2">5000+</div>
+            <div class="stat-label" id="label-2">كنوز توت</div>
           </div>
           <div class="stat">
-            <div class="stat-number">480K</div>
-            <div class="stat-label">م² مساحة</div>
+            <div class="stat-number" id="stat-3">480K</div>
+            <div class="stat-label" id="label-3">م² مساحة</div>
           </div>
           <div class="stat">
-            <div class="stat-number">5M</div>
-            <div class="stat-label">زائر سنوياً</div>
+            <div class="stat-number" id="stat-4">5M</div>
+            <div class="stat-label" id="label-4">زائر سنوياً</div>
           </div>
         </div>
 
@@ -275,7 +268,7 @@
           <div class="card" style="margin-bottom:12px">
             <strong style="color:var(--text)">SAFI — المرشدة المصرية الذكية</strong>
             <div style="margin-top:8px;color:var(--muted);font-size:13px" id="safi-desc">
-              أول مرشدة ذكية مصرية تتكلم عربي مصري أصيل وإنجليزي بطلاقة. خبيرة في تاريخ مصر والمتحف المصري الكبير.
+              صافي -أول نموذج ذكاء اصطناعي مصري وشخصية ومؤثرة، وأول مرشدة ذكية تتحدث اللغة العربية المصرية الأصيلة والإنجليزية بطلاقة، وتتمتع بخبرة في التاريخ والمتحف المصري الكبير.
             </div>
           </div>
 
@@ -286,7 +279,7 @@
           </div>
 
           <div class="card">
-            <div style="font-weight:700;margin-bottom:8px;color:var(--text)">🎯 أسئلة سريعة</div>
+            <div style="font-weight:700;margin-bottom:8px;color:var(--text)" id="quick-title">🎯 أسئلة سريعة</div>
             <div style="display:flex;flex-direction:column;gap:8px" id="quick-prompts">
               <button class="btn" onclick="app.sendPrompt('متى افتتاح المتحف المصري الكبير؟')">🏛️ موعد الافتتاح</button>
               <button class="btn" onclick="app.sendPrompt('What makes GEM the world\'s largest museum?')">🌍 الأكبر عالمياً</button>
@@ -299,19 +292,19 @@
         </div>
       </div>
 
-      <div class="footer">
-        🇪🇬 © 2025 Knowing.AI — Egypt's First Unified AI Platform<br>
-        Powered by SAFI • Developed with ❤️ for Egypt
+      <div class="footer" id="footer">
+        © 2025 Knowing.AI — Egypt's First Unified AI Platform • Powered by SAFI
+        <div id="developer-note">Developer: Knowing.AI - KaiGPT</div>
       </div>
     </aside>
 
     <main class="main" role="main">
       <div class="topbar">
-        <div class="title">KaiGPT <span class="tag" style="margin-left:12px">🏛️ GEM OPENING</span></div>
+        <div class="title" id="main-title">KaiGPT <span class="tag" style="margin-left:12px">🏛️ GEM OPENING</span></div>
         <div style="display:flex;gap:8px;align-items:center">
           <button class="btn" onclick="app.toggleTheme()" title="تبديل وضع الإضاءة">🔆</button>
           <button class="btn" onclick="app.toggleLanguage()" title="تبديل اللغة والأسئلة السريعة">🌐</button>
-          <button class="btn" onclick="app.reset()">🔄 Reset</button>
+          <button class="btn" onclick="app.reset()" id="reset-btn">🔄 Reset</button>
           <button id="voiceBtn" class="btn" onclick="app.toggleVoice()">🎤 Voice</button>
           <button class="btn" onclick="app.showInfo()">ℹ️ Info</button>
         </div>
@@ -340,7 +333,7 @@
                 <button class="btn primary" onclick="app.send()" id="send-btn">➤ إرسال</button>
               </div>
             </div>
-            <div class="small-note">استمتع بأول تجربة ذكاء اصطناعي مصرية أصيلة • Know more. Do more.</div>
+            <div class="small-note" id="small-note">“Know more. Do more.”</div>
           </div>
         </section>
 
@@ -350,9 +343,9 @@
               <div class="live-dot"></div>
               LIVE UPDATE
             </div>
-            <h3>🏛️ افتتاح تاريخي</h3>
-            <p>المتحف المصري الكبير يفتح غداً 1 نوفمبر 2025 في حفل يشهده العالم كله! 🌍</p>
-            <ul style="margin:8px 0;padding:0 0 0 20px;color:var(--text)">
+            <h3 id="live-info-title">🏛️ افتتاح تاريخي</h3>
+            <p id="live-info-text">المتحف المصري الكبير يفتح غداً 1 نوفمبر 2025 في حفل يشهده العالم كله! 🌍</p>
+            <ul style="margin:8px 0;padding:0 0 0 20px;color:var(--text)" id="live-info-list">
               <li>البث المباشر على TikTok</li>
               <li>حضور قادة ومسؤولين من العالم</li>
               <li>افتتاح معارض توت عنخ آمون</li>
@@ -360,27 +353,27 @@
           </div>
 
           <div class="card">
-            <h3>📊 حقائق مذهلة</h3>
-            <ul style="margin:8px 0 0 18px;color:var(--muted);padding:0;">
-              <li><strong>100,000+</strong> قطعة أثرية</li>
-              <li><strong>5,000+</strong> قطعة من كنوز توت</li>
-              <li><strong>22,000 م²</strong> مساحة العرض</li>
-              <li><strong>€30</strong> سعر التذكرة للأجانب</li>
-              <li><strong>5 مليون</strong> زائر متوقع سنوياً</li>
+            <h3 id="facts-title">📊 حقائق مذهلة</h3>
+            <ul style="margin:8px 0 0 18px;color:var(--muted);padding:0;" id="facts-list">
+              <li><strong id="fact-1-strong">أكثر من ١٠٠,٠٠٠</strong> قطعة أثرية</li>
+              <li><strong id="fact-2-strong">أكثر من ٥,٠٠٠</strong> قطعة من كنوز توت</li>
+              <li><strong id="fact-3-strong">٤٨٠,٠٠٠ م²</strong> مساحة العرض</li>
+              <li><strong id="fact-4-strong">€30</strong> سعر التذكرة للأجانب</li>
+              <li><strong id="fact-5-strong">أكثر من ٥ مليون</strong> زائر متوقع سنوياً</li>
             </ul>
           </div>
 
           <div class="card">
-            <h3>🎯 About Knowing.AI</h3>
-            <p>منصة مصرية رائدة للذكاء الاصطناعي، تقدم حلول مبتكرة للسياحة والتعليم والأعمال.</p>
+            <h3 id="about-kai-title">🎯 About Knowing.AI</h3>
+            <p id="about-kai-text">منصة مصرية رائدة للذكاء الاصطناعي، تقدم حلول مبتكرة للسياحة والتعليم والتكنولوجيا والذكاء الصناعي.</p>
             <div style="margin-top:12px;font-size:12px;color:var(--secondary-accent)">
-              <strong>Developer:</strong> Haitham - The Egyptian Miracle Boy 🇪🇬
+              <strong id="developer-label">Developer:</strong> Knowing.AI - KaiGPT
             </div>
           </div>
         </aside>
       </div>
 
-      <footer class="app-footer">
+      <footer class="app-footer" id="app-footer-2">
         🇪🇬 Made with Love in Egypt • © 2025 Knowing.AI — Egypt's First Unified AI Platform • Powered by SAFI
       </footer>
 
@@ -395,7 +388,7 @@ const ENHANCED_KNOWLEDGE = [
     id: 1, 
     keywords: ["متى","افتتاح","opening","when","november","1 november","1 نوفمبر","موعد","تاريخ","date"], 
     a_ar: "🎉 المتحف المصري الكبير يفتح رسمياً غداً 1 نوفمبر 2025 في حفل عالمي مهيب! الحفل هيبقى live على TikTok والعالم كله هيشوف أعظم افتتاح متحف في التاريخ.", 
-    a_en: "🎉 The Grand Egyptian Museum officially opens tomorrow, November 1, 2025, in a magnificent global ceremony! The event will be live-streamed on TikTok for the world to witness the greatest museum opening in history." 
+    a_en: "🎉 The Grand Egyptian Museum (GEM) officially opens tomorrow, November 1, 2025, in a magnificent global ceremony! The event will be live-streamed for the world to witness the greatest museum opening in history." 
   },
   
   // Location & Access
@@ -403,69 +396,130 @@ const ENHANCED_KNOWLEDGE = [
     id: 2, 
     keywords: ["اين","أين","مكان","where","location","giza","الجيزة","اهرامات","pyramids","عنوان","address"], 
     a_ar: "🏛️ المتحف موجود في هضبة الجيزة، على بعد مئات الأمتار من أهرامات الجيزة العظيمة. الموقع مثالي ويطل على الأهرامات مباشرة!", 
-    a_en: "🏛️ The museum is located on the Giza plateau, just a few hundred meters from the iconic Pyramids of Giza. The location is perfect with direct views of the pyramids!" 
+    a_en: "🏛️ The GEM is located on the Giza plateau, just a few hundred meters from the iconic Pyramids of Giza. The location is perfect with direct views of the pyramids!" 
   },
 
   // Tutankhamun Collection
   { 
     id: 4, 
     keywords: ["توت","توت عنخ","tutankhamun","treasures","كنوز","mask","قناع","5000","خمسة آلاف"], 
-    a_ar: "👑 لأول مرة في التاريخ، كل كنوز توت عنخ آمون الـ5000 قطعة هتبقى معروضة في مكان واحد! شامل القناع الذهبي الشهير والتماثيل الخشبية بالحجم الطبيعي.", 
-    a_en: "👑 For the first time in history, all 5,000+ treasures of King Tutankhamun will be displayed in one place! Including the famous golden funeral mask and life-size wooden statues." 
+    a_ar: "👑 لأول مرة في التاريخ، كل كنوز الملك توت عنخ آمون الـ٥٠٠٠ قطعة هتبقى معروضة في مكان واحد! شامل القناع الذهبي الشهير والتماثيل الخشبية بالحجم الطبيعي.", 
+    a_en: "👑 For the first time in history, all 5,000+ treasures of King Tutankhamun will be displayed in one place at the GEM! This includes the famous golden funeral mask and life-size wooden statues." 
   },
 
   // Ramses II Story (KIDS)
   {
     id: 21,
-    keywords: ["قصة رمسيس","ramses story","رمسيس الثاني","تمثال"],
-    a_ar: "👑 **قصة الملك الشاب رمسيس الثاني:** عند المدخل، سيقابلك تمثال الملك رمسيس الثاني العظيم. تخيل يا بطل أن رمسيس تولى الحكم وهو صغير! كان قلبه شجاعاً وعقله حكيماً. حكم بالعدل والقوة، وبنى معابد ضخمة مثل أبو سمبل، ليخلد اسمه في التاريخ. العبرة هي: **بالإرادة والعمل، تصبح بطلاً عظيماً!**",
-    a_en: "👑 **The Story of Young King Ramses II:** Right at the entrance, you'll meet the statue of Great King Ramses II. Imagine, young hero, Ramses became king when he was young! He had a brave heart and a wise mind. He ruled with justice and strength, building huge temples like Abu Simbel to immortalize his name. The moral is: **With willpower and hard work, you become a great hero!**"
+    keywords: ["قصة رمسيس","ramses story","رمسيس الثاني","تمثال","بطل القوة"],
+    a_ar: "👑 **قصة الملك رمسيس الثاني - بطل القوة والعدل:** تخيل يا بطل أن رمسيس تولى الحكم وهو شاب قوي وشجاع. حارب وانتصر (في قادش)، وبنى معابد ضخمة (أبو سمبل) تبرز قوته وعدله. العبرة هي: **بالقوة والإرادة والحكمة، تصبح قائداً عظيماً ويخلد اسمك!**",
+    a_en: "👑 **The Story of King Ramses II - Hero of Strength and Justice:** Imagine, young hero, Ramses became king when he was young, strong, and brave. He fought and won battles (like Kadesh), and built massive temples (Abu Simbel) showing his strength and justice. The moral is: **With strength, willpower, and wisdom, you become a great leader and immortalize your name!**"
   },
 
   // Queen Hatshepsut Story (KIDS)
   {
     id: 22,
-    keywords: ["قصة حتشبسوت","hatshepsut story","ملكة","queen"],
-    a_ar: "👸🏻 **قصة الملكة حتشبسوت:** كانت حتشبسوت واحدة من أقوى ملكات مصر! لبست ملابس الفراعنة ووضعت لحية مزيفة لتثبت قوتها للجميع. لم تحارب بالسيوف، بل بنت المعابد وأرسلت رحلات تجارية ضخمة. كانت ذكية ومبتكرة. العبرة هي: **يمكنك أن تكوني قوية ومؤثرة بعقلك وذكائك!**",
-    a_en: "👸🏻 **The Story of Queen Hatshepsut:** Hatshepsut was one of the strongest queens of Egypt! She wore Pharaoh's clothes and a fake beard to prove her power to everyone. She didn't fight with swords, but built temples and sent massive trade expeditions. She was smart and innovative. The moral is: **You can be strong and influential with your mind and intelligence!**"
+    keywords: ["قصة حتشبسوت","hatshepsut story","ملكة العقل","ملكة الجمال","queen"],
+    a_ar: "👸🏻 **قصة الملكة حتشبسوت - ملكة العقل والجمال:** كانت حتشبسوت ذكية جداً وجميلة، حكمت مصر بقوة العقل وليس السيف! بنت معبد الدير البحري وأرسلت رحلات تجارية ضخمة. العبرة هي: **يمكنك أن تكوني قوية ومؤثرة بذكائك وجمالك وحكمتك، فالعقل قوة!**",
+    a_en: "👸🏻 **The Story of Queen Hatshepsut - Queen of Mind and Beauty:** Hatshepsut was very intelligent and beautiful. She ruled Egypt with the power of the mind, not the sword! She built the magnificent Deir el-Bahari Temple and sent huge trade expeditions. The moral is: **You can be strong and influential with your intelligence, beauty, and wisdom, for the mind is power!**"
+  },
+
+  // Tutankhamun Mask Story (KIDS)
+  {
+    id: 23,
+    keywords: ["سر قناع توت","golden mask","قناع توت عنخ آمون","ذهب"],
+    a_ar: "✨ **سر قناع الملك توت عنخ آمون الذهبي:** هذا القناع الذهبي لا يقدر بثمن لأنه مصنوع من الذهب الخالص والأحجار الكريمة. لم يكن مجرد قناع، بل كان رمزاً ليصبح توت عنخ آمون إلهاً بعد موته، يعبر عن اعتقاد المصريين بالحياة الأبدية! العبرة: **تاريخنا كنز من الأسرار والقيم التي يجب أن نحافظ عليها!**",
+    a_en: "✨ **The Secret of Tutankhamun's Golden Mask:** This priceless mask is made of pure gold and gemstones. It wasn't just a mask; it was a symbol for Tutankhamun to become a god after death, representing the Egyptians' belief in eternal life! The moral: **Our history is a treasure of secrets and values we must preserve!**"
   },
 ];
 
 /* ========================= LOCALIZED CONTENT DATA ========================= */
 const CONTENT = {
     ar: {
+        // UI Text
+        slogan: "اعرف اكتر. افعل اكتر.",
+        countdownText: "🏛️ المتحف المصري الكبير",
+        quickTitle: "🎯 أسئلة سريعة",
+        sendBtn: "➤ إرسال",
+        smallNote: "استمتع بأول تجربة ذكاء اصطناعي مصرية أصيلة • اعرف اكتر. افعل اكتر.",
+        typing: "صافي بتكتب",
+        resetBtn: "🔄 إعادة تعيين",
+        liveInfoTitle: "🏛️ افتتاح تاريخي",
+        liveInfoText: "المتحف المصري الكبير يفتح غداً 1 نوفمبر 2025 في حفل يشهده العالم كله! 🌍",
+        factsTitle: "📊 حقائق مذهلة",
+        aboutKaiTitle: "🎯 عن Knowing.AI",
+        aboutKaiText: "منصة مصرية رائدة للذكاء الاصطناعي، تقدم حلول مبتكرة للسياحة والتعليم والتكنولوجيا والذكاء الصناعي.",
+        developerLabel: "المطور:",
+        developerNote: "المطور: Knowing.AI - KaiGPT",
+        footer: "© 2025 Knowing.AI — Egypt's First Unified AI Platform • Powered by SAFI",
+        footer2: "🇪🇬 صنع بكل حب في مصر • © 2025 Knowing.AI — أول منصة ذكاء اصطناعي موحدة في مصر • مدعوم من SAFI",
+
+        // Stats
+        stats: [
+            { num: "أكثر من ١٠٠ ألف", label: "قطعة أثرية" },
+            { num: "أكثر من ٥٠٠٠", label: "كنوز الملك توت عنخ آمون" },
+            { num: "٤٨٠ ألف", label: "متر مربع" },
+            { num: "أكثر من ٥ مليون", label: "زائر سنوياً" }
+        ],
+        
+        // Welcome & SAFI
         welcomeTitle: "أهلاً بيك! أنا صافي 🇪🇬",
         welcomeText1: "أنا صافي، أول مرشدة ذكية مصرية من Knowing.AI، وأنا هنا عشان أساعدك تعرف كل حاجة عن المتحف المصري الكبير اللي هيفتح بكرة 1 نوفمبر 2025! إسأل بالعربي المصري أو بالإنجليزي، وهجاوبك بكل حب وفخر بتاريخنا العظيم. 🏛️✨",
         newsStrong: "🎉 خبر عاجل:",
         welcomeText2: "المتحف المصري الكبير، أكبر متحف أثري في العالم، يفتح أبوابه رسمياً بكرة في حفل عالمي مهيب!",
-        safiDesc: "أول مرشدة ذكية مصرية تتكلم عربي مصري أصيل وإنجليزي بطلاقة. خبيرة في تاريخ مصر والمتحف المصري الكبير.",
-        quickTitle: "🎯 أسئلة سريعة",
+        safiDesc: "صافي -أول نموذج ذكاء اصطناعي مصري وشخصية ومؤثرة، وأول مرشدة ذكية تتحدث اللغة العربية المصرية الأصيلة والإنجليزية بطلاقة، وتتمتع بخبرة في التاريخ والمتحف المصري الكبير.",
+
+        // Prompts & Kids
         quickPrompts: [
             { text: "🏛️ موعد الافتتاح", prompt: "متى افتتاح المتحف المصري الكبير؟" },
-            { text: "🌍 الأكبر عالمياً", prompt: "What makes GEM the world's largest museum?" },
+            { text: "🌍 الأكبر عالمياً", prompt: "ما الذي يجعل المتحف المصري الكبير الأكبر عالمياً؟" },
             { text: "👑 كنوز توت", prompt: "أيه أهم كنوز توت عنخ آمون في المتحف؟" },
-            { text: "🤖 عن صافي", prompt: "Tell me about SAFI and Knowing.AI" },
+            { text: "🤖 عن صافي", prompt: "من هي صافي وما هي Knowing.AI؟" },
             { text: "🎫 أسعار التذاكر", prompt: "أسعار تذاكر المتحف أيه؟" },
-            { text: "🚗 إزاي أروح", prompt: "How can I visit GEM from Cairo?" }
+            { text: "🚗 إزاي أروح", prompt: "كيف يمكنني زيارة المتحف المصري الكبير من القاهرة؟" }
         ],
         kidsMenuTitle: "👶🏻 قائمة قصص الأطفال",
         kidsStories: [
             { text: "👑 حكاية الملك رمسيس الثاني (بطل القوة والعدل)", prompt: "احكي قصة الملك رمسيس الثاني للأطفال" },
-            { text: "👸🏻 حكاية الملكة حتشبسوت (ملكة العقل والذكاء)", prompt: "احكي قصة الملكة حتشبسوت للأطفال" },
-            { text: "🏺 سر قناع توت عنخ آمون الذهبي", prompt: "احكي قصة كنوز توت عنخ آمون للأطفال" }
+            { text: "👸🏻 حكاية الملكة حتشبسوت (ملكة العقل والجمال)", prompt: "احكي قصة الملكة حتشبسوت للأطفال" },
+            { text: "🏺 سر قناع توت عنخ آمون الذهبي", prompt: "احكي قصة سر قناع توت عنخ آمون الذهبي للأطفال" }
         ],
-        placeholder: "اسألني أي حاجة عن المتحف المصري الكبير... 🏛️ (مثال: متى الافتتاح؟ أو What time does GEM open?)",
-        sendBtn: "➤ إرسال",
-        smallNote: "استمتع بأول تجربة ذكاء اصطناعي مصرية أصيلة • Know more. Do more.",
-        typing: "صافي بتكتب"
+        placeholder: "اسألني أي حاجة عن المتحف المصري الكبير... 🏛️ (مثال: متى الافتتاح؟)"
     },
     en: {
-        welcomeTitle: "Welcome! I am SAFI 🇪🇬",
-        welcomeText1: "I am SAFI, Egypt's first intelligent AI guide from Knowing.AI. I'm here to help you know everything about the Grand Egyptian Museum, opening tomorrow, November 1, 2025! Ask in Egyptian Arabic or English, and I will answer with love and pride in our great history. 🏛️✨",
-        newsStrong: "🎉 Breaking News:",
-        welcomeText2: "The Grand Egyptian Museum, the world's largest archaeological museum, officially opens its doors tomorrow in a magnificent global ceremony!",
-        safiDesc: "Egypt's first intelligent AI guide, fluent in authentic Egyptian Arabic and English. An expert in Egypt's history and the Grand Egyptian Museum.",
+        // UI Text
+        slogan: "Know more. Do more.",
+        countdownText: "🏛️ The Grand Egyptian Museum (GEM)",
         quickTitle: "🎯 Quick Prompts",
+        sendBtn: "➤ Send",
+        smallNote: "Enjoy Egypt's first authentic AI experience • Know more. Do more.",
+        typing: "SAFI is typing",
+        resetBtn: "🔄 Reset",
+        liveInfoTitle: "🏛️ Historic Opening",
+        liveInfoText: "The Grand Egyptian Museum (GEM) opens tomorrow, November 1, 2025, in a global ceremony! 🌍",
+        factsTitle: "📊 Amazing Facts",
+        aboutKaiTitle: "🎯 About Knowing.AI",
+        aboutKaiText: "A leading Egyptian AI platform, offering innovative solutions for tourism, education, technology, and Artificial Intelligence.",
+        developerLabel: "Developer:",
+        developerNote: "Developer: Knowing.AI - KaiGPT",
+        footer: "© 2025 Knowing.AI — Egypt's First Unified AI Platform • Powered by SAFI",
+        footer2: "🇪🇬 Made with Love in Egypt • © 2025 Knowing.AI — Egypt's First Unified AI Platform • Powered by SAFI",
+
+        // Stats
+        stats: [
+            { num: "100K+", label: "Artifacts" },
+            { num: "5000+", label: "King Tut's Treasures" },
+            { num: "480K", label: "Square Meters" },
+            { num: "5M+", label: "Annual Visitors" }
+        ],
+
+        // Welcome & SAFI
+        welcomeTitle: "Welcome! I am SAFI 🇪🇬",
+        welcomeText1: "I am SAFI, Egypt's first intelligent AI guide from Knowing.AI. I'm here to help you know everything about the Grand Egyptian Museum (GEM), opening tomorrow, November 1, 2025! Ask in Egyptian Arabic or English, and I will answer with love and pride in our great history. 🏛️✨",
+        newsStrong: "🎉 Breaking News:",
+        welcomeText2: "The Grand Egyptian Museum (GEM), the world's largest archaeological museum, officially opens its doors tomorrow in a magnificent global ceremony!",
+        safiDesc: "SAFI - Egypt's first AI model, personality, and influencer, and the first intelligent guide fluent in authentic Egyptian Arabic and English, with expertise in history and the Grand Egyptian Museum (GEM).",
+        
+        // Prompts & Kids
         quickPrompts: [
             { text: "🏛️ Opening Date", prompt: "When does the Grand Egyptian Museum open?" },
             { text: "🌍 World's Largest", prompt: "What makes GEM the world's largest museum?" },
@@ -477,13 +531,10 @@ const CONTENT = {
         kidsMenuTitle: "👶🏻 Kids Stories Menu",
         kidsStories: [
             { text: "👑 The Story of King Ramses II (Hero of Strength and Justice)", prompt: "Tell the story of King Ramses II for children" },
-            { text: "👸🏻 The Story of Queen Hatshepsut (Queen of Mind and Intelligence)", prompt: "Tell the story of Queen Hatshepsut for children" },
-            { text: "🏺 The Secret of Tutankhamun's Golden Mask", prompt: "Tell the story of Tutankhamun's treasures for children" }
+            { text: "👸🏻 The Story of Queen Hatshepsut (Queen of Mind and Beauty)", prompt: "Tell the story of Queen Hatshepsut for children" },
+            { text: "🏺 The Secret of Tutankhamun's Golden Mask", prompt: "Tell the story of Tutankhamun's Golden Mask for children" }
         ],
-        placeholder: "Ask me anything about the Grand Egyptian Museum... 🏛️ (Example: When is the opening? or متى الافتتاح؟)",
-        sendBtn: "➤ Send",
-        smallNote: "Enjoy Egypt's first authentic AI experience • Know more. Do more.",
-        typing: "SAFI is typing"
+        placeholder: "Ask me anything about the Grand Egyptian Museum (GEM)... 🏛️ (Example: When is the opening?)"
     }
 };
 
@@ -512,14 +563,13 @@ function scoreMatch(text, entry) {
       if (nk === t) score += 5;
       else if (nk.includes(t) || t.includes(nk)) score += 3;
       else if (nk.startsWith(t) || nk.endsWith(t)) score += 2;
-      // Exact phrase matching
       if (norm.includes(nk)) score += 4;
     }
   }
   
   // Bonus for current events and kids mode
   if (norm.match(/2025|november|1|opening|افتتاح|غد/)) score += 2;
-  if (norm.match(/طفل|اطفال|قصة|kids|story/)) score += 5;
+  if (norm.match(/طفل|اطفال|قصة|kids|story|ramses|tutankhamun|hatshepsut/)) score += 5;
   
   return score;
 }
@@ -532,7 +582,7 @@ function findBestMatch(text) {
     }
   
   candidates.sort((a, b) => b.score - a.score);
-  return candidates.length ? candidates[0].entry : null;
+  return candidates.length && candidates[0].score >= 8 ? candidates[0].entry : null; 
 }
 
 function getContextualResponse(text, match, isArabic) {
@@ -544,7 +594,6 @@ function getContextualResponse(text, match, isArabic) {
   
   const response = isArabic ? (match.a_ar || match.a_en) : (match.a_en || match.a_ar);
   
-  // Add contextual information based on timing
   const now = new Date();
   const opening = new Date('2025-11-01');
   const isOpeningDay = now.toDateString() === opening.toDateString();
@@ -552,7 +601,7 @@ function getContextualResponse(text, match, isArabic) {
   if (isOpeningDay && match.id === 1) {
     return response + (isArabic ? 
       "\n\n🎉 اليوم هو اليوم التاريخي! المتحف بيفتح دلوقتي!" :
-      "\n\n🎉 Today is the historic day! The museum is opening right now!");
+      "\n\n🎉 Today is the historic day! GEM is opening right now!");
   }
   
   return response;
@@ -599,8 +648,9 @@ const app = {
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     
+    const lang = this.currentLanguage;
     if (days > 0) {
-      document.getElementById('countdown').innerHTML = `${days} ${this.currentLanguage === 'ar' ? 'يوم متبقي' : 'Days Left'}`;
+      document.getElementById('countdown').innerHTML = `${days} ${lang === 'ar' ? 'يوم متبقي' : 'Days Left'}`;
     } else {
       document.getElementById('countdown').innerHTML = `${hours}h ${minutes}m`;
     }
@@ -611,8 +661,6 @@ const app = {
     const body = document.body;
     this.currentTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
     body.className = this.currentTheme + '-mode';
-    // Update theme for Arabic layout direction
-    body.setAttribute('dir', this.currentLanguage === 'ar' ? 'rtl' : 'ltr');
   },
 
   /* NEW: Language/UI Toggle */
@@ -624,14 +672,35 @@ const app = {
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
 
-    // 2. Welcome Message
+    // 2. Static Texts (Slogan, Footers, Titles)
+    document.getElementById('slogan').innerText = data.slogan;
+    document.getElementById('countdown-text').innerText = data.countdownText;
+    document.getElementById('quick-title').innerText = data.quickTitle;
+    document.getElementById('send-btn').innerText = data.sendBtn;
+    document.getElementById('small-note').innerText = data.smallNote;
+    document.getElementById('live-info-title').innerText = data.liveInfoTitle;
+    document.getElementById('live-info-text').innerText = data.liveInfoText;
+    document.getElementById('facts-title').innerText = data.factsTitle;
+    document.getElementById('about-kai-title').innerText = data.aboutKaiTitle;
+    document.getElementById('about-kai-text').innerText = data.aboutKaiText;
+    document.getElementById('developer-note').innerText = data.developerNote;
+    document.getElementById('footer').childNodes[0].nodeValue = data.footer;
+    document.getElementById('app-footer-2').childNodes[0].nodeValue = data.footer2;
+    document.getElementById('reset-btn').innerText = data.resetBtn;
+    document.getElementById('main-title').childNodes[2].textContent = lang === 'ar' ? '🏛️ المتحف المصري الكبير' : '🏛️ GEM OPENING';
+
+    // 3. Stats & Welcome (Dynamic)
+    data.stats.forEach((stat, index) => {
+        document.getElementById(`stat-${index+1}`).innerText = stat.num;
+        document.getElementById(`label-${index+1}`).innerText = stat.label;
+    });
     document.getElementById('welcome-title').innerText = data.welcomeTitle;
     document.getElementById('welcome-text-1').innerText = data.welcomeText1;
     document.getElementById('news-strong').innerText = data.newsStrong;
-    document.getElementById('welcome-text-2').childNodes[1].nodeValue = data.welcomeText2; // Update the surrounding text of strong tag
+    document.getElementById('welcome-text-2').childNodes[1].nodeValue = data.welcomeText2; 
     document.getElementById('safi-desc').innerText = data.safiDesc;
     
-    // 3. Quick Prompts
+    // 4. Quick Prompts
     const quickEl = document.getElementById('quick-prompts');
     quickEl.innerHTML = '';
     data.quickPrompts.forEach(item => {
@@ -642,11 +711,9 @@ const app = {
         quickEl.appendChild(btn);
     });
 
-    // 4. Composer/Input
+    // 5. Composer/Input
     document.getElementById('input').placeholder = data.placeholder;
-    document.getElementById('send-btn').innerText = data.sendBtn;
-    document.querySelector('.small-note').innerText = data.smallNote;
-    this.updateCountdown(); // Update language of countdown text
+    this.updateCountdown(); 
   },
 
   toggleLanguage() {
@@ -655,7 +722,7 @@ const app = {
     
     const currentText = this.input.value.trim();
     if (currentText) {
-      this.input.value = ''; // Clear input to avoid mixed language confusion
+      this.input.value = ''; 
     }
   },
 
@@ -668,7 +735,6 @@ const app = {
     if (welcome) welcome.remove();
     this.removeTyping();
 
-    // Create or find the kids menu container
     let kidsMenu = document.getElementById('kids-menu');
     if (kidsMenu) kidsMenu.remove();
     
@@ -682,6 +748,7 @@ const app = {
     
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
+    
     bubble.innerHTML = `
       <div class="title-small">SAFI</div>
       <div class="story-menu">
@@ -714,6 +781,7 @@ const app = {
         const transcript = e.results[0][0].transcript;
         this.input.value = transcript;
         this.onInput();
+        this.send(); 
       };
       this.recognition.onerror = () => {};
     }
@@ -725,7 +793,7 @@ const app = {
 
   toggleRecording() {
     if (!this.recognition) {
-      alert('Speech recognition not supported in this browser.');
+      alert(this.currentLanguage === 'ar' ? 'التعرف على الصوت غير مدعوم في متصفحك.' : 'Speech recognition not supported in this browser.');
       return;
     }
     
@@ -753,7 +821,8 @@ const app = {
   },
 
   showInfo() {
-    const info = `
+    const info = this.currentLanguage === 'ar' ? 
+      `
 🏛️ المتحف المصري الكبير - معلومات سريعة:
 
 📅 الافتتاح: 1 نوفمبر 2025
@@ -762,16 +831,20 @@ const app = {
 ⏰ الحجز: يبدأ 4 نوفمبر للجمهور
 
 🤖 تم تطويري بواسطة Knowing.AI
-💡 مهمتنا: Know more. Do more.
+💡 شعارنا: اعرف اكتر. افعل اكتر.
+      ` : 
+      `
+🏛️ Grand Egyptian Museum (GEM) - Quick Info:
 
-Grand Egyptian Museum - Quick Info:
 📅 Opening: November 1, 2025
-📍 Location: Giza Plateau, next to Pyramids
+📍 Location: Giza Plateau, next to the Pyramids
 🎫 Price: €30 for adult foreigners
-⏰ Booking: Starts November 4th for public
-    `.trim();
-    
-    this.addMessage(info, 'bot');
+⏰ Booking: Starts November 4th for the public
+
+🤖 Developed by Knowing.AI
+💡 Slogan: Know more. Do more.
+      `;
+    this.addMessage(info.trim(), 'bot');
   },
 
   sendPrompt(text) {
@@ -788,7 +861,6 @@ Grand Egyptian Museum - Quick Info:
     this.onInput();
     this.showTyping();
     
-    // Simulate more realistic response time
     setTimeout(() => this.respond(text), Math.random() * 800 + 400);
   },
 
@@ -879,26 +951,27 @@ Grand Egyptian Museum - Quick Info:
     if (!('speechSynthesis' in window)) return;
     
     window.speechSynthesis.cancel();
-    // Remove emojis from speech text
     const utterance = new SpeechSynthesisUtterance(text.replace(/[🏛️🎉👑🌍🚀🌐✈️🔬🎫🏗️📧🎊🏺🚗⛵👨‍💻😊⭐]/g, ''));
     utterance.lang = lang || 'ar-EG';
-    utterance.rate = 0.9;
-    utterance.pitch = 1.1;
+    utterance.rate = 0.9; 
+    utterance.pitch = 1.1; 
     
     const voices = window.speechSynthesis.getVoices();
     if (voices && voices.length) {
       let selectedVoice = null;
       
       if (lang && lang.startsWith('ar')) {
+        // Try to find a clear female Arabic voice
         selectedVoice = voices.find(v => 
           v.lang && v.lang.startsWith('ar') && 
           /female|woman|sara|salma|mona|hoda/i.test(v.name)
-        ) || voices.find(v => v.lang && v.lang.startsWith('ar'));
+        ) || voices.find(v => v.lang && v.lang.startsWith('ar') && /female/i.test(v.name));
       } else {
+        // Try to find a clear female English voice
         selectedVoice = voices.find(v => 
           v.lang && v.lang.startsWith('en') && 
-          /female|woman|samantha|karen|zira/i.test(v.name)
-        ) || voices.find(v => v.lang && v.lang.startsWith('en'));
+          /female|woman|samantha|karen|zira|eloquence/i.test(v.name)
+        ) || voices.find(v => v.lang && v.lang.startsWith('en') && /female/i.test(v.name));
       }
       
       if (selectedVoice) utterance.voice = selectedVoice;
@@ -914,7 +987,7 @@ Grand Egyptian Museum - Quick Info:
   },
 
   reset() {
-    if (confirm(this.currentLanguage === 'ar' ? 'هل تريد بدء محادثة جديدة؟' : 'Start a new conversation?')) {
+    if (confirm(this.currentLanguage === 'ar' ? 'هل تريد بدء محادثة جديدة؟ سيتم مسح سجل الرسائل.' : 'Start a new conversation? All messages will be cleared.')) {
       location.reload();
     }
   },
@@ -939,7 +1012,6 @@ Grand Egyptian Museum - Quick Info:
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;')
-      // Allow bolding for stories (Simple markdown to HTML for user messages)
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); 
   }
 };
@@ -948,7 +1020,7 @@ Grand Egyptian Museum - Quick Info:
 document.addEventListener('DOMContentLoaded', () => {
   app.init();
   console.log('🇪🇬 KaiGPT • SAFI — Grand Egyptian Museum Edition loaded successfully!');
-  console.log('Developed with ❤️ by Haitham - The Egyptian Miracle Boy');
+  console.log('Developer: Knowing.AI - KaiGPT');
 });
 
 // Global app exposure
