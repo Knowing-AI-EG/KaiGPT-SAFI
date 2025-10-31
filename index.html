@@ -1,1209 +1,399 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KaiGPT & SAFI - Egypt's First AI Assistant | Knowing.AI</title>
-    <meta name="description" content="Experience SAFI, Egypt's first national AI assistant. Built for the Grand Egyptian Museum opening. Know More. Do More.">
-    <meta property="og:title" content="KaiGPT & SAFI - Egypt's First AI Assistant">
-    <meta property="og:description" content="The first Egyptian AI model created by Knowing.AI">
-    <meta property="og:image" content="https://kaigpt-safi.netlify.app/og-image.png">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%23000'/><circle cx='50' cy='50' r='30' fill='none' stroke='%23fff' stroke-width='4'/></svg>">
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --black: #000000;
-            --white: #ffffff;
-            --gray-50: #fafafa;
-            --gray-100: #f5f5f5;
-            --gray-200: #e5e5e5;
-            --gray-300: #d4d4d4;
-            --gray-400: #a3a3a3;
-            --gray-500: #737373;
-            --gray-600: #525252;
-            --gray-700: #404040;
-            --gray-800: #262626;
-            --gray-900: #171717;
-            --gray-950: #0a0a0a;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            overflow: hidden;
-            height: 100vh;
-        }
-
-        body.dark {
-            background: var(--black);
-            color: var(--white);
-        }
-
-        body.light {
-            background: var(--white);
-            color: var(--black);
-        }
-
-        .app-container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            width: 100%;
-        }
-
-        /* HEADER */
-        .header {
-            border-bottom: 1px solid;
-            padding: 16px 24px;
-            backdrop-filter: blur(20px);
-            position: relative;
-            z-index: 100;
-        }
-
-        .dark .header {
-            background: rgba(0, 0, 0, 0.8);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .light .header {
-            background: rgba(255, 255, 255, 0.8);
-            border-color: rgba(0, 0, 0, 0.1);
-        }
-
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .btn {
-            padding: 12px;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            background: transparent;
-        }
-
-        .dark .btn {
-            color: var(--white);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .dark .btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-1px);
-        }
-
-        .light .btn {
-            color: var(--black);
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        .light .btn:hover {
-            background: rgba(0, 0, 0, 0.1);
-            transform: translateY(-1px);
-        }
-
-        .logo-box {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .dark .logo-box {
-            background: var(--white);
-        }
-
-        .light .logo-box {
-            background: var(--black);
-        }
-
-        .logo-svg {
-            width: 32px;
-            height: 32px;
-        }
-
-        .status-dot {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            width: 12px;
-            height: 12px;
-            background: #22c55e;
-            border-radius: 50%;
-            border: 2px solid;
-            animation: pulse 2s infinite;
-        }
-
-        .dark .status-dot {
-            border-color: var(--black);
-        }
-
-        .light .status-dot {
-            border-color: var(--white);
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.05); }
-        }
-
-        .brand-info h1 {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 2px;
-            letter-spacing: -0.5px;
-        }
-
-        .brand-info p {
-            font-size: 13px;
-            opacity: 0.6;
-        }
-
-        .controls {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        /* MESSAGES CONTAINER */
-        .messages-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 32px 24px;
-            scroll-behavior: smooth;
-        }
-
-        .messages-wrapper {
-            max-width: 900px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .message {
-            display: flex;
-            gap: 16px;
-            position: relative; /* For copy button */
-            animation: slideUp 0.3s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(16px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .message.user {
-            flex-direction: row-reverse;
-        }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .dark .message.user .avatar {
-            background: var(--white);
-            color: var(--black);
-        }
-
-        .light .message.user .avatar {
-            background: var(--black);
-            color: var(--white);
-        }
-
-        .dark .message.assistant .avatar {
-            background: var(--gray-800);
-            border: 2px solid var(--white);
-        }
-
-        .light .message.assistant .avatar {
-            background: var(--gray-100);
-            border: 2px solid var(--black);
-        }
-
-        .message-content {
-            flex: 1;
-            max-width: 700px;
-            padding: 14px 18px;
-            border-radius: 20px;
-            font-size: 15px;
-            line-height: 1.6;
-            word-wrap: break-word;
-        }
-        
-        /* --- NEW: Markdown Formatting CSS --- */
-        .message-content strong {
-            font-weight: 700;
-        }
-        .message-content ul {
-            padding-left: 20px;
-            margin-top: 8px;
-            margin-bottom: 8px;
-        }
-        .message-content li {
-            margin-bottom: 4px;
-        }
-        /* --- END: Markdown Formatting CSS --- */
-
-        .dark .message.user .message-content {
-            background: var(--white);
-            color: var(--black);
-        }
-
-        .light .message.user .message-content {
-            background: var(--black);
-            color: var(--white);
-        }
-
-        .dark .message.assistant .message-content {
-            background: var(--gray-900);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .light .message.assistant .message-content {
-            background: var(--gray-50);
-            border: 1px solid var(--gray-200);
-        }
-        
-        /* --- NEW: Copy Button CSS --- */
-        .copy-btn {
-            position: absolute;
-            bottom: 12px;
-            right: -44px; /* Position outside the user bubble */
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0.3;
-            transition: all 0.2s;
-        }
-        .message.assistant .copy-btn {
-            right: auto;
-            left: -44px; /* Position outside the assistant bubble */
-        }
-        .message:hover .copy-btn {
-            opacity: 1;
-        }
-        .dark .copy-btn {
-            background: var(--gray-800);
-            color: var(--white);
-        }
-        .light .copy-btn {
-            background: var(--gray-100);
-            color: var(--black);
-        }
-        .dark .copy-btn:hover { background: var(--gray-700); }
-        .light .copy-btn:hover { background: var(--gray-200); }
-        .copy-btn .icon { width: 16px; height: 16px; }
-        .copy-btn.copied .icon { color: #22c55e; }
-        /* --- END: Copy Button CSS --- */
-
-
-        .typing-indicator {
-            display: flex;
-            gap: 6px;
-            padding: 14px 18px;
-        }
-
-        .typing-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--gray-400);
-            animation: typing 1.4s infinite;
-        }
-
-        .typing-dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typing {
-            0%, 60%, 100% {
-                transform: translateY(0);
-                opacity: 0.7;
-            }
-            30% {
-                transform: translateY(-10px);
-                opacity: 1;
-            }
-        }
-
-        /* INPUT SECTION */
-        .input-section {
-            padding: 20px 24px 24px;
-            border-top: 1px solid;
-        }
-
-        .dark .input-section {
-            background: rgba(0, 0, 0, 0.8);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .light .input-section {
-            background: rgba(255, 255, 255, 0.8);
-            border-color: rgba(0, 0, 0, 0.1);
-        }
-
-        .input-wrapper {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .input-container {
-            display: flex;
-            gap: 12px;
-            align-items: flex-end;
-            padding: 12px 16px;
-            border-radius: 16px;
-            border: 2px solid;
-            transition: border-color 0.2s;
-        }
-
-        .dark .input-container {
-            background: var(--gray-900);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .dark .input-container:focus-within {
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .light .input-container {
-            background: var(--gray-50);
-            border-color: var(--gray-200);
-        }
-
-        .light .input-container:focus-within {
-            border-color: var(--gray-400);
-        }
-
-        .input-field {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            font-size: 15px;
-            resize: none;
-            max-height: 200px;
-            font-family: inherit;
-            line-height: 1.5;
-        }
-
-        .dark .input-field {
-            color: var(--white);
-        }
-
-        .light .input-field {
-            color: var(--black);
-        }
-
-        .input-field::placeholder {
-            opacity: 0.4;
-        }
-
-        .send-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-
-        .dark .send-btn {
-            background: var(--white);
-            color: var(--black);
-        }
-
-        .dark .send-btn:hover:not(:disabled) {
-            background: var(--gray-100);
-            transform: translateY(-2px);
-        }
-
-        .light .send-btn {
-            background: var(--black);
-            color: var(--white);
-        }
-
-        .light .send-btn:hover:not(:disabled) {
-            background: var(--gray-800);
-            transform: translateY(-2px);
-        }
-
-        .send-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        .input-footer {
-            text-align: center;
-            margin-top: 12px;
-            font-size: 13px;
-            opacity: 0.5;
-        }
-
-        /* MODAL */
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(12px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-            z-index: 1000;
-            animation: fadeIn 0.2s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            max-width: 700px;
-            width: 100%;
-            border-radius: 24px;
-            padding: 48px;
-            position: relative;
-            animation: slideUp 0.3s ease-out;
-            border: 2px solid;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .dark .modal-content {
-            background: linear-gradient(135deg, var(--gray-900) 0%, var(--black) 100%);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .light .modal-content {
-            background: linear-gradient(135deg, var(--white) 0%, var(--gray-50) 100%);
-            border-color: var(--gray-300);
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-
-        .dark .close-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--white);
-        }
-
-        .dark .close-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .light .close-btn {
-            background: rgba(0, 0, 0, 0.1);
-            color: var(--black);
-        }
-
-        .light .close-btn:hover {
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-logo {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 24px;
-            border-radius: 16px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .dark .modal-logo {
-            background: var(--white);
-        }
-
-        .light .modal-logo {
-            background: var(--black);
-        }
-
-        .dark .modal-logo .logo-svg circle:nth-child(4),
-        .dark .modal-logo .logo-svg line {
-            fill: var(--black);
-            stroke: var(--black);
-        }
-
-        .light .modal-logo .logo-svg circle:nth-child(4),
-        .light .modal-logo .logo-svg line {
-            fill: var(--white);
-            stroke: var(--white);
-        }
-
-        .modal-title {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 32px;
-        }
-
-        .modal-section {
-            margin-bottom: 32px;
-            padding-bottom: 32px;
-            border-bottom: 1px solid;
-        }
-
-        .dark .modal-section {
-            border-color: var(--gray-800);
-        }
-
-        .light .modal-section {
-            border-color: var(--gray-200);
-        }
-
-        .modal-section:last-child {
-            border: none;
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
-            opacity: 0.8;
-        }
-
-        .section-text {
-            font-size: 16px;
-            line-height: 1.8;
-            opacity: 0.9;
-        }
-
-        .section-text + .section-text {
-            margin-top: 16px;
-        }
-
-        .modal-footer {
-            text-align: center;
-            font-size: 13px;
-            opacity: 0.5;
-            margin-top: 24px;
-        }
-
-        /* ICONS */
-        .icon {
-            width: 20px;
-            height: 20px;
-        }
-
-        /* SCROLLBAR */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .dark ::-webkit-scrollbar-thumb {
-            background: var(--gray-700);
-            border-radius: 4px;
-        }
-
-        .light ::-webkit-scrollbar-thumb {
-            background: var(--gray-300);
-            border-radius: 4px;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .header {
-                padding: 12px 16px;
-            }
-            .logo-section {
-                gap: 12px;
-            }
-            .brand-info h1 {
-                font-size: 18px;
-            }
-            .brand-info p {
-                font-size: 12px;
-            }
-            .messages-container {
-                padding: 20px 16px;
-            }
-            .message-content {
-                font-size: 14px;
-            }
-            .input-section {
-                padding: 16px;
-            }
-            .modal-content {
-                padding: 32px 24px;
-            }
-            .modal-title {
-                font-size: 28px;
-            }
-            /* Hide copy button on mobile, it's too cluttered */
-            .copy-btn {
-                display: none;
-            }
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>KaiGPT & SAFI — Knowing.AI</title>
+<meta name="description" content="SAFI — Egypt's bilingual AI assistant for the Grand Egyptian Museum." />
+<style>
+  /* (kept compact) basic styling adapted from your original - responsive, dark/light */
+  :root{--bg:#0a0a0a;--panel:#111;--muted:#9aa0a6;--accent:#22c55e;--white:#fff}
+  body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,arial; margin:0;height:100vh;background:var(--bg);color:var(--white);display:flex;flex-direction:column}
+  .header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.04);backdrop-filter:blur(6px)}
+  .logo{display:flex;align-items:center;gap:12px}
+  .logo-box{width:46px;height:46px;border-radius:12px;background:var(--white);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700}
+  h1{font-size:16px;margin:0}
+  p.subtitle{margin:0;font-size:12px;color:var(--muted)}
+  .controls{display:flex;gap:8px;align-items:center}
+  .btn{background:transparent;border:1px solid rgba(255,255,255,.06);padding:8px 10px;border-radius:10px;color:var(--white);cursor:pointer}
+  .container{flex:1;display:flex;flex-direction:column;overflow:hidden}
+  .messages{flex:1;overflow:auto;padding:22px;display:flex;flex-direction:column;gap:18px}
+  .msg{max-width:78%;padding:12px 14px;border-radius:14px;line-height:1.5}
+  .user{align-self:flex-end;background:var(--white);color:#000;border-radius:14px 14px 6px 14px}
+  .bot{align-self:flex-start;background:var(--panel);border:1px solid rgba(255,255,255,.03)}
+  .meta{font-size:12px;color:var(--muted);margin-bottom:8px}
+  .input-area{padding:14px;border-top:1px solid rgba(255,255,255,.03);display:flex;align-items:center;gap:12px}
+  textarea{flex:1;padding:12px;border-radius:12px;border:none;background:transparent;color:var(--white);resize:none;height:48px;outline:none}
+  .send{width:44px;height:44px;border-radius:10px;background:var(--white);color:#000;border:none;cursor:pointer}
+  .send:disabled{opacity:.4;cursor:not-allowed}
+  .small{font-size:13px;color:var(--muted)}
+  .top-actions{display:flex;gap:8px;align-items:center}
+  .typing{opacity:.8;font-style:italic}
+  .copy-btn{margin-left:8px;background:transparent;border:0;color:var(--muted);cursor:pointer}
+  @media(max-width:720px){.messages{padding:12px}}
+</style>
 </head>
-<body class="dark">
-    <div class="app-container">
-        <header class="header">
-            <div class="header-content">
-                <div class="logo-section">
-                    <button class="btn" id="backBtn" title="Back to Home">
-                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="19" y1="12" x2="5" y2="12"></line>
-                            <polyline points="12 19 5 12 12 5"></polyline>
-                        </svg>
-                    </button>
-                    <div class="logo-box">
-                        <svg class="logo-svg" viewBox="0 0 300 200">
-                            <path d="M150,30 C195,30 235,50 260,85 L245,100 C225,70 190,55 150,55 C110,55 75,70 55,100 L40,85 C65,50 105,30 150,30 Z" fill="currentColor"/>
-                            <path d="M150,170 C105,170 65,150 40,115 L55,100 C75,130 110,145 150,145 C190,145 225,130 245,100 L260,115 C235,150 195,170 150,170 Z" fill="currentColor"/>
-                            <circle cx="150" cy="100" r="45" fill="currentColor"/>
-                            <circle cx="150" cy="100" r="20" fill="#000"/>
-                            <circle cx="210" cy="100" r="12" fill="currentColor"/>
-                            <circle cx="240" cy="120" r="12" fill="currentColor"/>
-                            <line x1="150" y1="100" x2="210" y2="100" stroke="#000" stroke-width="8"/>
-                            <line x1="210" y1="100" x2="240" y2="120" stroke="#000" stroke-width="8"/>
-                        </svg>
-                        <div class="status-dot"></div>
-                    </div>
-                    <div class="brand-info">
-                        <h1>KaiGPT & SAFI</h1>
-                        <p>Know More. Do More.</p>
-                    </div>
-                </div>
-                <div class="controls">
-                    <button class="btn" id="themeBtn" title="Toggle Theme">
-                        <svg class="icon theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="5"></circle>
-                            <line x1="12" y1="1" x2="12" y2="3"></line>
-                            <line x1="12" y1="21" x2="12" y2="23"></line>
-                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                            <line x1="1" y1="12" x2="3" y2="12"></line>
-                            <line x1="21" y1="12" x2="23" y2="12"></line>
-                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                        </svg>
-                        <svg class="icon theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                        </svg>
-                    </button>
-                    <button class="btn" id="aboutBtn" title="About SAFI">
-                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="16" x2="12" y2="12"></line>
-                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                        </svg>
-                    </button>
-                    <button class="btn" id="langBtn" title="Switch Language">
-                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 8l6 6"></path>
-                            <path d="M4 14l6-6 2-3"></path>
-                            <path d="M2 5h12"></path>
-                            <path d="M7 2h1"></path>
-                            <path d="M22 22l-5-10-5 10"></path>
-                            <path d="M14 18h6"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </header>
-
-        <main class="messages-container" id="messagesContainer">
-            <div class="messages-wrapper" id="messagesWrapper">
-                </div>
-        </main>
-
-        <div class="input-section">
-            <div class="input-wrapper">
-                <div class="input-container">
-                    <textarea 
-                        id="messageInput" 
-                        class="input-field" 
-                        placeholder="Ask about the Grand Egyptian Museum..."
-                        rows="1"
-                    ></textarea>
-                    <button class="send-btn" id="sendBtn" disabled>
-                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="22" y1="2" x2="11" y2="13"></line>
-                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                        </svg>
-                    </button>
-                </div>
-                <div class="input-footer">
-                    <span id="footerText">SAFI - Egypt's First AI Assistant | Powered by Knowing.AI</span>
-                </div>
-            </div>
-        </div>
+<body>
+  <header class="header">
+    <div class="logo">
+      <div class="logo-box">SA</div>
+      <div>
+        <h1 id="brandTitle">KaiGPT & SAFI</h1>
+        <p class="subtitle" id="brandSubtitle">Know More. Do More.</p>
+      </div>
     </div>
-
-    <div class="modal" id="aboutModal" style="display:none;">
-        <div class="modal-content">
-            <button class="close-btn" id="closeModal">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-            <div class="modal-logo">
-                <svg class="logo-svg" viewBox="0 0 300 200">
-                    <path d="M150,30 C195,30 235,50 260,85 L245,100 C225,70 190,55 150,55 C110,55 75,70 55,100 L40,85 C65,50 105,30 150,30 Z" fill="currentColor"/>
-                    <path d="M150,170 C105,170 65,150 40,115 L55,100 C75,130 110,145 150,145 C190,145 225,130 245,100 L260,115 C235,150 195,170 150,170 Z" fill="currentColor"/>
-                    <circle cx="150" cy="100" r="45" fill="currentColor"/>
-                    <circle cx="150" cy="100" r="20" fill="currentColor"/> 
-                    <circle cx="210" cy="100" r="12" fill="currentColor"/>
-                    <circle cx="240" cy="120" r="12" fill="currentColor"/>
-                    <line x1="150" y1="100" x2="210" y2="100" stroke="currentColor" stroke-width="8"/> 
-                    <line x1="210" y1="100" x2="240" y2="120" stroke="currentColor" stroke-width="8"/>
-                </svg>
-            </div>
-            <h2 class="modal-title">About SAFI / عن صافي</h2>
-            <div class="modal-section">
-                <h3 class="section-title">English</h3>
-                <p class="section-text">
-                    SAFI is Egypt's first national AI model, created by <strong>Knowing.AI</strong> to deliver intelligent, human-like interactions in Arabic and English.
-                </p>
-                <p class="section-text">
-                    She blends Egypt's heritage with advanced technology — built for <strong>clarity</strong>, <strong>trust</strong>, and <strong>knowledge</strong>.
-                </p>
-            </div>
-            <div class="modal-section" dir="rtl">
-                <h3 class="section-title">العربية</h3>
-                <p class="section-text">
-                    صافي هي أول نموذج ذكاء اصطناعي وطني في مصر، من تطوير <strong>Knowing.AI</strong> لتقدّم تفاعل ذكي وطبيعي بالعربي والإنجليزي.
-                </p>
-                <p class="section-text">
-                    بتجمع بين روح مصر العريقة والتقنيات الحديثة — معمولة علشان <strong>الوضوح</strong>، و<strong>الثقة</strong>، و<strong>المعرفة</strong>.
-                </p>
-            </div>
-            <div class="modal-footer">
-                Powered by Knowing.AI • مدعوم من Knowing.AI
-            </div>
-        </div>
+    <div class="controls">
+      <div class="top-actions">
+        <button class="btn" id="clearBtn">Clear</button>
+        <button class="btn" id="aboutBtn">About</button>
+      </div>
     </div>
+  </header>
 
-    <script>
-        // --- NEW: A simple state variable to manage active streaming intervals
-        let activeStreamInterval = null;
+  <div class="container">
+    <main class="messages" id="messages"></main>
 
-        // APP STATE
-        const state = {
-            messages: [],
-            language: 'en',
-            isTyping: false,
-            // --- NEW: Massively expanded database with Markdown formatting ---
-            gemDatabase: [
-                {
-                    keywords: ["when", "open", "opening", "date", "متى", "افتتاح"],
-                    en: "The moment the world has been waiting for is **tomorrow**! \n\nThe official Grand Opening of the Grand Egyptian Museum is **November 1st, 2025**.",
-                    ar: "اللحظة التي ينتظرها العالم هي **غداً**! \n\nالافتتاح الرسمي للمتحف المصري الكبير هو **1 نوفمبر 2025**."
-                },
-                {
-                    keywords: ["where", "location", "located", "address", "أين", "موقع", "عنوان"],
-                    en: "The Grand Egyptian Museum is located in **Giza**, on the desert plateau just **one mile (about 2km) northwest of the Giza Pyramids**. \n\nIts address is Cairo-Alexandria Desert Road, Giza, Egypt.",
-                    ar: "يقع المتحف المصري الكبير في **الجيزة**، على هضبة الأهرامات، على بعد **ميل واحد (حوالي 2 كم) شمال غرب أهرامات الجيزة**. \n\nعنوانه هو طريق القاهرة-الإسكندرية الصحراوي، الجيزة، مصر."
-                },
-                {
-                    keywords: ["size", "large", "area", "مساحة", "حجم"],
-                    en: "The GEM is **one of the largest archaeological museums in the world**. \n\nThe entire complex covers approximately **50 hectares (120 acres)**, which is about 480,000 square meters. It's the largest museum in the world dedicated to a single civilization.",
-                    ar: "المتحف المصري الكبير هو **واحد من أكبر المتاحف الأثرية في العالم**. \n\nيغطي المجمع بأكمله حوالي **50 هكتارًا (120 فدانًا)**، أي حوالي 480,000 متر مربع. إنه أكبر متحف في العالم مخصص لحضارة واحدة."
-                },
-                {
-                    keywords: ["tutankhamun", "treasures", "golden king", "king tut", "توت", "كنوز", "الفرعون الذهبي"],
-                    en: "The GEM's star attraction is the **complete collection of King Tutankhamun's treasures**. \n\nFor the **first time in history**, all **5,000+ artifacts** from his tomb will be displayed together in two dedicated galleries, including his iconic golden mask, sarcophagi, chariots, and personal belongings.",
-                    ar: "جاذبية المتحف الرئيسية هي **المجموعة الكاملة لكنوز الملك توت عنخ آمون**. \n\nلأول **مرة في التاريخ**، سيتم عرض جميع القطع الأثرية من مقبرته التي يزيد عددها عن **5,000 قطعة** معًا في قاعتين مخصصتين، بما في ذلك قناعه الذهبي الشهير، والتوابيت، والعجلات الحربية، ومقتنياته الشخصية."
-                },
-                {
-                    keywords: ["ramses", "ramsis", "statue", "atrium", "lobby", "رمسيس", "تمثال", "البهو"],
-                    en: "Upon entering the Grand Hall (Atrium), visitors are greeted by the colossal **83-ton, 11-meter (36-foot) tall statue of King Ramses II**. \n\nThis magnificent statue was moved from Ramses Square in Cairo in 2006 to become the centerpiece of the museum's entrance.",
-                    ar: "عند دخول البهو الكبير (الأذين)، يتم استقبال الزوار بتمثال الملك **رمسيس الثاني** الضخم الذي يبلغ وزنه **83 طنًا** وارتفاعه **11 مترًا (36 قدمًا)**. \n\nتم نقل هذا التمثال الرائع من ميدان رمسيس بالقاهرة عام 2006 ليصبح القطعة المركزية في مدخل المتحف."
-                },
-                {
-                    keywords: ["tickets", "book", "reservation", "price", "cost", "تذاكر", "حجز", "سعر", "تكلفة"],
-                    en: "Ticket information for the official opening is as follows:\n* **Egyptian Adults:** 300 EGP\n* **Egyptian Students:** 150 EGP\n* **Foreign Adults:** 1200 EGP (Approx. $40 USD)\n* **Foreign Students:** 600 EGP\n\nTickets can be **booked online** through the official GEM website or purchased at the museum's counters upon arrival. Online booking is highly recommended.",
-                    ar: "معلومات تذاكر الافتتاح الرسمي هي كما يلي:\n* **المصريون البالغون:** 300 جنيه مصري\n* **الطلاب المصريون:** 150 جنيهًا مصريًا\n* **الأجانب البالغون:** 1200 جنيه مصري (حوالي 40 دولارًا أمريكيًا)\n* **الطلاب الأجانب:** 600 جنيه مصري\n\nيمكن **حجز التذاكر عبر الإنترنت** من خلال موقع المتحف الرسمي أو شراؤها من شباك التذاكر بالمتحف عند الوصول. يوصى بشدة بالحجز عبر الإنترنت."
-                },
-                {
-                    keywords: ["hours", "times", "ساعات", "مواعيد", "أوقات"],
-                    en: "The museum's operating hours starting November 1st, 2025 are:\n* **Saturday - Thursday:** 9:00 AM – 6:00 PM\n* **Friday:** 9:00 AM – 8:00 PM\n\n*Note: Last entry is one hour before closing.*",
-                    ar: "ساعات عمل المتحف ابتداءً من 1 نوفمبر 2025 هي:\n* **من السبت إلى الخميس:** 9:00 صباحًا - 6:00 مساءً\n* **الجمعة:** 9:00 صباحًا - 8:00 مساءً\n\n*ملاحظة: آخر موعد للدخول هو قبل ساعة واحدة من الإغلاق.*"
-                },
-                {
-                    keywords: ["food", "restaurants", "shopping", "shops", "eat", "مطاعم", "تسوق", "أكل", "محلات"],
-                    en: "Yes, the GEM complex features a wide array of high-end facilities:\n* **Restaurants & Cafes:** Including international brands and fine dining with views of the pyramids (like Zooba).\n* **Retail Shops:** Numerous shops offering high-quality replicas, books, and designer goods.\n* **Conference Center:** A state-of-the-art center for events.\n* **Gardens:** Beautifully landscaped gardens for relaxation.",
-                    ar: "نعم، يضم مجمع المتحف مجموعة واسعة من المرافق الراقية:\n* **مطاعم ومقاهي:** بما في ذلك علامات تجارية عالمية ومطاعم فاخرة تطل على الأهرامات (مثل زوبا).\n* **متاجر التجزئة:** العديد من المتاجر التي تقدم نسخًا طبق الأصل عالية الجودة وكتبًا وسلعًا مصممة.\n* **مركز مؤتمرات:** مركز حديث للمناسبات.\n* **حدائق:** حدائق ذات مناظر طبيعية جميلة للاسترخاء."
-                },
-                {
-                    keywords: ["solar boat", "khufu", "cheops", "مركب الشمس", "خوفو"],
-                    en: "The GEM is the new, permanent home of the magnificent **Khufu's Solar Boat**. This 4,600-year-old cedarwood ship was discovered in a pit beside the Great Pyramid of Giza. \n\nIt was painstakingly relocated to the GEM in 2021 and is displayed in its own dedicated, climate-controlled building.",
-                    ar: "المتحف المصري الكبير هو الموطن الجديد والدائم **لمركب خوفو الشمسي** الرائع. تم اكتشاف هذا المركب المصنوع من خشب الأرز، والذي يبلغ عمره 4600 عام، في حفرة بجوار الهرم الأكبر بالجيزة. \n\nتم نقله بعناية فائقة إلى المتحف في عام 2021 ويتم عرضه في مبنى مخصص ومكيف بالكامل."
-                },
-                {
-                    keywords: ["architect", "design", "who built", "تصميم", "معماري", "مين بنى"],
-                    en: "The museum was designed by the Irish architectural firm **Heneghan Peng Architects**. Their design was chosen from over 1,550 entries in an international competition. \n\nThe building's design is striking, featuring a massive, translucent alabaster facade and a layout that aligns with the nearby pyramids.",
-                    ar: "تم تصميم المتحف من قبل شركة الهندسة المعمارية الأيرلندية **Heneghan Peng Architects**. تم اختيار تصميمهم من بين أكثر من 1550 مشاركة في مسابقة دولية. \n\nتصميم المبنى مذهل، حيث يتميز بواجهة ضخمة من المرمر الشفاف وتصميم يتناغم مع الأهرامات المجاورة."
-                }
-            ]
-        };
+    <div class="input-area">
+      <textarea id="input" placeholder="Ask about the Grand Egyptian Museum..." aria-label="message"></textarea>
+      <button id="send" class="send" disabled>Send</button>
+    </div>
+    <div style="padding:8px 18px 18px"><span id="hint" class="small">SAFI — Powered by Knowing.AI</span></div>
+  </div>
 
-        // DOM ELEMENTS
-        const elements = {
-            body: document.body,
-            backBtn: document.getElementById('backBtn'),
-            themeBtn: document.getElementById('themeBtn'),
-            aboutBtn: document.getElementById('aboutBtn'),
-            langBtn: document.getElementById('langBtn'),
-            messagesWrapper: document.getElementById('messagesWrapper'),
-            messagesContainer: document.getElementById('messagesContainer'),
-            messageInput: document.getElementById('messageInput'),
-            sendBtn: document.getElementById('sendBtn'),
-            aboutModal: document.getElementById('aboutModal'),
-            closeModal: document.getElementById('closeModal'),
-            footerText: document.getElementById('footerText'),
-            themeDark: document.querySelector('.theme-icon-dark'),
-            themeLight: document.querySelector('.theme-icon-light')
-        };
+  <!-- About Modal (simple) -->
+  <div id="aboutModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);align-items:center;justify-content:center">
+    <div style="background:#0f0f10;padding:20px;border-radius:12px;width:90%;max-width:560px;color:var(--white)">
+      <h2 style="margin-top:0">About SAFI / عن صافي</h2>
+      <p style="color:var(--muted)">SAFI is a bilingual assistant built by Knowing.AI for the Grand Egyptian Museum opening. هذه نسخة عرض.</p>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
+        <button class="btn" id="closeAbout">Close</button>
+      </div>
+    </div>
+  </div>
 
-        // INITIALIZE
-        function init() {
-            addWelcomeMessage();
-            setupEventListeners();
-            autoResizeTextarea();
-        }
+<script>
+/*
+  Single-file enhancement for SAFI
+  - bilingual (auto-switch UI by detected input language)
+  - robust findBestMatch with scoring, fallback responses
+  - disable send while processing
+  - clear chat, localStorage persistence
+  - streaming simulation + copy button + retry fallback
+*/
 
-        // WELCOME MESSAGE
-        function addWelcomeMessage() {
-            const msg = state.language === 'en'
-                ? "Hello! I'm SAFI, Egypt's first AI assistant. The Grand Egyptian Museum opens **tomorrow, November 1st, 2025**! 🏛️✨\n\nAsk me anything about the opening, tickets, or exhibits!"
-                : "أهلاً! أنا صافي، أول مساعد ذكاء اصطناعي مصري. المتحف المصري الكبير يفتتح **غداً، 1 نوفمبر 2025**! 🏛️✨\n\nاسألني أي شيء عن الافتتاح أو التذاكر أو المعروضات!";
-            addMessage(msg, 'assistant');
-        }
+const elements = {
+  messages: document.getElementById('messages'),
+  input: document.getElementById('input'),
+  send: document.getElementById('send'),
+  clearBtn: document.getElementById('clearBtn'),
+  aboutBtn: document.getElementById('aboutBtn'),
+  aboutModal: document.getElementById('aboutModal'),
+  closeAbout: document.getElementById('closeAbout'),
+  hint: document.getElementById('hint'),
+  brandTitle: document.getElementById('brandTitle'),
+  brandSubtitle: document.getElementById('brandSubtitle')
+};
 
-        // EVENT LISTENERS
-        function setupEventListeners() {
-            elements.backBtn.addEventListener('click', () => {
-                window.location.href = 'https://knowing-ai.netlify.app';
-            });
+let isProcessing = false;
+let activeStream = null;
 
-            elements.themeBtn.addEventListener('click', toggleTheme);
-            elements.aboutBtn.addEventListener('click', () => elements.aboutModal.style.display = 'flex');
-            elements.closeModal.addEventListener('click', () => elements.aboutModal.style.display = 'none');
-            elements.aboutModal.addEventListener('click', (e) => {
-                if (e.target === elements.aboutModal) {
-                    elements.aboutModal.style.display = 'none';
-                }
-            });
+/* -----------------------
+   Knowledge DB (your data)
+   ----------------------- */
+const gemDatabase = [
+  { keywords:["when","open","opening","date","متى","افتتاح"], en:"The Grand Opening is **November 1st, 2025**.", ar:"الافتتاح الرسمي هو **1 نوفمبر 2025**." },
+  { keywords:["where","location","located","address","أين","موقع","عنوان"], en:"The Grand Egyptian Museum is located in **Giza**, near the Pyramids (Cairo-Alexandia Desert Road).", ar:"يقع المتحف المصري الكبير في **الجيزة** على طريق القاهرة-الإسكندرية الصحراوي، بالقرب من الأهرامات." },
+  { keywords:["tickets","book","reservation","price","cost","تذاكر","حجز","سعر","تكلفة"], en:"Ticket info: Egyptian Adults 300 EGP, Foreign Adults ~1200 EGP. Online booking recommended.", ar:"معلومات التذاكر: البالغون المصريون 300 جنيه، الأجانب تقريبًا 1200 جنيه. يُنصح بالحجز أونلاين." },
+  { keywords:["tutankhamun","tut","king tut","توت","كنوز","توت عنخ آمون"], en:"The museum displays the complete Tutankhamun collection — 5,000+ artifacts, including the golden mask.", ar:"يُعرض بالمتحف المجموعة الكاملة لكنوز توت عنخ آمون — أكثر من ٥٠٠٠ قطعة بما في ذلك القناع الذهبي." },
+  { keywords:["hours","times","ساعات","مواعيد","أوقات"], en:"Opening hours: Sat–Thu 9:00–18:00, Fri 9:00–20:00. Last entry 1 hour before close.", ar:"ساعات العمل: من السبت إلى الخميس ٩:٠٠–١٨:٠٠، الجمعة ٩:٠٠–٢٠:٠٠. آخر دخول قبل ساعة من الإغلاق." },
+  { keywords:["size","area","مساحة"], en:"The complex covers about 50 hectares (~480,000 m²).", ar:"المجمع يغطي حوالي ٥٠ هكتارًا (حوالي ٤٨٠,٠٠٠ متر مربع)." },
+  { keywords:["ramses","statue","رمسيس","تمثال"], en:"Ramses II colossal statue (83 tons, 11 m) greets visitors in the Grand Hall.", ar:"تمثال رمسيس الثاني الضخم (٨٣ طنًا، ١١ مترًا) يستقبل الزوار في البهو الكبير." },
+  { keywords:["boat","khufu","خوفو","مركب"], en:"Khufu's Solar Boat is housed in a climate-controlled building at the museum.", ar:"مركب خوفو الشمسي معروض في مبنى مخصص ومكيف داخل المتحف." }
+];
 
-            elements.langBtn.addEventListener('click', toggleLanguage);
-            elements.messageInput.addEventListener('input', handleInputChange);
-            elements.messageInput.addEventListener('keydown', handleKeyPress);
-            elements.sendBtn.addEventListener('click', sendMessage);
-        }
+/* -----------------------
+   Util: detect language
+   returns 'ar' or 'en'
+   ----------------------- */
+function detectLanguage(text){
+  const arabic = (text.match(/[\u0600-\u06FF]/g) || []).length;
+  const latin = (text.match(/[A-Za-z]/g) || []).length;
+  if(arabic === 0 && latin === 0) return 'en';
+  return (arabic > latin) ? 'ar' : 'en';
+}
 
-        // THEME TOGGLE
-        function toggleTheme() {
-            const isDark = elements.body.classList.contains('dark');
-            if (isDark) {
-                elements.body.classList.remove('dark');
-                elements.body.classList.add('light');
-                elements.themeDark.style.display = 'none';
-                elements.themeLight.style.display = 'block';
-            } else {
-                elements.body.classList.remove('light');
-                elements.body.classList.add('dark');
-                elements.themeDark.style.display = 'block';
-                elements.themeLight.style.display = 'none';
-            }
-        }
+/* -----------------------
+   UI language switch (placeholders & hint)
+   ----------------------- */
+function setUILanguage(lang){
+  if(lang === 'ar'){
+    elements.input.placeholder = 'اسأل عن المتحف المصري الكبير...';
+    elements.hint.textContent = 'صافي — مدعوم من Knowing.AI';
+    elements.brandSubtitle.textContent = 'اعرف أكتر. نفّذ أكتر.';
+    elements.brandTitle.textContent = 'صافي — Knowing.AI';
+    document.documentElement.lang = 'ar';
+    document.body.dir = 'rtl';
+  } else {
+    elements.input.placeholder = 'Ask about the Grand Egyptian Museum...';
+    elements.hint.textContent = "SAFI — Powered by Knowing.AI";
+    elements.brandSubtitle.textContent = 'Know More. Do More.';
+    elements.brandTitle.textContent = 'KaiGPT & SAFI';
+    document.documentElement.lang = 'en';
+    document.body.dir = 'ltr';
+  }
+}
 
-        // LANGUAGE TOGGLE
-        function toggleLanguage() {
-            // Stop any active stream before switching
-            if (activeStreamInterval) {
-                clearInterval(activeStreamInterval);
-                activeStreamInterval = null;
-            }
-            state.language = state.language === 'en' ? 'ar' : 'en';
-            updatePlaceholders();
-            
-            state.messages = [];
-            elements.messagesWrapper.innerHTML = '';
-            addWelcomeMessage();
-        }
+/* -----------------------
+   Persistence (localStorage)
+   ----------------------- */
+function saveState(){
+  try {
+    localStorage.setItem('safi_chat', JSON.stringify(state.messages || []));
+  } catch(e){/* ignore */ }
+}
+function loadState(){
+  try {
+    const raw = localStorage.getItem('safi_chat');
+    if(!raw) return;
+    const arr = JSON.parse(raw);
+    if(Array.isArray(arr)) arr.forEach(m => renderMessage(m.text,m.role,false));
+  } catch(e){}
+}
 
-        function updatePlaceholders() {
-            if (state.language === 'en') {
-                elements.messageInput.placeholder = 'Ask about the Grand Egyptian Museum...';
-                elements.messageInput.dir = 'ltr';
-                elements.footerText.textContent = "SAFI - Egypt's First AI Assistant | Powered by Knowing.AI";
-            } else {
-                elements.messageInput.placeholder = 'اسأل عن المتحف المصري الكبير...';
-                elements.messageInput.dir = 'rtl';
-                elements.footerText.textContent = 'صافي - أول مساعد ذكاء اصطناعي مصري | بدعم من Knowing.AI';
-            }
-        }
+/* local state */
+const state = { messages: [] };
 
-        // INPUT HANDLING
-        function handleInputChange() {
-            elements.sendBtn.disabled = !elements.messageInput.value.trim();
-            autoResizeTextarea();
-        }
+/* -----------------------
+   Message rendering + copy button
+   ----------------------- */
+function renderMessage(text, role='assistant', shouldSave=true){
+  const el = document.createElement('div');
+  el.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
+  // meta (only for bot we show little label)
+  if(role === 'bot') {
+    const meta = document.createElement('div'); meta.className='meta'; meta.textContent = (state.uiLang === 'ar' ? 'صافي' : 'SAFI');
+    el.appendChild(meta);
+  }
+  // message content container
+  const inner = document.createElement('div');
+  inner.innerHTML = text;
+  // copy button
+  const copyBtn = document.createElement('button');
+  copyBtn.className = 'copy-btn';
+  copyBtn.title = (state.uiLang === 'ar' ? 'انسخ' : 'Copy');
+  copyBtn.innerText = '⧉';
+  copyBtn.addEventListener('click', ()=> {
+    navigator.clipboard.writeText(stripHtml(text)).then(()=>{
+      copyBtn.innerText = '✔';
+      setTimeout(()=> copyBtn.innerText = '⧉',1200);
+    });
+  });
+  inner.style.display = 'inline-block';
+  el.appendChild(inner);
+  el.appendChild(copyBtn);
+  elements.messages.appendChild(el);
+  elements.messages.scrollTop = elements.messages.scrollHeight;
+  if(shouldSave){
+    state.messages.push({ role, text });
+    saveState();
+  }
+}
+function stripHtml(html){ const tmp=document.createElement('div'); tmp.innerHTML=html; return tmp.textContent||tmp.innerText||''; }
 
-        function autoResizeTextarea() {
-            elements.messageInput.style.height = 'auto';
-            elements.messageInput.style.height = Math.min(elements.messageInput.scrollHeight, 200) + 'px';
-        }
+/* -----------------------
+   findBestMatch improved scoring
+   ----------------------- */
+function findBestMatch(query, uiLang){
+  const q = query.toLowerCase();
+  let best = null;
+  let bestScore = 0;
+  for(const item of gemDatabase){
+    let score = 0;
+    for(const kw of item.keywords){
+      const k = kw.toLowerCase();
+      if(k.length < 2) continue;
+      if(q.includes(k)) score += 3;
+      // word-level fuzzy: split query words
+      const words = q.split(/\s+/);
+      if(words.some(w=>w === k)) score += 2;
+      // partial
+      if(k.length>3 && q.includes(k.slice(0, Math.floor(k.length*0.6)))) score += 1;
+    }
+    if(score > bestScore){
+      bestScore = score;
+      best = item;
+    }
+  }
+  if(best && bestScore > 0){
+    return uiLang === 'ar' ? best.ar : best.en;
+  }
+  return null;
+}
 
-        function handleKeyPress(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        }
+/* -----------------------
+   Fallback responses (friendly)
+   ----------------------- */
+function fallbackResponse(lang){
+  return (lang === 'ar') ?
+    "آسف، مش فهمت السؤال مضبوط. ممكن تعيد صياغته أو تسأل عن التذاكر/الموقع/المعروضات؟" :
+    "Sorry, I couldn't quite catch that. Could you rephrase or ask about tickets/location/exhibits?";
+}
 
-        // --- NEW: Markdown Parser ---
-        function parseMarkdown(text) {
-            return text
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-                .replace(/^(?!\s*<li>)(\s*)\* (.*)/gm, '$1<ul><li>$2</li></ul>') // Lists (basic)
-                .replace(/<\/ul>\n<ul>/g, '\n') // Combine adjacent lists
-                .replace(/\n/g, '<br>'); // Newlines
-        }
+/* -----------------------
+   Streaming simulator: type-out text char-by-char
+   ----------------------- */
+async function streamOut(text, lang){
+  // create temporary typing bubble
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'msg bot';
+  const meta = document.createElement('div'); meta.className='meta'; meta.textContent = (lang==='ar'? 'صافي' : 'SAFI');
+  typingDiv.appendChild(meta);
+  const content = document.createElement('div');
+  typingDiv.appendChild(content);
+  elements.messages.appendChild(typingDiv);
+  elements.messages.scrollTop = elements.messages.scrollHeight;
 
-        // --- NEW: Send Message (modified for streaming) ---
-        function sendMessage() {
-            const text = elements.messageInput.value.trim();
-            if (!text) return;
+  // simulate streaming speed
+  let i = 0;
+  const speed = 18; // ms per char (fast)
+  return new Promise(resolve=>{
+    activeStream = setInterval(()=>{
+      if(i < text.length){
+        content.textContent = text.slice(0,i+1) + '▌';
+        i++;
+        elements.messages.scrollTop = elements.messages.scrollHeight;
+      } else {
+        clearInterval(activeStream);
+        activeStream = null;
+        // parse simple markdown: **bold** -> <strong>
+        const final = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g,'<br>');
+        content.innerHTML = final;
+        // copy button attachment
+        const copyBtn = document.createElement('button'); copyBtn.className='copy-btn'; copyBtn.innerText='⧉';
+        copyBtn.title = (lang==='ar' ? 'انسخ' : 'Copy');
+        copyBtn.addEventListener('click', ()=>{
+          navigator.clipboard.writeText(stripHtml(final)).then(()=>{ copyBtn.innerText='✔'; setTimeout(()=>copyBtn.innerText='⧉',1200); });
+        });
+        typingDiv.appendChild(copyBtn);
+        elements.messages.scrollTop = elements.messages.scrollHeight;
+        // save to state
+        state.messages.push({ role:'assistant', text: final });
+        saveState();
+        resolve();
+      }
+    }, speed);
+  });
+}
 
-            // Stop any previous stream if user sends a new message
-            if (activeStreamInterval) {
-                clearInterval(activeStreamInterval);
-                activeStreamInterval = null;
-            }
+/* -----------------------
+   Main send handler
+   ----------------------- */
+async function handleSend(){
+  if(isProcessing) return;
+  const text = elements.input.value.trim();
+  if(!text) return;
+  // detect language & set UI
+  const detected = detectLanguage(text);
+  state.uiLang = detected;
+  setUILanguage(detected);
 
-            addMessage(text, 'user');
-            elements.messageInput.value = '';
-            elements.messageInput.style.height = 'auto';
-            elements.sendBtn.disabled = true;
+  // push user message
+  renderMessage(escapeHtml(text), 'user', true);
 
-            showTypingIndicator();
-            
-            setTimeout(() => {
-                try {
-                    const response = findBestMatch(text);
-                    hideTypingIndicator();
-                    addMessage(response, 'assistant'); // Pass the raw text to addMessage
-                } catch (error) {
-                    console.error("SAFI AI Runtime Error:", error);
-                    hideTypingIndicator();
-                    const errorMsg = state.language === 'en'
-                        ? "SAFI encountered a technical issue. Please try again."
-                        : "واجه صافي مشكلة فنية. الرجاء المحاولة مرة أخرى.";
-                    addMessage(errorMsg, 'assistant');
-                }
-            }, 1200); // Simulated "thinking" time
-        }
+  // clear input + disable
+  elements.input.value = '';
+  elements.send.disabled = true;
+  isProcessing = true;
 
-        // FIND BEST MATCH
-        function findBestMatch(query) {
-            const lowerQuery = query.toLowerCase();
-            
-            for (const item of state.gemDatabase) {
-                if (item.keywords.some(keyword => lowerQuery.includes(keyword.toLowerCase()))) {
-                    return state.language === 'en' ? item.en : item.ar;
-                }
-            }
+  // show typing and compute response
+  try {
+    // small delay to feel natural
+    await new Promise(r=>setTimeout(r, 400));
+    let response = findBestMatch(text, detected);
+    // Retry logic: if no match, try language flip once (user phrasing)
+    if(!response){
+      // small second attempt: flip language and try
+      const altLang = detected === 'ar' ? 'en' : 'ar';
+      response = findBestMatch(text, altLang);
+    }
+    if(!response){
+      // fallback friendly
+      response = fallbackResponse(detected);
+    }
+    // ensure non-empty
+    if(!response || response.trim()===''){
+      response = fallbackResponse(detected);
+    }
 
-            return state.language === 'en'
-                ? "I'd be happy to help! Could you please rephrase your question about the Grand Egyptian Museum? You can ask about the grand opening, location, exhibits like King Tut's, or visitor facilities."
-                : "يسعدني المساعدة! هل يمكنك إعادة صياغة سؤالك عن المتحف المصري الكبير؟ يمكنك السؤال عن الافتتاح الكبير، أو الموقع، أو المعروضات مثل كنوز توت عنخ آمون، أو مرافق الزوار.";
-        }
+    // stream out the text (simulated)
+    await streamOut(response, detected);
 
-        // --- NEW: Add Message (modified for streaming and markdown) ---
-        function addMessage(text, role) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${role}`;
+  } catch(e){
+    console.error('Runtime error:', e);
+    const errText = state.uiLang === 'ar' ? 'حدث خطأ مؤقت، حاول مرة أخرى.' : 'Temporary error, please try again.';
+    await streamOut(errText, state.uiLang || 'en');
+  } finally {
+    isProcessing = false;
+    elements.send.disabled = false;
+    elements.input.focus();
+  }
+}
 
-            const avatar = document.createElement('div');
-            avatar.className = 'avatar';
-            avatar.textContent = role === 'user' ? 'You' : '👸';
-            if (role === 'user') {
-                avatar.style.fontSize = '12px';
-                avatar.style.fontWeight = '600';
-            }
+/* -----------------------
+   Helpers
+   ----------------------- */
+function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-            const content = document.createElement('div');
-            content.className = 'message-content';
+/* -----------------------
+   Event wiring
+   ----------------------- */
+elements.input.addEventListener('input', ()=>{
+  elements.send.disabled = !elements.input.value.trim() || isProcessing;
+  // optional: auto detect language while typing to update placeholder etc.
+  const d = detectLanguage(elements.input.value || '') || 'en';
+  if(d !== state.uiLang){ state.uiLang = d; setUILanguage(d); }
+});
+elements.input.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter' && !e.shiftKey){
+    e.preventDefault();
+    if(!elements.send.disabled) handleSend();
+  }
+});
+elements.send.addEventListener('click', ()=> handleSend());
+elements.clearBtn.addEventListener('click', ()=>{
+  state.messages = [];
+  localStorage.removeItem('safi_chat');
+  elements.messages.innerHTML = '';
+  addWelcomeMessage();
+});
+elements.aboutBtn.addEventListener('click', ()=> elements.aboutModal.style.display='flex');
+elements.closeAbout.addEventListener('click', ()=> elements.aboutModal.style.display='none');
+window.addEventListener('beforeunload', ()=> saveState());
 
-            // --- Add Copy Button ---
-            const copyBtn = document.createElement('button');
-            copyBtn.className = 'copy-btn';
-            copyBtn.title = 'Copy';
-            copyBtn.innerHTML = '<svg class="icon" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM5 11a1 1 0 100 2h4a1 1 0 100-2H5zM5 15a1 1 0 100 2h4a1 1 0 100-2H5zM3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"></path></svg>';
-            copyBtn.addEventListener('click', () => {
-                navigator.clipboard.writeText(text).then(() => {
-                    copyBtn.innerHTML = '<svg class="icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>';
-                    copyBtn.classList.add('copied');
-                    setTimeout(() => {
-                        copyBtn.innerHTML = '<svg class="icon" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM5 11a1 1 0 100 2h4a1 1 0 100-2H5zM5 15a1 1 0 100 2h4a1 1 0 100-2H5zM3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"></path></svg>';
-                        copyBtn.classList.remove('copied');
-                    }, 2000);
-                });
-            });
-            messageDiv.appendChild(copyBtn);
-            // --- End Copy Button ---
+/* -----------------------
+   Welcome + restore
+   ----------------------- */
+function addWelcomeMessage(){
+  const lang = state.uiLang || 'en';
+  const welcome = (lang === 'ar')
+    ? "أهلاً! أنا صافي — اسألني عن المتحف المصري الكبير. (مثال: ما هي مواعيد العمل؟)"
+    : "Hello! I'm SAFI — ask me about the Grand Egyptian Museum. (e.g. What are the opening hours?)";
+  renderMessage(welcome, 'assistant', true);
+}
 
-            // Handle text direction
-            if (state.language === 'ar' && role === 'assistant') {
-                content.dir = 'rtl';
-            } else if (role === 'user' && text.match(/[\u0600-\u06FF]/)) {
-                content.dir = 'rtl';
-            } else {
-                content.dir = 'ltr';
-            }
+// load previous
+(function boot(){
+  // default UI language = en
+  state.uiLang = 'en';
+  setUILanguage(state.uiLang);
+  // load saved chat
+  loadState();
+  if(state.messages.length === 0){
+    addWelcomeMessage();
+  }
+  elements.input.focus();
+})();
 
-            messageDiv.appendChild(avatar);
-            messageDiv.appendChild(content);
-            elements.messagesWrapper.appendChild(messageDiv);
-
-            if (role === 'user') {
-                // User messages appear instantly
-                content.textContent = text;
-            } else {
-                // Assistant messages stream in
-                let i = 0;
-                let streamedText = '';
-                content.innerHTML = "<span>▌</span>"; // Initial cursor
-                
-                // Clear any existing interval
-                if (activeStreamInterval) clearInterval(activeStreamInterval);
-
-                activeStreamInterval = setInterval(() => {
-                    if (i < text.length) {
-                        streamedText += text[i];
-                        // We use textContent during streaming for performance
-                        content.textContent = streamedText + "▌"; 
-                        i++;
-                        scrollToBottom();
-                    } else {
-                        // Streaming is done
-                        clearInterval(activeStreamInterval);
-                        activeStreamInterval = null;
-                        // Now, parse the final text into rich HTML
-                        content.innerHTML = parseMarkdown(streamedText);
-                        // Re-enable send button
-                        handleInputChange();
-                    }
-                }, 20); // 20ms per character = very fast, like Grok
-            }
-
-            state.messages.push({ role, text });
-            scrollToBottom();
-        }
-
-
-        // TYPING INDICATOR
-        function showTypingIndicator() {
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'message assistant';
-            typingDiv.id = 'typingIndicator';
-
-            const avatar = document.createElement('div');
-            avatar.className = 'avatar';
-            avatar.textContent = '👸';
-
-            const dots = document.createElement('div');
-            dots.className = 'message-content typing-indicator';
-            for (let i = 0; i < 3; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'typing-dot';
-                dots.appendChild(dot);
-            }
-
-            typingDiv.appendChild(avatar);
-            typingDiv.appendChild(dots);
-            elements.messagesWrapper.appendChild(typingDiv);
-            scrollToBottom();
-        }
-
-        function hideTypingIndicator() {
-            const indicator = document.getElementById('typingIndicator');
-            if (indicator) indicator.remove();
-        }
-
-        // SCROLL TO BOTTOM
-        function scrollToBottom() {
-            elements.messagesContainer.scrollTop = elements.messagesContainer.scrollHeight;
-        }
-
-        // START APP
-        init();
-    </script>
+</script>
 </body>
 </html>
