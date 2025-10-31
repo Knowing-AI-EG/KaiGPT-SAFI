@@ -533,7 +533,7 @@
             background: var(--black);
         }
 
-        /* FIX: Ensure inner SVG elements are correctly colored based on theme */
+        /* FIX: Ensure inner SVG elements are correctly colored based on theme (Child 4 is the middle circle) */
         .dark .modal-logo .logo-svg circle:nth-child(4),
         .dark .modal-logo .logo-svg line {
             fill: var(--black);
@@ -963,7 +963,8 @@
         }
 
         // SEND MESSAGE
-        async function sendMessage() {
+        // CRITICAL FIX: Added try/catch to prevent chat interface from hanging
+        function sendMessage() {
             const text = elements.messageInput.value.trim();
             if (!text) return;
 
@@ -975,9 +976,19 @@
             showTypingIndicator();
             
             setTimeout(() => {
-                const response = findBestMatch(text);
-                hideTypingIndicator();
-                addMessage(response, 'assistant');
+                try {
+                    const response = findBestMatch(text);
+                    hideTypingIndicator();
+                    addMessage(response, 'assistant');
+                } catch (error) {
+                    // If a function fails during response generation/display
+                    console.error("SAFI AI Runtime Error: The chat response failed to display.", error);
+                    hideTypingIndicator(); // IMPORTANT: Ensure the typing dots disappear
+                    const errorMsg = state.language === 'en'
+                        ? "SAFI encountered a technical issue while looking for an answer. Please try again or rephrase."
+                        : "واجه صافي مشكلة فنية أثناء البحث عن الإجابة. الرجاء المحاولة مرة أخرى أو إعادة صياغة السؤال.";
+                    addMessage(errorMsg, 'assistant');
+                }
             }, 1200);
         }
 
@@ -986,6 +997,7 @@
             const lowerQuery = query.toLowerCase();
             
             for (const item of state.gemDatabase) {
+                // Check if the query contains any of the keywords
                 if (item.keywords.some(keyword => lowerQuery.includes(keyword.toLowerCase()))) {
                     return state.language === 'en' ? item.en : item.ar;
                 }
@@ -1013,7 +1025,7 @@
             content.className = 'message-content';
             content.textContent = text;
             
-            // Set direction for Arabic text
+            // PROFESSIONAL FIX: Set direction for Arabic text for correct rendering
             if (state.language === 'ar' && role === 'assistant') {
                 content.dir = 'rtl';
             } else if (role === 'user' && text.match(/[\u0600-\u06FF]/)) {
@@ -1070,15 +1082,3 @@
     </script>
 </body>
 </html>
-// Inside addMessage(text, role) function
-// ...
-// Set direction for Arabic text
-if (state.language === 'ar' && role === 'assistant') {
-    content.dir = 'rtl';
-} else if (role === 'user' && text.match(/[\u0600-\u06FF]/)) {
-    // Heuristic for user-entered Arabic text
-    content.dir = 'rtl';
-} else {
-    content.dir = 'ltr';
-}
-// ...
