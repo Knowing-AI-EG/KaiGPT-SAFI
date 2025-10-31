@@ -1070,3 +1070,15 @@
     </script>
 </body>
 </html>
+// Inside addMessage(text, role) function
+// ...
+// Set direction for Arabic text
+if (state.language === 'ar' && role === 'assistant') {
+    content.dir = 'rtl';
+} else if (role === 'user' && text.match(/[\u0600-\u06FF]/)) {
+    // Heuristic for user-entered Arabic text
+    content.dir = 'rtl';
+} else {
+    content.dir = 'ltr';
+}
+// ...
