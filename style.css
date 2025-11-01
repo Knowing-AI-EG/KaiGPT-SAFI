@@ -1,138 +1,120 @@
-/* ==========================
-   KaiGPT & SAFI — Knowing.AI
-   Premium Black & White Theme
-   ========================== */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap');
 
-/* الخطوط العامة */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
-
-:root {
-  --bg-black: #0b0b0b;
-  --text-white: #f2f2f2;
-  --accent: #00ffd0;
-  --gray: #888;
-  --border-color: #222;
-  --font-main: 'Inter', sans-serif;
-}
-
-/* ضبط الصفحة الأساسية */
-body {
-  background-color: var(--bg-black);
-  color: var(--text-white);
-  font-family: var(--font-main);
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: 'Cairo', sans-serif;
+}
+
+body {
+  background-color: #000;
+  color: #fff;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
-/* الهيدر */
 header {
   text-align: center;
-  padding: 40px 20px 10px;
-  font-size: 1.4rem;
-  font-weight: 600;
-  letter-spacing: 1px;
+  padding: 20px 0;
+  border-bottom: 1px solid #222;
 }
 
-/* منطقة الشات */
-#chat {
+.logo {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: #bbb;
+  margin-top: 5px;
+}
+
+main {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding: 20px;
-  gap: 15px;
-  max-width: 900px;
-  margin: 0 auto;
 }
 
-/* الرسائل */
+.chat-container {
+  width: 100%;
+  max-width: 600px;
+  background-color: #111;
+  border: 1px solid #222;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 80vh;
+}
+
+.chat-box {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
 .message {
-  padding: 12px 18px;
-  border-radius: 14px;
+  padding: 10px 14px;
+  border-radius: 10px;
   line-height: 1.6;
   max-width: 80%;
-  font-size: 1rem;
-  animation: fadeIn 0.3s ease-in;
+  word-wrap: break-word;
 }
 
 .message.user {
-  background: var(--accent);
-  color: #000;
+  background-color: #333;
   align-self: flex-end;
+  text-align: right;
 }
 
-.message.ai {
-  background: #1a1a1a;
-  color: var(--text-white);
-  border: 1px solid var(--border-color);
+.message.bot {
+  background-color: #1a1a1a;
   align-self: flex-start;
+  text-align: left;
+  border-left: 3px solid #fff;
 }
 
-/* منطقة الإدخال */
-#input-area {
+.input-area {
   display: flex;
-  justify-content: center;
+  border-top: 1px solid #222;
+}
+
+#user-input {
+  flex: 1;
   padding: 15px;
-  border-top: 1px solid var(--border-color);
-  background: #0f0f0f;
-}
-
-input[type="text"] {
-  width: 80%;
-  padding: 12px 15px;
   border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  background: #1c1c1c;
-  color: var(--text-white);
   outline: none;
-  transition: 0.2s;
+  background-color: #000;
+  color: #fff;
 }
 
-input[type="text"]:focus {
-  background: #2a2a2a;
-}
-
-button {
-  margin-left: 10px;
-  padding: 12px 18px;
+#send-btn {
+  padding: 0 25px;
   border: none;
-  border-radius: 10px;
-  background: var(--accent);
+  background-color: #fff;
   color: #000;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.2s;
+  transition: background 0.3s;
 }
 
-button:hover {
-  background: #00e0b5;
+#send-btn:hover {
+  background-color: #ccc;
 }
 
-/* تذييل بسيط */
 footer {
   text-align: center;
-  padding: 20px;
-  color: var(--gray);
-  font-size: 0.9rem;
-  border-top: 1px solid var(--border-color);
-}
-
-/* مؤثرات دخول ناعمة */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* استجابة الموبايل */
-@media (max-width: 600px) {
-  input[type="text"] {
-    width: 70%;
-  }
-  button {
-    padding: 10px 15px;
-  }
+  padding: 10px;
+  font-size: 0.8rem;
+  border-top: 1px solid #222;
+  color: #888;
 }
