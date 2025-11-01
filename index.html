@@ -1,400 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>KaiGPT & SAFI — Knowing.AI</title>
-<link rel="stylesheet" href="style.css">
-<meta name="description" content="SAFI — Egypt's bilingual AI assistant for the Grand Egyptian Museum." />
-<style>
-  /* (kept compact) basic styling adapted from your original - responsive, dark/light */
-  :root{--bg:#0a0a0a;--panel:#111;--muted:#9aa0a6;--accent:#22c55e;--white:#fff}
-  body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,arial; margin:0;height:100vh;background:var(--bg);color:var(--white);display:flex;flex-direction:column}
-  .header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.04);backdrop-filter:blur(6px)}
-  .logo{display:flex;align-items:center;gap:12px}
-  .logo-box{width:46px;height:46px;border-radius:12px;background:var(--white);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700}
-  h1{font-size:16px;margin:0}
-  p.subtitle{margin:0;font-size:12px;color:var(--muted)}
-  .controls{display:flex;gap:8px;align-items:center}
-  .btn{background:transparent;border:1px solid rgba(255,255,255,.06);padding:8px 10px;border-radius:10px;color:var(--white);cursor:pointer}
-  .container{flex:1;display:flex;flex-direction:column;overflow:hidden}
-  .messages{flex:1;overflow:auto;padding:22px;display:flex;flex-direction:column;gap:18px}
-  .msg{max-width:78%;padding:12px 14px;border-radius:14px;line-height:1.5}
-  .user{align-self:flex-end;background:var(--white);color:#000;border-radius:14px 14px 6px 14px}
-  .bot{align-self:flex-start;background:var(--panel);border:1px solid rgba(255,255,255,.03)}
-  .meta{font-size:12px;color:var(--muted);margin-bottom:8px}
-  .input-area{padding:14px;border-top:1px solid rgba(255,255,255,.03);display:flex;align-items:center;gap:12px}
-  textarea{flex:1;padding:12px;border-radius:12px;border:none;background:transparent;color:var(--white);resize:none;height:48px;outline:none}
-  .send{width:44px;height:44px;border-radius:10px;background:var(--white);color:#000;border:none;cursor:pointer}
-  .send:disabled{opacity:.4;cursor:not-allowed}
-  .small{font-size:13px;color:var(--muted)}
-  .top-actions{display:flex;gap:8px;align-items:center}
-  .typing{opacity:.8;font-style:italic}
-  .copy-btn{margin-left:8px;background:transparent;border:0;color:var(--muted);cursor:pointer}
-  @media(max-width:720px){.messages{padding:12px}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KaiGPT • SAFI — Knowing.AI</title>
+  <meta name="description" content="KaiGPT powered by SAFI — Egypt’s pioneering AI assistant from Knowing.AI">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="header">
-    <div class="logo">
-      <div class="logo-box">SA</div>
-      <div>
-        <h1 id="brandTitle">KaiGPT & SAFI</h1>
-        <p class="subtitle" id="brandSubtitle">Know More. Do More.</p>
-      </div>
-    </div>
-    <div class="controls">
-      <div class="top-actions">
-        <button class="btn" id="clearBtn">Clear</button>
-        <button class="btn" id="aboutBtn">About</button>
-      </div>
-    </div>
+
+  <header>
+    <div class="logo">🤍 SAFI</div>
+    <div class="subtitle">Powered by <strong>Knowing.AI</strong></div>
   </header>
 
-  <div class="container">
-    <main class="messages" id="messages"></main>
+  <main>
+    <div class="chat-container">
+      <div id="chat-box" class="chat-box">
+        <div class="message bot">مرحبًا! أنا <strong>صافي</strong>، مساعدتك الذكية من قلب مصر 🇪🇬. ازيك؟</div>
+      </div>
 
-    <div class="input-area">
-      <textarea id="input" placeholder="Ask about the Grand Egyptian Museum..." aria-label="message"></textarea>
-      <button id="send" class="send" disabled>Send</button>
-    </div>
-    <div style="padding:8px 18px 18px"><span id="hint" class="small">SAFI — Powered by Knowing.AI</span></div>
-  </div>
-
-  <!-- About Modal (simple) -->
-  <div id="aboutModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);align-items:center;justify-content:center">
-    <div style="background:#0f0f10;padding:20px;border-radius:12px;width:90%;max-width:560px;color:var(--white)">
-      <h2 style="margin-top:0">About SAFI / عن صافي</h2>
-      <p style="color:var(--muted)">SAFI is a bilingual assistant built by Knowing.AI for the Grand Egyptian Museum opening. هذه نسخة عرض.</p>
-      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
-        <button class="btn" id="closeAbout">Close</button>
+      <div class="input-area">
+        <input type="text" id="user-input" placeholder="اكتب رسالتك هنا...">
+        <button id="send-btn">إرسال</button>
       </div>
     </div>
-  </div>
+  </main>
 
-<script>
-/*
-  Single-file enhancement for SAFI
-  - bilingual (auto-switch UI by detected input language)
-  - robust findBestMatch with scoring, fallback responses
-  - disable send while processing
-  - clear chat, localStorage persistence
-  - streaming simulation + copy button + retry fallback
-*/
+  <footer>
+    <p>© 2025 Knowing.AI — All Rights Reserved.</p>
+  </footer>
 
-const elements = {
-  messages: document.getElementById('messages'),
-  input: document.getElementById('input'),
-  send: document.getElementById('send'),
-  clearBtn: document.getElementById('clearBtn'),
-  aboutBtn: document.getElementById('aboutBtn'),
-  aboutModal: document.getElementById('aboutModal'),
-  closeAbout: document.getElementById('closeAbout'),
-  hint: document.getElementById('hint'),
-  brandTitle: document.getElementById('brandTitle'),
-  brandSubtitle: document.getElementById('brandSubtitle')
-};
+  <script>
+    const sendBtn = document.getElementById("send-btn");
+    const userInput = document.getElementById("user-input");
+    const chatBox = document.getElementById("chat-box");
 
-let isProcessing = false;
-let activeStream = null;
+    const responses = {
+      "ازيك": "الحمد لله، وإنت عامل إيه؟ 😄",
+      "عاملة ايه": "تمام، بحاول أساعدك بأفضل شكل ممكن!",
+      "انتي مين": "أنا صافي، أول شخصية ذكاء اصطناعي مصرية من Knowing.AI 🇪🇬.",
+      "فينك": "أنا دايمًا هنا، جوّه قلب Knowing.AI 💫.",
+      "وحشاني": "ده عشان مابقتش تيجي تسأل كتير 😌",
+      "تشربي شاي": "أكيد، بس من غير سكر عشان المركزة 😉"
+    };
 
-/* -----------------------
-   Knowledge DB (your data)
-   ----------------------- */
-const gemDatabase = [
-  { keywords:["when","open","opening","date","متى","افتتاح"], en:"The Grand Opening is **November 1st, 2025**.", ar:"الافتتاح الرسمي هو **1 نوفمبر 2025**." },
-  { keywords:["where","location","located","address","أين","موقع","عنوان"], en:"The Grand Egyptian Museum is located in **Giza**, near the Pyramids (Cairo-Alexandia Desert Road).", ar:"يقع المتحف المصري الكبير في **الجيزة** على طريق القاهرة-الإسكندرية الصحراوي، بالقرب من الأهرامات." },
-  { keywords:["tickets","book","reservation","price","cost","تذاكر","حجز","سعر","تكلفة"], en:"Ticket info: Egyptian Adults 300 EGP, Foreign Adults ~1200 EGP. Online booking recommended.", ar:"معلومات التذاكر: البالغون المصريون 300 جنيه، الأجانب تقريبًا 1200 جنيه. يُنصح بالحجز أونلاين." },
-  { keywords:["tutankhamun","tut","king tut","توت","كنوز","توت عنخ آمون"], en:"The museum displays the complete Tutankhamun collection — 5,000+ artifacts, including the golden mask.", ar:"يُعرض بالمتحف المجموعة الكاملة لكنوز توت عنخ آمون — أكثر من ٥٠٠٠ قطعة بما في ذلك القناع الذهبي." },
-  { keywords:["hours","times","ساعات","مواعيد","أوقات"], en:"Opening hours: Sat–Thu 9:00–18:00, Fri 9:00–20:00. Last entry 1 hour before close.", ar:"ساعات العمل: من السبت إلى الخميس ٩:٠٠–١٨:٠٠، الجمعة ٩:٠٠–٢٠:٠٠. آخر دخول قبل ساعة من الإغلاق." },
-  { keywords:["size","area","مساحة"], en:"The complex covers about 50 hectares (~480,000 m²).", ar:"المجمع يغطي حوالي ٥٠ هكتارًا (حوالي ٤٨٠,٠٠٠ متر مربع)." },
-  { keywords:["ramses","statue","رمسيس","تمثال"], en:"Ramses II colossal statue (83 tons, 11 m) greets visitors in the Grand Hall.", ar:"تمثال رمسيس الثاني الضخم (٨٣ طنًا، ١١ مترًا) يستقبل الزوار في البهو الكبير." },
-  { keywords:["boat","khufu","خوفو","مركب"], en:"Khufu's Solar Boat is housed in a climate-controlled building at the museum.", ar:"مركب خوفو الشمسي معروض في مبنى مخصص ومكيف داخل المتحف." }
-];
+    function appendMessage(sender, text) {
+      const msg = document.createElement("div");
+      msg.classList.add("message", sender);
+      msg.innerHTML = text;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
 
-/* -----------------------
-   Util: detect language
-   returns 'ar' or 'en'
-   ----------------------- */
-function detectLanguage(text){
-  const arabic = (text.match(/[\u0600-\u06FF]/g) || []).length;
-  const latin = (text.match(/[A-Za-z]/g) || []).length;
-  if(arabic === 0 && latin === 0) return 'en';
-  return (arabic > latin) ? 'ar' : 'en';
-}
+    function handleUserInput() {
+      const text = userInput.value.trim();
+      if (!text) return;
+      appendMessage("user", text);
+      userInput.value = "";
 
-/* -----------------------
-   UI language switch (placeholders & hint)
-   ----------------------- */
-function setUILanguage(lang){
-  if(lang === 'ar'){
-    elements.input.placeholder = 'اسأل عن المتحف المصري الكبير...';
-    elements.hint.textContent = 'صافي — مدعوم من Knowing.AI';
-    elements.brandSubtitle.textContent = 'اعرف أكتر. نفّذ أكتر.';
-    elements.brandTitle.textContent = 'صافي — Knowing.AI';
-    document.documentElement.lang = 'ar';
-    document.body.dir = 'rtl';
-  } else {
-    elements.input.placeholder = 'Ask about the Grand Egyptian Museum...';
-    elements.hint.textContent = "SAFI — Powered by Knowing.AI";
-    elements.brandSubtitle.textContent = 'Know More. Do More.';
-    elements.brandTitle.textContent = 'KaiGPT & SAFI';
-    document.documentElement.lang = 'en';
-    document.body.dir = 'ltr';
-  }
-}
+      setTimeout(() => {
+        const lowerText = text.toLowerCase();
+        let reply = responses[lowerText] || "أنا لسه بتعلم منك أكتر كل يوم 💭";
+        appendMessage("bot", reply);
+      }, 600);
+    }
 
-/* -----------------------
-   Persistence (localStorage)
-   ----------------------- */
-function saveState(){
-  try {
-    localStorage.setItem('safi_chat', JSON.stringify(state.messages || []));
-  } catch(e){/* ignore */ }
-}
-function loadState(){
-  try {
-    const raw = localStorage.getItem('safi_chat');
-    if(!raw) return;
-    const arr = JSON.parse(raw);
-    if(Array.isArray(arr)) arr.forEach(m => renderMessage(m.text,m.role,false));
-  } catch(e){}
-}
-
-/* local state */
-const state = { messages: [] };
-
-/* -----------------------
-   Message rendering + copy button
-   ----------------------- */
-function renderMessage(text, role='assistant', shouldSave=true){
-  const el = document.createElement('div');
-  el.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
-  // meta (only for bot we show little label)
-  if(role === 'bot') {
-    const meta = document.createElement('div'); meta.className='meta'; meta.textContent = (state.uiLang === 'ar' ? 'صافي' : 'SAFI');
-    el.appendChild(meta);
-  }
-  // message content container
-  const inner = document.createElement('div');
-  inner.innerHTML = text;
-  // copy button
-  const copyBtn = document.createElement('button');
-  copyBtn.className = 'copy-btn';
-  copyBtn.title = (state.uiLang === 'ar' ? 'انسخ' : 'Copy');
-  copyBtn.innerText = '⧉';
-  copyBtn.addEventListener('click', ()=> {
-    navigator.clipboard.writeText(stripHtml(text)).then(()=>{
-      copyBtn.innerText = '✔';
-      setTimeout(()=> copyBtn.innerText = '⧉',1200);
+    sendBtn.addEventListener("click", handleUserInput);
+    userInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") handleUserInput();
     });
-  });
-  inner.style.display = 'inline-block';
-  el.appendChild(inner);
-  el.appendChild(copyBtn);
-  elements.messages.appendChild(el);
-  elements.messages.scrollTop = elements.messages.scrollHeight;
-  if(shouldSave){
-    state.messages.push({ role, text });
-    saveState();
-  }
-}
-function stripHtml(html){ const tmp=document.createElement('div'); tmp.innerHTML=html; return tmp.textContent||tmp.innerText||''; }
+  </script>
 
-/* -----------------------
-   findBestMatch improved scoring
-   ----------------------- */
-function findBestMatch(query, uiLang){
-  const q = query.toLowerCase();
-  let best = null;
-  let bestScore = 0;
-  for(const item of gemDatabase){
-    let score = 0;
-    for(const kw of item.keywords){
-      const k = kw.toLowerCase();
-      if(k.length < 2) continue;
-      if(q.includes(k)) score += 3;
-      // word-level fuzzy: split query words
-      const words = q.split(/\s+/);
-      if(words.some(w=>w === k)) score += 2;
-      // partial
-      if(k.length>3 && q.includes(k.slice(0, Math.floor(k.length*0.6)))) score += 1;
-    }
-    if(score > bestScore){
-      bestScore = score;
-      best = item;
-    }
-  }
-  if(best && bestScore > 0){
-    return uiLang === 'ar' ? best.ar : best.en;
-  }
-  return null;
-}
-
-/* -----------------------
-   Fallback responses (friendly)
-   ----------------------- */
-function fallbackResponse(lang){
-  return (lang === 'ar') ?
-    "آسف، مش فهمت السؤال مضبوط. ممكن تعيد صياغته أو تسأل عن التذاكر/الموقع/المعروضات؟" :
-    "Sorry, I couldn't quite catch that. Could you rephrase or ask about tickets/location/exhibits?";
-}
-
-/* -----------------------
-   Streaming simulator: type-out text char-by-char
-   ----------------------- */
-async function streamOut(text, lang){
-  // create temporary typing bubble
-  const typingDiv = document.createElement('div');
-  typingDiv.className = 'msg bot';
-  const meta = document.createElement('div'); meta.className='meta'; meta.textContent = (lang==='ar'? 'صافي' : 'SAFI');
-  typingDiv.appendChild(meta);
-  const content = document.createElement('div');
-  typingDiv.appendChild(content);
-  elements.messages.appendChild(typingDiv);
-  elements.messages.scrollTop = elements.messages.scrollHeight;
-
-  // simulate streaming speed
-  let i = 0;
-  const speed = 18; // ms per char (fast)
-  return new Promise(resolve=>{
-    activeStream = setInterval(()=>{
-      if(i < text.length){
-        content.textContent = text.slice(0,i+1) + '▌';
-        i++;
-        elements.messages.scrollTop = elements.messages.scrollHeight;
-      } else {
-        clearInterval(activeStream);
-        activeStream = null;
-        // parse simple markdown: **bold** -> <strong>
-        const final = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g,'<br>');
-        content.innerHTML = final;
-        // copy button attachment
-        const copyBtn = document.createElement('button'); copyBtn.className='copy-btn'; copyBtn.innerText='⧉';
-        copyBtn.title = (lang==='ar' ? 'انسخ' : 'Copy');
-        copyBtn.addEventListener('click', ()=>{
-          navigator.clipboard.writeText(stripHtml(final)).then(()=>{ copyBtn.innerText='✔'; setTimeout(()=>copyBtn.innerText='⧉',1200); });
-        });
-        typingDiv.appendChild(copyBtn);
-        elements.messages.scrollTop = elements.messages.scrollHeight;
-        // save to state
-        state.messages.push({ role:'assistant', text: final });
-        saveState();
-        resolve();
-      }
-    }, speed);
-  });
-}
-
-/* -----------------------
-   Main send handler
-   ----------------------- */
-async function handleSend(){
-  if(isProcessing) return;
-  const text = elements.input.value.trim();
-  if(!text) return;
-  // detect language & set UI
-  const detected = detectLanguage(text);
-  state.uiLang = detected;
-  setUILanguage(detected);
-
-  // push user message
-  renderMessage(escapeHtml(text), 'user', true);
-
-  // clear input + disable
-  elements.input.value = '';
-  elements.send.disabled = true;
-  isProcessing = true;
-
-  // show typing and compute response
-  try {
-    // small delay to feel natural
-    await new Promise(r=>setTimeout(r, 400));
-    let response = findBestMatch(text, detected);
-    // Retry logic: if no match, try language flip once (user phrasing)
-    if(!response){
-      // small second attempt: flip language and try
-      const altLang = detected === 'ar' ? 'en' : 'ar';
-      response = findBestMatch(text, altLang);
-    }
-    if(!response){
-      // fallback friendly
-      response = fallbackResponse(detected);
-    }
-    // ensure non-empty
-    if(!response || response.trim()===''){
-      response = fallbackResponse(detected);
-    }
-
-    // stream out the text (simulated)
-    await streamOut(response, detected);
-
-  } catch(e){
-    console.error('Runtime error:', e);
-    const errText = state.uiLang === 'ar' ? 'حدث خطأ مؤقت، حاول مرة أخرى.' : 'Temporary error, please try again.';
-    await streamOut(errText, state.uiLang || 'en');
-  } finally {
-    isProcessing = false;
-    elements.send.disabled = false;
-    elements.input.focus();
-  }
-}
-
-/* -----------------------
-   Helpers
-   ----------------------- */
-function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-/* -----------------------
-   Event wiring
-   ----------------------- */
-elements.input.addEventListener('input', ()=>{
-  elements.send.disabled = !elements.input.value.trim() || isProcessing;
-  // optional: auto detect language while typing to update placeholder etc.
-  const d = detectLanguage(elements.input.value || '') || 'en';
-  if(d !== state.uiLang){ state.uiLang = d; setUILanguage(d); }
-});
-elements.input.addEventListener('keydown', (e)=>{
-  if(e.key === 'Enter' && !e.shiftKey){
-    e.preventDefault();
-    if(!elements.send.disabled) handleSend();
-  }
-});
-elements.send.addEventListener('click', ()=> handleSend());
-elements.clearBtn.addEventListener('click', ()=>{
-  state.messages = [];
-  localStorage.removeItem('safi_chat');
-  elements.messages.innerHTML = '';
-  addWelcomeMessage();
-});
-elements.aboutBtn.addEventListener('click', ()=> elements.aboutModal.style.display='flex');
-elements.closeAbout.addEventListener('click', ()=> elements.aboutModal.style.display='none');
-window.addEventListener('beforeunload', ()=> saveState());
-
-/* -----------------------
-   Welcome + restore
-   ----------------------- */
-function addWelcomeMessage(){
-  const lang = state.uiLang || 'en';
-  const welcome = (lang === 'ar')
-    ? "أهلاً! أنا صافي — اسألني عن المتحف المصري الكبير. (مثال: ما هي مواعيد العمل؟)"
-    : "Hello! I'm SAFI — ask me about the Grand Egyptian Museum. (e.g. What are the opening hours?)";
-  renderMessage(welcome, 'assistant', true);
-}
-
-// load previous
-(function boot(){
-  // default UI language = en
-  state.uiLang = 'en';
-  setUILanguage(state.uiLang);
-  // load saved chat
-  loadState();
-  if(state.messages.length === 0){
-    addWelcomeMessage();
-  }
-  elements.input.focus();
-})();
-
-</script>
 </body>
 </html>
